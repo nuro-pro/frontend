@@ -13,15 +13,68 @@
 - axios (API 클라이언트)
 - ESLint + Prettier
 
-## 시작하기
+## 시작하기 
+
+> 터미널(맥: `터미널`, 윈도우: `PowerShell` 또는 `Git Bash`)에서 진행합니다.
+> 명령어 한 줄씩 복사해서 붙여넣고 Enter 치면 됩니다.
+
+### 0. 사전 준비 — Node.js 설치 (최초 1회)
+
+이 프로젝트는 **Node.js 24 (LTS)** 버전을 사용합니다. 설치 여부 확인:
 
 ```bash
-# Node 버전 (fnm 사용 시 자동 적용; .node-version 참조)
-fnm use
-
-npm install
-npm run dev      # http://localhost:5173
+node -v        # v24.x.x 처럼 나오면 OK. "command not found" 면 아래로.
 ```
+
+설치가 안 되어 있다면 둘 중 하나:
+
+- **간단한 방법**: [nodejs.org](https://nodejs.org) 에서 LTS 버전을 받아 설치.
+- **버전 관리까지 하고 싶다면(권장)**: `fnm` 사용.
+  ```bash
+  # macOS (Homebrew 필요)
+  brew install fnm
+  # 셸 설정에 fnm 자동 로딩 추가 (zsh 기준, 최초 1회)
+  echo 'eval "$(fnm env --use-on-cd)"' >> ~/.zshrc
+  # 터미널을 껐다 켠 뒤, 프로젝트 폴더에서:
+  fnm install        # .node-version에 적힌 버전 자동 설치
+  fnm use            # 그 버전으로 전환
+  ```
+
+### 1. 프로젝트 받기 (최초 1회)
+
+```bash
+git clone https://github.com/nuro-pro/frontend.git
+cd frontend
+```
+
+### 2. 의존성 설치 (최초 1회 / package.json 바뀔 때마다)
+
+```bash
+npm install
+```
+
+### 3. 개발 서버 실행 (매번 개발할 때)
+
+```bash
+npm run dev
+```
+
+- 실행되면 터미널에 `Local: http://localhost:5173/` 가 뜹니다.
+- 브라우저에서 **http://localhost:5173** 를 열면 화면이 보입니다.
+- 코드를 저장하면 **새로고침 없이 화면이 자동 갱신**됩니다 (HMR).
+- **서버 끄기**: 터미널에서 `Ctrl + C`.
+
+> 💡 API(진단 요청)까지 실제로 테스트하려면 백엔드(nuro-be)도 같이
+> `http://localhost:8080` 에 떠 있어야 합니다. 백엔드 없이도 화면 자체는 열립니다.
+
+### 자주 묻는 문제
+
+| 증상                                  | 해결                                                                 |
+| ------------------------------------- | -------------------------------------------------------------------- |
+| `command not found: node` / `npm`     | 0번(Node 설치)부터. fnm 쓰면 터미널 껐다 켜야 적용됨.                |
+| `5173 포트가 이미 사용 중`            | 기존 dev 서버를 `Ctrl + C`로 끄거나, 새 포트로 열림(터미널 주소 확인). |
+| 화면은 뜨는데 진단 API가 안 됨         | 백엔드가 `localhost:8080`에 떠 있는지 확인 (위 💡 참고).             |
+| 패키지 에러가 계속 남                  | `rm -rf node_modules package-lock.json && npm install` 후 재시도.    |
 
 ## 스크립트
 
@@ -43,7 +96,6 @@ npm run dev      # http://localhost:5173
   - 성공: `{ "message": "success", "data": {...} }` (data 없을 수도 있음)
   - 에러: `{ "errorCode": 4040, "message": "..." }` — message는 한글, 사용자 노출 가능.
 - 이미지 업로드는 `multipart/form-data` (JSON body 아님). 파일 10MB / 요청 12MB 초과 시 400.
-- 인증/로그인 체계는 아직 없음.
 - 실제 API 스펙은 항상 Swagger 기준으로 확인:
   - Swagger UI: http://localhost:8080/swagger-ui.html
   - Health: http://localhost:8080/actuator/health

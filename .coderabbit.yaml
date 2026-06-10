@@ -1,0 +1,152 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: 'ko-KR'
+early_access: true
+
+tone_instructions: |
+  한국어로 정중하고 협업적인 톤의 코드 리뷰를 제공합니다.
+  비판보다는 개선 방향과 그 이유를 중심으로 설명합니다.
+  리뷰는 팀 협업을 돕는 것을 목표로 합니다.
+
+reviews:
+  profile: 'assertive'
+  request_changes_workflow: false
+  high_level_summary: true
+  changed_files_summary: true
+  review_status: true
+  collapse_walkthrough: true
+  sequence_diagrams: false
+  poem: false
+  abort_on_close: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  auto_apply_labels: false
+  suggested_reviewers: true
+
+  path_filters:
+    - 'src/**'
+    - '.github/**'
+    - '.coderabbit.yaml'
+    - 'index.html'
+    - 'vite.config.*'
+    - 'tsconfig*.json'
+    - 'eslint.config.*'
+    - '.prettierrc*'
+    - '.env.example'
+    - '!dist/**'
+    - '!build/**'
+    - '!out/**'
+    - '!coverage/**'
+    - '!node_modules/**'
+    - '!**/*.png'
+    - '!**/*.jpg'
+    - '!**/*.jpeg'
+    - '!**/*.svg'
+    - '!**/*.lock'
+    - '!package-lock.json'
+    - '!**/*.md'
+
+  path_instructions:
+    - path: 'src/**'
+      instructions: |
+        이 프로젝트의 규칙은 루트 CLAUDE.md가 SSOT다. 충돌 시 CLAUDE.md 우선.
+
+        [네이밍]
+        - 컴포넌트 파일/이름: PascalCase, 컴포넌트는 named export (진입점 App만 default)
+        - 훅: useXxx (camelCase 파일), 변수/함수: camelCase
+        - 상수: UPPER_SNAKE_CASE
+        - 이벤트 핸들러: handleXxx
+
+        [TypeScript — tsconfig가 엄격함]
+        - verbatimModuleSyntax: 타입 전용 import는 반드시 `import type` (누락 시 빌드 실패) 지적
+        - erasableSyntaxOnly: TS `enum`/`namespace`/파라미터 프로퍼티 금지 → `as const` + union 권장
+        - noUnusedLocals/noUnusedParameters: 미사용 import/변수/매개변수 지적 (의도적이면 `_` prefix)
+        - `any` 사용 지양, 외부 데이터(API 응답)는 명시 타입으로. optional(`?`) 남용 여부
+        - import는 `@/` 별칭 사용(상대경로 `../../` 지양). features/ 간 직접 import 금지
+
+        [React]
+        - 함수형 컴포넌트 + 훅만 (클래스 금지)
+        - Hooks 규칙 및 useEffect 의존성 배열 정확성, 불필요한 useEffect/useMemo/useCallback 지적
+        - 리스트 key 누락 / index key 사용 지양
+        - 컴포넌트 책임 분리, 불필요한 리렌더링, 상태 위치 적절성(props/state/derived 구분)
+        - 접근성(a11y): 클릭 가능한 div 금지(button 사용), img에 alt, input에 label
+        - 결과/진단 화면에는 면책 문구(DISCLAIMER) 노출 필수
+
+        [스타일 — Tailwind CSS v4 (CSS-first)]
+        - tailwind.config.js / postcss.config.js 신규 생성 금지 (v4는 @theme 사용)
+        - 유틸리티 클래스 일관성, 모바일 우선 반응형
+        - CSS Modules/styled-components 등 신규 도입 지적
+
+        [의존성]
+        - 라우터/상태관리/데이터페칭/폼·검증/테스트/UI키트 라이브러리 임의 추가 시 강하게 지적
+          (CLAUDE.md상 사전 논의 대상). package.json dependencies 변경은 특히 주의
+
+    - path: 'src/api/**'
+      instructions: |
+        공통 API 인프라. 변경은 영향 범위가 크므로 신중히 리뷰.
+        - 모든 호출은 `@/api/client`의 단일 axios 인스턴스 사용. 새 axios 인스턴스나 raw fetch 금지
+        - 응답은 CommonResponse<T> 래퍼: 성공 { message, data? } / 에러 { errorCode, message }
+        - 에러는 인터셉터가 ApiError로 정규화. 호출부 catch는 ApiError 가정. message는 한글이라 사용자 노출 가능
+        - baseURL이 이미 /api/v1 → 엔드포인트 함수에 prefix 중복 금지
+        - 비즈니스 분기는 HTTP status가 아니라 errorCode 기준
+
+    - path: 'src/features/**'
+      instructions: |
+        feature 단위 모듈. features/ 간 직접 import 금지(공유는 components/ · lib/ · api/로 끌어올림).
+        - API 호출은 api 인스턴스 + unwrap + CommonResponse<T> 제네릭
+        - API 응답 타입은 백엔드 Swagger가 SSOT. 추측 필드는 // TODO(Swagger) 주석 확인
+        - 이미지 업로드는 multipart/form-data(FormData, 파트명 'image'). Content-Type 수동 지정 금지
+        - 요청 전 클라이언트 가드(용량 MAX_FILE_BYTES 등) 권장. 로딩/에러/데이터 3-상태 처리
+        - 진단 결과 화면 면책 문구 노출 확인
+
+    - path: '.github/**'
+      instructions: |
+        GitHub Actions 워크플로 및 템플릿. 시크릿 하드코딩, 권한 과다(permissions), 핀 안 된 액션 버전 주의.
+
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - 'main'
+      - 'develop'
+    labels:
+      - '!wip'
+      - '!draft'
+      - '!skip-review'
+
+  finishing_touches:
+    docstrings:
+      enabled: true
+    unit_tests:
+      enabled: false
+
+  tools:
+    eslint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    yamllint:
+      enabled: true
+    actionlint:
+      enabled: true
+
+chat:
+  auto_reply: true
+  art: false
+
+knowledge_base:
+  opt_out: false
+  web_search:
+    enabled: true
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - 'CLAUDE.md'
+      - '.cursorrules'
+      - '.github/copilot-instructions.md'
+  learnings:
+    scope: 'auto'
+  pull_requests:
+    scope: 'auto'

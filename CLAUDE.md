@@ -39,13 +39,13 @@
 | 빌드/dev | **Vite 8** (`@vitejs/plugin-react`) | dev 서버 `5173`, dev 프록시로 `/api` → `:8080`. |
 | 스타일 | **Tailwind CSS v4** (`@tailwindcss/vite`) | **CSS-first 설정** — `tailwind.config.js` 없음(§9). |
 | HTTP | **axios 1.17** | 단일 인스턴스 + 인터셉터(`src/api/client.ts`). |
+| 라우팅 | **react-router-dom 7** | `BrowserRouter`를 `App.tsx`에 1개. 화면은 `features/*/`의 page 컴포넌트(§8.3). |
 | 린트/포맷 | **ESLint 10**(flat config) + **Prettier 3.8** | §10. |
 | 배포 | **Vercel** | SPA. 환경변수는 Vercel 대시보드에서 주입. |
 
 **기본 import 별칭**: `@/` → `src/` (예: `import { api } from '@/api/client'`). 상대경로 `../../`보다 `@/`를 쓴다.
 
 ### 아직 없는 것 (임의 도입 금지 — 필요 시 §17대로 먼저 논의)
-- **라우터** (`react-router` 등) — 현재 단일 화면. 화면이 2개 이상 필요해지면 그때 논의.
 - **전역 상태관리** (`zustand`/`redux`/`jotai` 등) — 아직 불필요. 우선 `useState`/`useReducer`/props로 해결.
 - **서버 상태/데이터 페칭 라이브러리** (`@tanstack/react-query`/`swr` 등) — 현재 axios 직접 호출. 캐싱/재시도/로딩 상태 관리가 본격적으로 필요해지면 논의.
 - **폼/검증 라이브러리** (`react-hook-form`/`zod` 등) — 현재 폼이 단순(파일 1개). 복잡한 폼이 생기면 논의.
@@ -246,6 +246,13 @@ export function DiagnosisCard({ result }: DiagnosisCardProps) {
   ```
 - 호출 로직이 한 컴포넌트를 넘어 재사용되면 **`features/xxx/hooks/useXxx.ts` 커스텀 훅으로 추출**한다(상태관리 라이브러리 도입 전 1차 수단).
 
+### 8.3 라우팅 (react-router-dom 7)
+- **`BrowserRouter`는 `App.tsx`에 단 1개.** 라우트 정의(`<Routes><Route .../></Routes>`)도 `App.tsx`에 모은다. 중첩 `BrowserRouter` 금지.
+- **각 화면(페이지)은 해당 feature 안의 page 컴포넌트**다(예: `features/landing/LandingPage.tsx`, `features/diagnosis/DiagnosisPage.tsx`). page도 named export, `PascalCase`.
+- 공통 레이아웃(배경 등)은 `components/Layout.tsx`로 감싼다. 화면 전환은 `<Link to="...">`/`useNavigate()`(직접 `<a href>`로 새로고침 유발 금지).
+- 현재 라우트는 `/`(랜딩)뿐. 진단 플로우(`/diagnosis` 등)는 화면을 만들면서 `App.tsx`에 추가한다(주석 자리 있음).
+- ⚠️ **Vercel 배포 시 SPA 폴백 필요**: `BrowserRouter`는 `/diagnosis` 같은 경로로 새로고침/직접 진입하면 정적 호스팅이 404를 낸다. 라우트를 2개 이상 늘리기 전에 **`vercel.json`에 모든 경로를 `index.html`로 rewrite**하는 설정을 추가한다(§17대로 필요 시 논의).
+
 ---
 
 ## 9. 스타일링 — Tailwind CSS v4 (CSS-first)
@@ -256,6 +263,8 @@ export function DiagnosisCard({ result }: DiagnosisCardProps) {
 - 전역 베이스 스타일(폰트·`color-scheme` 등)은 `index.css`에 이미 있다 — 거기에 모은다. 컴포넌트별 전역 CSS를 흩뿌리지 말 것.
 - 클래스 순서/조건부 클래스: 현재 `clsx`/`tailwind-merge` 같은 헬퍼가 없다. 조건부는 템플릿 리터럴/삼항으로 간단히. 복잡해지면 헬퍼 도입을 §17대로 논의.
 - **반응형은 모바일 우선**(기본 = 모바일, `sm:`/`md:`로 확장). 피부 사진 업로드는 모바일 사용이 많다는 점을 가정.
+- **에셋(이미지)은 반드시 `import`해서 쓴다**: `import logo from '@/assets/logo.png'` → `<img src={logo} />`. 문자열 경로(`src="src/assets/..."`)는 **프로덕션 빌드에서 깨진다**(Vite가 해시·번들 처리를 못 함). 변하지 않는 정적 파일(favicon 등)만 `public/`에 두고 `/파일명`으로 참조.
+- **Tailwind 분수 유틸리티는 정의된 값만 존재한다**: `w-1/2`·`h-2/5` 등은 OK지만 `h-4/7`·`h-1/30`·`w-3/7`처럼 **없는 분모는 클래스가 무시되어 스타일이 안 먹는다**. 임의 비율은 arbitrary value로(`h-[57%]`, `h-[calc(4/7*100%)]`).
 
 ---
 

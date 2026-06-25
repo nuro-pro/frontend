@@ -1,4 +1,10 @@
-function Layout({ children }: { children: React.ReactNode }) {
+import type { ReactNode } from 'react'
+
+interface LayoutProps {
+  children: ReactNode
+}
+
+export function Layout({ children }: LayoutProps) {
   return (
     <div
       className="min-h-screen"
@@ -11,5 +17,3 @@ function Layout({ children }: { children: React.ReactNode }) {
     </div>
   )
 }
-
-export default Layout

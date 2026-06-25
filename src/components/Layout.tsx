@@ -1,10 +1,10 @@
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center"
+      className="min-h-screen"
       style={{
         background:
-          'radial-gradient(ellipse 90% 40% at bottom center, #3b0764 0%, #0a0010 60%, #000000 100%)',
+          'radial-gradient(ellipse 90% 40% at bottom center, #663fce 0%, #0a0010 60%, #000000 100%)',
       }}
     >
       {children}

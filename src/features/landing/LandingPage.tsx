@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom'
 import landingImage from '@/assets/landing1/landingImage.png'
 import landingTitle from '@/assets/landing1/landingTitle.png'

@@ -12,7 +12,7 @@ export function OnboardingPage() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!canSubmit) return
-    // TODO: 입력값(닉네임/나이)을 진단 플로우 상태로 전달
+    // TODO: 입력값(닉네임/나이)을 진단 플로우 상태로 전달 
     navigate('/ready')
   }
 

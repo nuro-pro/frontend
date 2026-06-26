@@ -36,10 +36,15 @@ export const IntroPage = () => {
     <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
       <div
         className="flex flex-col gap-2"
-        style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease-in-out' }}
+        style={{
+          opacity: visible ? 1 : 0,
+          transition: 'opacity 0.8s ease-in-out',
+        }}
       >
         {MESSAGES[index].map((line, i) => (
-          <p key={i} className="text-[#FEFEFE] text-3xl">{line}</p>
+          <p key={i} className="text-[#FEFEFE] text-3xl">
+            {line}
+          </p>
         ))}
       </div>
     </div>

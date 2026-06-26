@@ -9,6 +9,7 @@ import { CaptureReviewPage } from '@/features/diagnosis/CaptureReviewPage'
 import { SurveyPage } from '@/features/survey/SurveyPage'
 import { AnalyzingPage } from '@/features/result/AnalyzingPage'
 import { ResultPage } from '@/features/result/ResultPage'
+import { ResultSharePage } from '@/features/result/ResultSharePage'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/survey" element={<SurveyPage />} />
           <Route path="/analyzing" element={<AnalyzingPage />} />
           <Route path="/result" element={<ResultPage />} />
+          <Route path="/share" element={<ResultSharePage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

@@ -35,7 +35,7 @@ export function CaptureReviewPage() {
         </button>
       </div>
 
-      <div className="mt-10 flex items-center gap-3">
+      <div className="mt-10 flex items-center gap-10">
         <Button variant="secondary" onClick={() => navigate('/capture')}>
           다시 촬영하기
         </Button>

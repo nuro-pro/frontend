@@ -1,43 +1,21 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/Button'
+import { RadarChart } from '@/components/RadarChart'
 import { DISCLAIMER } from '@/lib/constants'
-
-// 결과 화면(디자인 결과) 데이터는 백엔드 진단 결과로 교체 예정 — 현재는 mock
-// TODO(Swagger): DiagnosisResult 스키마 확정 후 props/state로 주입
-const USER_NAME = 'Minseo'
-const TOTAL_SCORE = 53
-
-interface Metric {
-  label: string
-  score: number
-  delta: string
-}
-
-const METRICS: Metric[] = [
-  { label: '수분', score: 62, delta: '+4' },
-  { label: '유분', score: 62, delta: '-2' },
-  { label: '탄력', score: 48, delta: '+1' },
-  { label: '모공', score: 55, delta: '+3' },
-  { label: '주름', score: 41, delta: '-1' },
-  { label: '색소', score: 58, delta: '+5' },
-]
-
-interface Ingredient {
-  name: string
-  desc: string
-}
-
-const INGREDIENTS: Ingredient[] = [
-  { name: '히알루론산', desc: '수분을 끌어당겨 건조함을 완화해 줘요.' },
-  { name: '나이아신아마이드', desc: '피부 톤과 유분 밸런스를 도와줘요.' },
-  { name: '세라마이드', desc: '장벽을 강화해 자극을 줄여줘요.' },
-]
-
-const ROUTINE: string[] = ['클렌징', '토너', '세럼', '수분크림', '선크림']
-
-// 6개 지표 밸런스 도넛(임시 색상 분할)
-const BALANCE_DONUT =
-  'conic-gradient(#8b6cff 0deg 60deg, #5ad1ff 60deg 120deg, #6affd0 120deg 180deg, #ffe68a 180deg 240deg, #ff9d6a 240deg 300deg, #ff7a9c 300deg 360deg)'
+import {
+  INGREDIENTS,
+  METRICS,
+  PEER_SCORE,
+  PROFILE_DESC,
+  PROFILE_TAGS,
+  RADAR_LABELS,
+  RADAR_VALUES,
+  RESULT_DATE,
+  ROUTINE,
+  TOTAL_DESC,
+  TOTAL_SCORE,
+  USER_NAME,
+} from './mockResult'
 
 export function ResultPage() {
   const navigate = useNavigate()
@@ -51,43 +29,47 @@ export function ResultPage() {
           {USER_NAME} 님의 피부 진단 결과입니다.
         </h1>
         <p className="mt-2 text-xs text-white/40">
-          2026.06.24 · 20대 · NURO Skin AI
+          {RESULT_DATE} · NURO Skin AI
         </p>
       </header>
 
-      {/* 상단 카드: 프로필 + 6지표 밸런스 */}
+      {/* 상단: 프로필 + 6지표 밸런스 */}
       <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="flex items-center gap-5 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-          <div className="h-24 w-24 shrink-0 rounded-2xl bg-white/80" />
-          <div>
-            <p className="text-3xl font-bold text-white">{TOTAL_SCORE}</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]">
-                복합성 피부
-              </span>
-              <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/70">
-                또래 평균 24점
-              </span>
+        <article className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+          <div className="flex items-start gap-5">
+            {/* 진단 사진 자리 — 실제 촬영 이미지로 교체 예정 */}
+            <div className="h-24 w-24 shrink-0 rounded-2xl bg-white/10" />
+            <div>
+              <p className="text-xl font-bold text-white">{USER_NAME} 님</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {PROFILE_TAGS.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+          <p className="mt-4 text-sm leading-relaxed text-white/50">
+            {PROFILE_DESC}
+          </p>
+        </article>
 
-        <div className="flex items-center gap-6 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-          <div
-            className="h-28 w-28 shrink-0 rounded-full"
-            style={{ background: BALANCE_DONUT }}
-          >
-            <div className="flex h-full w-full items-center justify-center">
-              <div className="h-16 w-16 rounded-full bg-[#15101f]" />
-            </div>
+        <article className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+          <span className="inline-block rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs font-medium text-[#c4b5ff]">
+            6개 지표 밸런스
+          </span>
+          <div className="mt-2 flex justify-center">
+            <RadarChart
+              values={RADAR_VALUES}
+              labels={RADAR_LABELS}
+              className="h-56 w-56"
+            />
           </div>
-          <div>
-            <p className="font-semibold text-white">6개 지표 밸런스</p>
-            <p className="mt-1 text-sm text-white/50">
-              지표별 분포를 한눈에 확인해요.
-            </p>
-          </div>
-        </div>
+        </article>
       </section>
 
       {/* 항목별 분석 */}
@@ -95,38 +77,54 @@ export function ResultPage() {
         <p className="text-sm font-medium text-[#a78bff]">AI Analysis</p>
         <h2 className="mt-1 text-xl font-bold text-white">항목별 분석</h2>
 
-        <div className="mt-5 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-          <p className="text-sm text-white/50">종합 점수</p>
-          <p className="mt-1 text-3xl font-bold text-white">
-            {TOTAL_SCORE}
-            <span className="text-base font-normal text-white/40"> / 100</span>
-          </p>
+        <div className="mt-5 flex flex-col gap-4 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 sm:flex-row sm:items-center sm:gap-8">
+          <div className="shrink-0">
+            <p className="text-sm text-white/50">종합 점수</p>
+            <p className="mt-1 text-3xl font-bold text-white">
+              {TOTAL_SCORE}
+              <span className="text-base font-normal text-white/40">
+                {' '}
+                / 또래 {PEER_SCORE}
+              </span>
+            </p>
+          </div>
+          <p className="text-sm leading-relaxed text-white/60">{TOTAL_DESC}</p>
         </div>
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {METRICS.map((metric) => (
-            <div
+            <article
               key={metric.label}
               className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">
-                <span className="text-sm text-white/70">{metric.label}</span>
-                <span className="text-xs text-[#a78bff]">{metric.delta}</span>
-              </div>
-              <p className="mt-2 text-2xl font-bold text-white">
-                {metric.score}
-                <span className="text-sm font-normal text-white/40">
-                  {' '}
-                  / 100
+                <span className="text-sm font-medium text-white">
+                  {metric.label}
                 </span>
-              </p>
+                <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs text-white/60">
+                  {metric.grade}
+                </span>
+              </div>
+
+              <div className="mt-3 flex items-baseline justify-between">
+                <p className="text-2xl font-bold text-white">
+                  {metric.score}
+                  <span className="text-sm font-normal text-white/40">
+                    /100
+                  </span>
+                </p>
+                <span className="text-xs text-[#a78bff]">{metric.peer}</span>
+              </div>
+
               <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#8b6cff] to-[#5ad1ff]"
+                  className={`h-full rounded-full bg-gradient-to-r ${metric.barClass}`}
                   style={{ width: `${metric.score}%` }}
                 />
               </div>
-            </div>
+
+              <p className="mt-3 text-xs text-white/40">{metric.desc}</p>
+            </article>
           ))}
         </div>
       </section>
@@ -138,16 +136,23 @@ export function ResultPage() {
 
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {INGREDIENTS.map((ingredient) => (
-            <div
+            <article
               key={ingredient.name}
               className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
             >
-              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#8b6cff] to-[#5ad1ff]" />
+              <div className="flex items-center justify-between">
+                <div
+                  className={`h-9 w-9 rounded-full bg-gradient-to-br ${ingredient.iconClass}`}
+                />
+                <span className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]">
+                  {ingredient.badge}
+                </span>
+              </div>
               <p className="mt-4 font-semibold text-white">{ingredient.name}</p>
               <p className="mt-2 text-sm leading-relaxed text-white/50">
                 {ingredient.desc}
               </p>
-            </div>
+            </article>
           ))}
         </div>
       </section>
@@ -159,17 +164,23 @@ export function ResultPage() {
           추천 스킨케어 루틴
         </h2>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5">
-          {ROUTINE.map((label, index) => (
-            <div
-              key={label}
-              className="rounded-2xl bg-white/5 p-5 text-center ring-1 ring-white/10"
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {ROUTINE.map((step, index) => (
+            <article
+              key={step.name}
+              className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
             >
-              <p className="text-xs text-[#a78bff]">
+              <p className="text-sm font-bold text-[#a78bff]">
                 {String(index + 1).padStart(2, '0')}
               </p>
-              <p className="mt-2 text-sm font-medium text-white">{label}</p>
-            </div>
+              <p className="mt-3 text-sm font-semibold text-white">
+                {step.name}
+              </p>
+              <p className="mt-1 text-xs text-white/40">{step.product}</p>
+              <p className="mt-2 text-xs leading-relaxed text-white/40">
+                {step.desc}
+              </p>
+            </article>
           ))}
         </div>
       </section>
@@ -180,10 +191,10 @@ export function ResultPage() {
       {/* 하단 액션 */}
       <div className="mt-6 flex items-center justify-center gap-3">
         <Button variant="secondary" onClick={() => navigate('/')}>
-          처음으로
+          홈으로
         </Button>
-        <Button variant="primary" onClick={() => navigate('/intro')}>
-          다시 진단하기
+        <Button variant="primary" onClick={() => navigate('/share')}>
+          이미지로 공유
         </Button>
       </div>
     </div>

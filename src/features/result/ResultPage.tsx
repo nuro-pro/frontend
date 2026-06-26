@@ -152,7 +152,7 @@ export function ResultPage() {
                 {String(index + 1).padStart(2, '0')}
               </p>
               <p className="mt-3 text-sm font-semibold text-white">{step.name}</p>
-              <p className="mt-1 text-xs text-white/40">{step.product}</p>
+              <p className="mt-1 text-xs text-[#a78bff]">{step.product}</p>
               <p className="mt-2 text-xs leading-relaxed text-white/40">{step.desc}</p>
             </article>
           ))}

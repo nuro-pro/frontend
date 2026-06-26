@@ -35,7 +35,8 @@ export function ResultPage() {
 
       {/* 상단: 프로필 + 6지표 밸런스 */}
       <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <article className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+        {/* 1. 프로필 카드 */}
+        <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
           <div className="flex items-start gap-5">
             {/* 진단 사진 자리 — 실제 촬영 이미지로 교체 예정 */}
             <div className="h-24 w-24 shrink-0 rounded-2xl bg-white/10" />
@@ -58,7 +59,8 @@ export function ResultPage() {
           </p>
         </article>
 
-        <article className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+        {/* 2. 6개 지표 밸런스 카드 */}
+        <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
           <span className="inline-block rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs font-medium text-[#c4b5ff]">
             6개 지표 밸런스
           </span>
@@ -77,7 +79,7 @@ export function ResultPage() {
         <p className="text-sm font-medium text-[#a78bff]">AI Analysis</p>
         <h2 className="mt-1 text-xl font-bold text-white">항목별 분석</h2>
 
-        <div className="mt-5 flex flex-col gap-4 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 sm:flex-row sm:items-center sm:gap-8">
+        <div className="mt-5 flex flex-col gap-4 rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10 sm:flex-row sm:items-center sm:gap-8">
           <div className="shrink-0">
             <p className="text-sm text-white/50">종합 점수</p>
             <p className="mt-1 text-3xl font-bold text-white">
@@ -92,10 +94,11 @@ export function ResultPage() {
         </div>
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* 3. 항목별 상세 분석 리스트 */}
           {METRICS.map((metric) => (
             <article
               key={metric.label}
-              className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
+              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-white">
@@ -135,10 +138,11 @@ export function ResultPage() {
         <h2 className="mt-1 text-xl font-bold text-white">나와 잘 맞는 성분</h2>
 
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {/* 4. 추천 성분 리스트 */}
           {INGREDIENTS.map((ingredient) => (
             <article
               key={ingredient.name}
-              className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
+              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">
                 <div
@@ -165,10 +169,11 @@ export function ResultPage() {
         </h2>
 
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {/* 5. 루틴 단계 리스트 */}
           {ROUTINE.map((step, index) => (
             <article
               key={step.name}
-              className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
+              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <p className="text-sm font-bold text-[#a78bff]">
                 {String(index + 1).padStart(2, '0')}
@@ -189,14 +194,24 @@ export function ResultPage() {
       <p className="mt-12 text-center text-xs text-white/40">{DISCLAIMER}</p>
 
       {/* 하단 액션 */}
-      <div className="mt-6 flex items-center justify-center gap-3">
-        <Button variant="secondary" onClick={() => navigate('/')}>
-          홈으로
-        </Button>
-        <Button variant="primary" onClick={() => navigate('/share')}>
-          이미지로 공유
-        </Button>
-      </div>
+        <div className="mt-8 flex justify-center">
+          <div className="grid w-full max-w-sm grid-cols-2 gap-3">
+            <Button 
+              variant="secondary" 
+              className="w-full" 
+              onClick={() => navigate('/')}
+            >
+              홈으로
+            </Button>
+            <Button 
+              variant="primary" 
+              className="w-full" 
+              onClick={() => navigate('/share')}
+            >
+              이미지로 공유
+            </Button>
+          </div>
+        </div>
     </div>
   )
 }

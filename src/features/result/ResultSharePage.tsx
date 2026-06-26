@@ -3,16 +3,19 @@ import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RadarChart } from '@/components/RadarChart'
 import {
-  INGREDIENTS,
+  MOCK_RESULT,
   RADAR_LABELS,
-  RADAR_VALUES,
-  USER_NAME,
+  scoresToRadarValues,
+  INGREDIENT_ICON_CLASSES,
 } from './mockResult'
 
-// 결과 저장/공유 화면(디자인 결과저장화면).
+// 결과 저장/공유 화면
 export function ResultSharePage() {
   const navigate = useNavigate()
   const [phone, setPhone] = useState('')
+
+  const result = MOCK_RESULT  // TODO: 실제 API 응답으로 교체
+  const radarValues = scoresToRadarValues(result.scores)
 
   const canSend = phone.replace(/\D/g, '').length >= 10
 
@@ -32,27 +35,27 @@ export function ResultSharePage() {
 
         {/* 결과 요약 카드 */}
         <div className="mt-6 rounded-3xl bg-black/40 p-5 ring-1 ring-white/10">
-          <p className="text-center font-semibold text-white">{USER_NAME} 님</p>
+          <p className="text-center font-semibold text-white">{result.userName} 님</p>
           <p className="mt-1 text-center text-xs text-white/40">
-            복합성 피부 &middot; 속건조 가능
+            {result.skinType} &middot; 피부 나이 {result.skinAge}세
           </p>
 
           <div className="mt-2 flex justify-center">
             <RadarChart
-              values={RADAR_VALUES}
-              labels={RADAR_LABELS}
+              values={radarValues}
+              labels={[...RADAR_LABELS]}
               className="h-48 w-48"
             />
           </div>
 
           <ul className="mt-4 space-y-2">
-            {INGREDIENTS.map((ingredient) => (
+            {result.ingredients.map((ingredient) => (
               <li
                 key={ingredient.name}
                 className="flex items-center gap-3 rounded-xl bg-white/5 px-3 py-2 ring-1 ring-white/10"
               >
                 <span
-                  className={`h-7 w-7 shrink-0 rounded-full bg-gradient-to-br ${ingredient.iconClass}`}
+                  className={`h-7 w-7 shrink-0 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.name] ?? 'from-white/20 to-white/10'}`}
                 />
                 <span className="flex-1 text-sm text-white">
                   {ingredient.name}

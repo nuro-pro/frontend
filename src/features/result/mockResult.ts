@@ -27,6 +27,8 @@ export interface DiagnosisResult {
     desc: string
   }[]
   disclaimer: string
+  totalScore: number
+  totalDesc: string
 }
 
 export const MOCK_RESULT: DiagnosisResult = {
@@ -69,6 +71,8 @@ export const MOCK_RESULT: DiagnosisResult = {
     { name: '선크림', product: '데일리 선크림', desc: '색소 침착을 예방해줘요.' },
   ],
   disclaimer: '이 결과는 의학적 진단이 아닙니다.',
+  totalScore: 53,
+  totalDesc: '전반적으로 균형 잡힌 편이지만 수분 관리에 조금 더 신경 쓰면 좋아요.',
 }
 
 // RadarChart용 상수 (프론트 고정값)

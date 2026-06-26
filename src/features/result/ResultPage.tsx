@@ -30,7 +30,7 @@ export function ResultPage() {
 
       {/* 프로필 + 레이더 차트 */}
       <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <article className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+        <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
           <div className="flex items-start gap-5">
             <div className="h-24 w-24 shrink-0 rounded-2xl bg-white/10" />
             <div>
@@ -52,7 +52,7 @@ export function ResultPage() {
           </p>
         </article>
 
-        <article className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+        <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
           <span className="inline-block rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs font-medium text-[#c4b5ff]">
             6개 지표 밸런스
           </span>
@@ -66,10 +66,23 @@ export function ResultPage() {
         </article>
       </section>
 
+
+
       {/* 항목별 점수 */}
       <section className="mt-12">
         <p className="text-sm font-medium text-[#a78bff]">AI Analysis</p>
         <h2 className="mt-1 text-xl font-bold text-white">항목별 분석</h2>
+
+        <div className="px-10 mt-5 flex flex-col gap-4 rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10 sm:flex-row sm:items-center sm:gap-8">
+          <div className="shrink-0 border-r border-white pr-8">
+            <p className="text-sm text-white/50">종합 점수</p>
+            <p className="mt-1 text-3xl font-bold text-white">
+              {result.totalScore}
+              <span className="text-base font-normal text-white/40"> / 100</span>
+            </p>
+          </div>
+          <p className="text-sm leading-relaxed text-white/60">{result.totalDesc}</p>
+        </div>
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {RADAR_LABELS.map((label) => {
@@ -77,7 +90,7 @@ export function ResultPage() {
             return (
               <article
                 key={label}
-                className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
+                className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
               >
                 <span className="text-sm font-medium text-white">{label}</span>
                 <p className="mt-3 text-2xl font-bold text-white">
@@ -105,7 +118,7 @@ export function ResultPage() {
           {result.ingredients.map((ingredient) => (
             <article
               key={ingredient.name}
-              className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
+              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">
                 <div
@@ -133,7 +146,7 @@ export function ResultPage() {
           {result.routine.map((step, index) => (
             <article
               key={step.name}
-              className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10"
+              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <p className="text-sm font-bold text-[#a78bff]">
                 {String(index + 1).padStart(2, '0')}
@@ -150,9 +163,9 @@ export function ResultPage() {
       <p className="mt-12 text-center text-xs text-white/40">{result.disclaimer}</p>
 
       {/* 액션 버튼 */}
-      <div className="mt-6 flex items-center justify-center gap-3">
-        <Button variant="secondary" onClick={() => navigate('/')}>홈으로</Button>
-        <Button variant="primary" onClick={() => navigate('/share')}>이미지로 공유</Button>
+      <div className="mt-6 flex items-center justify-center gap-10">
+        <Button variant="secondary" className="w-44" onClick={() => navigate('/')}>홈으로</Button>
+        <Button variant="primary" className="w-44" onClick={() => navigate('/share')}>휴대폰으로 공유</Button>
       </div>
     </div>
   )

@@ -10,9 +10,15 @@ export interface DiagnosisResult {
     score: number
   }[]
   ingredients: {
-    name: string
-    badge: string
+    korName: string
+    engName: string
+    ewgGrade: number
+    riskLevel: string
+    dataLevel: string
     desc: string
+    effects: string[]
+    howToUse: string
+    tip: string
   }[]
   routine: {
     name: string

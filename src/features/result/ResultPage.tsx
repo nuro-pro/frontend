@@ -167,13 +167,13 @@ export function ResultPage() {
             >
               <div className="flex items-center justify-between">
                 <div
-                  className={`h-9 w-9 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.name] ?? 'from-white/20 to-white/10'}`}
+                  className={`h-9 w-9 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.korName] ?? 'from-white/20 to-white/10'}`}
                 />
                 <span className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]">
-                  {ingredient.badge}
+                  {ingredient.effects[0]}
                 </span>
               </div>
-              <p className="mt-4 font-semibold text-white">{ingredient.name}</p>
+              <p className="mt-4 font-semibold text-white">{ingredient.korName}</p>
               <p className="mt-2 text-sm leading-relaxed text-white/50">
                 {ingredient.desc}
               </p>

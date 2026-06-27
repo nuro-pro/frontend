@@ -10,11 +10,13 @@ import { SurveyPage } from '@/features/survey/SurveyPage'
 import { AnalyzingPage } from '@/features/result/AnalyzingPage'
 import { ResultPage } from '@/features/result/ResultPage'
 import { ResultSharePage } from '@/features/result/ResultSharePage'
+import {DiagnosisProvider} from '@/features/diagnosis/DiagnisisProvider'
 
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
+      <DiagnosisProvider>
+        <Layout>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/intro" element={<IntroPage />} />
@@ -28,6 +30,7 @@ function App() {
           <Route path="/share" element={<ResultSharePage />} />
         </Routes>
       </Layout>
+      </DiagnosisProvider>
     </BrowserRouter>
   )
 }

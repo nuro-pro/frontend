@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 
 export function OnboardingPage() {
   const navigate = useNavigate()
+  const { setUserInfo } = useDiagnosis()
   const [nickname, setNickname] = useState('')
   const [age, setAge] = useState('')
 
@@ -12,7 +14,7 @@ export function OnboardingPage() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!canSubmit) return
-    // TODO: 입력값(닉네임/나이)을 진단 플로우 상태로 전달
+    setUserInfo({ name: nickname, age: Number(age) })  
     navigate('/ready')
   }
 

@@ -5,31 +5,36 @@ import { createDiagnosis } from '@/features/diagnosis/api'
 
 export function AnalyzingPage() {
   const navigate = useNavigate()
-  const { photo, surveyAnswers, reset } = useDiagnosis()
+  const { photo, userInfo, surveyAnswers, reset } = useDiagnosis()
 
-  useEffect(()=>{
-    if(!photo || !surveyAnswers){
-      navigate('/capture') //데이터 없으면 처음으로
+  useEffect(() => {
+    if (!photo || !surveyAnswers) {
+      navigate('/capture')
       return
     }
 
-    async function analyze(){
-      try{
+    async function analyze() {
+      try {
         const result = await createDiagnosis(
           photo!,
           surveyAnswers!.skinCondition,
           surveyAnswers!.skinConcern,
           surveyAnswers!.skinSensitivity
         )
-        reset() //진단 완료 후 상태 초기화
-        navigate('/result', { state: { result } }) //결과 페이지로 이동
+        const photoUrl = URL.createObjectURL(photo!)
+        reset()
+        navigate('/result', { state: { 
+          result,
+          userName: userInfo?.name || '사용자',
+          photoUrl
+         } })
       } catch {
-        navigate('/capture') //에러 발생 시 처음으로
+        navigate('/capture')
       }
     }
 
     analyze()
-    }, [])
+  }, [photo, surveyAnswers, navigate, reset])
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">

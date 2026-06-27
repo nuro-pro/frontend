@@ -1,29 +1,18 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useEffect, useMemo } from 'react'
 import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
-import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 import { MOCK_RESULT, INGREDIENT_ICON_CLASSES, METRIC_BAR_CLASSES } from './mockResult'
 
 const RADAR_LABELS = ['수분', '주름', '색소', '모공', '민감', '유분'] as const
 
 export function ResultPage() {
-  const { photo } = useDiagnosis()
-
-  const photoUrl = useMemo(() => {
-    if (!photo) return null
-    return URL.createObjectURL(photo)
-  }, [photo])
-
-  useEffect(() => {
-    if (photoUrl) {URL.revokeObjectURL(photoUrl)}
-  }, [photoUrl])
 
   const navigate = useNavigate()
   const { state } = useLocation()
   const result: DiagnosisResult = state?.result ?? MOCK_RESULT
   const userName: string = state?.userName ?? '사용자'
+  const photoUrl: string | null = state?.photoUrl ?? null  // ← Context 대신 state에서
 
   // metrics 배열 → 레이더 차트용 배열로 변환
   const radarValues = RADAR_LABELS.map(

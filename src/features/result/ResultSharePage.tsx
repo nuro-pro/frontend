@@ -66,17 +66,17 @@ export function ResultSharePage() {
           <ul className="mt-4 space-y-2">
             {result.ingredients.map((ingredient) => (
               <li
-                key={ingredient.name}
+                key={ingredient.engName}
                 className="flex items-center gap-3 rounded-xl bg-white/5 px-3 py-2 ring-1 ring-white/10"
               >
                 <span
-                  className={`h-7 w-7 shrink-0 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.name] ?? 'from-white/20 to-white/10'}`}
+                  className={`h-7 w-7 shrink-0 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.korName] ?? 'from-white/20 to-white/10'}`}
                 />
                 <span className="flex-1 text-sm text-white">
-                  {ingredient.name}
+                  {ingredient.korName}
                 </span>
                 <span className="rounded-full bg-[#8b6cff]/20 px-2.5 py-0.5 text-xs text-[#c4b5ff]">
-                  {ingredient.badge}
+                  {ingredient.effects[0]}
                 </span>
               </li>
             ))}

@@ -30,45 +30,57 @@ export function ResultPage() {
       </header>
 
       {/* 프로필 + 레이더 차트 */}
-      <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
-          <div className="flex items-start gap-5">
-            <div className="h-24 w-24 shrink-0 rounded-2xl overflow-hidden bg-white/10"> 
-                {photoUrl && (
-                  <img src={photoUrl} alt="진단 사진" className="w-full h-full object-cover" />
-                )}
+    <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {/* 프로필 카드 */}
+      <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
+        <p className="text-xs text-[#a78bff] mb-3">한눈에 보는 피부 상태</p>
+        <div className="flex items-start gap-4">
+          <div className="flex flex-col items-center gap-1 shrink-0">
+            <div className="h-40 w-40 rounded-2xl overflow-hidden bg-white/10">
+              {photoUrl && (
+                <img src={photoUrl} alt="진단 사진" className="w-full h-full object-cover" />
+              )}
             </div>
-            <div>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {[result.skinType, `피부 나이 ${result.skinAge}세`].map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <p className="text-xs text-white/50">{userName} 님 · {state?.userAge ?? ''}세</p>
           </div>
-          <p className="mt-4 text-sm leading-relaxed text-white/50">
-            {result.summary}
-          </p>
-        </article>
 
-        <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
-          <span className="inline-block rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs font-medium text-[#c4b5ff]">
-            6개 지표 밸런스
-          </span>
-          <div className="mt-2 flex justify-center">
-            <RadarChart
-              values={radarValues}
-              labels={[...RADAR_LABELS]}
-              className="h-56 w-56"
-            />
+          <div className="flex-1">
+            <div className="flex items-baseline gap-1">
+              <p className="text-sm text-white/50">종합 점수</p>
+            </div>
+            <p className="text-3xl font-bold text-white mt-1">
+              {result.totalScore}
+              <span className="text-sm font-normal text-white/40"> / 또래 52</span>
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {[result.skinType, `피부 나이 ${result.skinAge}세`].map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <p className="mt-3 text-xs leading-relaxed text-white/50">
+              {result.summary}
+            </p>
           </div>
-        </article>
-      </section>
+        </div>
+      </article>
+
+      {/* 레이더 차트 */}
+      <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
+        <p className="text-xs text-[#a78bff] mb-1">6개 지표 밸런스</p>
+        <div className="flex justify-center">
+          <RadarChart
+            values={radarValues}
+            labels={[...RADAR_LABELS]}
+            className="h-56 w-56"
+          />
+        </div>
+      </article>
+    </section>
 
       {/* 항목별 점수 */}
       <section className="mt-12">

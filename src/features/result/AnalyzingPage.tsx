@@ -26,6 +26,7 @@ export function AnalyzingPage() {
         navigate('/result', { state: { 
           result,
           userName: userInfo?.name || '사용자',
+          userAge: userInfo?.age,
           photoUrl
          } })
       } catch {

@@ -162,7 +162,10 @@ export function ResultPage() {
 
       <div className="mt-6 flex items-center justify-center gap-10">
         <Button variant="secondary" className="w-44" onClick={() => navigate('/')}>홈으로</Button>
-        <Button variant="primary" className="w-44" onClick={() => navigate('/share')}>휴대폰으로 공유</Button>
+        <Button variant="primary" className="w-44" onClick={() => navigate('/share', { 
+            state: { result, userName, userAge: state?.userAge, photoUrl } })}>
+            휴대폰으로 공유
+        </Button>
       </div>
     </div>
   )

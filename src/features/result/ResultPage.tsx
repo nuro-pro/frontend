@@ -1,19 +1,34 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useEffect, useMemo } from 'react'
 import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
-import {
-  MOCK_RESULT,
-  RADAR_LABELS,
-  scoresToRadarValues,
-  INGREDIENT_ICON_CLASSES,
-  METRIC_BAR_CLASSES,
-} from './mockResult'
+import type { DiagnosisResult } from '@/features/diagnosis/types'
+import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
+import { MOCK_RESULT, INGREDIENT_ICON_CLASSES, METRIC_BAR_CLASSES } from './mockResult'
+
+const RADAR_LABELS = ['수분', '주름', '색소', '모공', '민감', '유분'] as const
 
 export function ResultPage() {
-  const navigate = useNavigate()
-  const result = MOCK_RESULT  // TODO: 실제 API 응답으로 교체
+  const { photo } = useDiagnosis()
 
-  const radarValues = scoresToRadarValues(result.scores)
+  const photoUrl = useMemo(() => {
+    if (!photo) return null
+    return URL.createObjectURL(photo)
+  }, [photo])
+
+  useEffect(() => {
+    if (photoUrl) {URL.revokeObjectURL(photoUrl)}
+  }, [photoUrl])
+
+  const navigate = useNavigate()
+  const { state } = useLocation()
+  const result: DiagnosisResult = state?.result ?? MOCK_RESULT
+  const userName: string = state?.userName ?? '사용자'
+
+  // metrics 배열 → 레이더 차트용 배열로 변환
+  const radarValues = RADAR_LABELS.map(
+    (label) => result.metrics.find((m) => m.name === label)?.score ?? 0
+  )
 
   return (
     <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-8 sm:py-14">
@@ -21,20 +36,20 @@ export function ResultPage() {
       <header>
         <p className="text-sm font-medium text-[#a78bff]">AI 피부 진단 결과</p>
         <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
-          {result.userName} 님의 피부 진단 결과입니다.
+          {userName}님의 피부 진단 결과입니다.
         </h1>
-        <p className="mt-2 text-xs text-white/40">
-          {result.resultDate} · NURO Skin AI
-        </p>
       </header>
 
       {/* 프로필 + 레이더 차트 */}
       <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <article className="rounded-2xl bg-[#1e1a27] p-6 ring-1 ring-white/10">
           <div className="flex items-start gap-5">
-            <div className="h-24 w-24 shrink-0 rounded-2xl bg-white/10" />
+            <div className="h-24 w-24 shrink-0 rounded-2xl overflow-hidden bg-white/10"> 
+                {photoUrl && (
+                  <img src={photoUrl} alt="진단 사진" className="w-full h-full object-cover" />
+                )}
+            </div>
             <div>
-              <p className="text-xl font-bold text-white">{result.userName} 님</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {[result.skinType, `피부 나이 ${result.skinAge}세`].map((tag) => (
                   <span
@@ -48,7 +63,7 @@ export function ResultPage() {
             </div>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-white/50">
-            {result.profileDesc}
+            {result.summary}
           </p>
         </article>
 
@@ -65,8 +80,6 @@ export function ResultPage() {
           </div>
         </article>
       </section>
-
-
 
       {/* 항목별 점수 */}
       <section className="mt-12">
@@ -86,12 +99,9 @@ export function ResultPage() {
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {RADAR_LABELS.map((label) => {
-            const score = result.scores[label]
+            const score = result.metrics.find((m) => m.name === label)?.score ?? 0
             return (
-              <article
-                key={label}
-                className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
-              >
+              <article key={label} className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10">
                 <span className="text-sm font-medium text-white">{label}</span>
                 <p className="mt-3 text-2xl font-bold text-white">
                   {score}
@@ -116,22 +126,15 @@ export function ResultPage() {
 
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {result.ingredients.map((ingredient) => (
-            <article
-              key={ingredient.name}
-              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
-            >
+            <article key={ingredient.name} className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10">
               <div className="flex items-center justify-between">
-                <div
-                  className={`h-9 w-9 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.name] ?? 'from-white/20 to-white/10'}`}
-                />
+                <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.name] ?? 'from-white/20 to-white/10'}`} />
                 <span className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]">
                   {ingredient.badge}
                 </span>
               </div>
               <p className="mt-4 font-semibold text-white">{ingredient.name}</p>
-              <p className="mt-2 text-sm leading-relaxed text-white/50">
-                {ingredient.desc}
-              </p>
+              <p className="mt-2 text-sm leading-relaxed text-white/50">{ingredient.desc}</p>
             </article>
           ))}
         </div>
@@ -144,13 +147,8 @@ export function ResultPage() {
 
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {result.routine.map((step, index) => (
-            <article
-              key={step.name}
-              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
-            >
-              <p className="text-sm font-bold text-[#a78bff]">
-                {String(index + 1).padStart(2, '0')}
-              </p>
+            <article key={step.name} className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10">
+              <p className="text-sm font-bold text-[#a78bff]">{String(index + 1).padStart(2, '0')}</p>
               <p className="mt-3 text-sm font-semibold text-white">{step.name}</p>
               <p className="mt-1 text-xs text-[#a78bff]">{step.product}</p>
               <p className="mt-2 text-xs leading-relaxed text-white/40">{step.desc}</p>
@@ -159,10 +157,8 @@ export function ResultPage() {
         </div>
       </section>
 
-      {/* 면책 문구 */}
       <p className="mt-12 text-center text-xs text-white/40">{result.disclaimer}</p>
 
-      {/* 액션 버튼 */}
       <div className="mt-6 flex items-center justify-center gap-10">
         <Button variant="secondary" className="w-44" onClick={() => navigate('/')}>홈으로</Button>
         <Button variant="primary" className="w-44" onClick={() => navigate('/share')}>휴대폰으로 공유</Button>

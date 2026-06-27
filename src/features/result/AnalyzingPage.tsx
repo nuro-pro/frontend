@@ -1,16 +1,35 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-// 이미지 분석중 로딩 화면(디자인 분석중) 일정 시간 후 결과로 이동
-const ANALYZING_MS = 2500
+import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
+import { createDiagnosis } from '@/features/diagnosis/api'
 
 export function AnalyzingPage() {
   const navigate = useNavigate()
+  const { photo, surveyAnswers, reset } = useDiagnosis()
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => navigate('/result'), ANALYZING_MS)
-    return () => window.clearTimeout(timer)
-  }, [navigate])
+  useEffect(()=>{
+    if(!photo || !surveyAnswers){
+      navigate('/capture') //데이터 없으면 처음으로
+      return
+    }
+
+    async function analyze(){
+      try{
+        const result = await createDiagnosis(
+          photo!,
+          surveyAnswers!.skinCondition,
+          surveyAnswers!.skinConcern,
+          surveyAnswers!.skinSensitivity
+        )
+        reset() //진단 완료 후 상태 초기화
+        navigate('/result', { state: { result } }) //결과 페이지로 이동
+      } catch {
+        navigate('/capture') //에러 발생 시 처음으로
+      }
+    }
+
+    analyze()
+    }, [])
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">

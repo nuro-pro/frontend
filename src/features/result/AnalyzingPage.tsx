@@ -19,16 +19,18 @@ export function AnalyzingPage() {
           photo!,
           surveyAnswers!.skinCondition,
           surveyAnswers!.skinConcern,
-          surveyAnswers!.skinSensitivity
+          surveyAnswers!.skinSensitivity,
         )
         const photoUrl = URL.createObjectURL(photo!)
         reset()
-        navigate('/result', { state: { 
-          result,
-          userName: userInfo?.name || '사용자',
-          userAge: userInfo?.age,
-          photoUrl
-         } })
+        navigate('/result', {
+          state: {
+            result,
+            userName: userInfo?.name || '사용자',
+            userAge: userInfo?.age,
+            photoUrl,
+          },
+        })
       } catch {
         navigate('/capture')
       }

@@ -74,7 +74,7 @@ export function CapturePage() {
     canvas.height = video.videoHeight
     const ctx = canvas.getContext('2d')
     if (!ctx) return
-    // 디스플레이는 셀카처럼 좌우반전이지만, 백엔드엔 원본 프레임을 보냄 
+    // 디스플레이는 셀카처럼 좌우반전이지만, 백엔드엔 원본 프레임을 보냄
     ctx.drawImage(video, 0, 0)
     canvas.toBlob(
       (blob) => {

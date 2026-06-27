@@ -37,7 +37,8 @@ export const MOCK_RESULT: DiagnosisResult = {
   userName: 'Minseo',
   skinType: '복합성 피부',
   skinAge: 24,
-  profileDesc: '유분이 많은 T존과 속건조가 함께 공존하는 복합성 피부예요. 피지 조절과 수분 보충이 핵심이에요.',
+  profileDesc:
+    '유분이 많은 T존과 속건조가 함께 공존하는 복합성 피부예요. 피지 조절과 수분 보충이 핵심이에요.',
   scores: {
     수분: 80,
     주름: 55,
@@ -64,22 +65,52 @@ export const MOCK_RESULT: DiagnosisResult = {
     },
   ],
   routine: [
-    { name: '클렌징', product: '약산성 젤 클렌저', desc: '유분은 덜어내되 속당김은 막아줘요.' },
-    { name: '토너', product: '수분 결 토너', desc: '다음 단계 흡수를 도와줘요.' },
-    { name: '세럼', product: '히알루론산 세럼', desc: '속건조를 집중적으로 채워줘요.' },
-    { name: '수분크림', product: '세라마이드 크림', desc: '장벽을 감싸 수분을 가둬줘요.' },
-    { name: '선크림', product: '데일리 선크림', desc: '색소 침착을 예방해줘요.' },
+    {
+      name: '클렌징',
+      product: '약산성 젤 클렌저',
+      desc: '유분은 덜어내되 속당김은 막아줘요.',
+    },
+    {
+      name: '토너',
+      product: '수분 결 토너',
+      desc: '다음 단계 흡수를 도와줘요.',
+    },
+    {
+      name: '세럼',
+      product: '히알루론산 세럼',
+      desc: '속건조를 집중적으로 채워줘요.',
+    },
+    {
+      name: '수분크림',
+      product: '세라마이드 크림',
+      desc: '장벽을 감싸 수분을 가둬줘요.',
+    },
+    {
+      name: '선크림',
+      product: '데일리 선크림',
+      desc: '색소 침착을 예방해줘요.',
+    },
   ],
   disclaimer: '이 결과는 의학적 진단이 아닙니다.',
   totalScore: 53,
-  totalDesc: '전반적으로 균형 잡힌 편이지만 수분 관리에 조금 더 신경 쓰면 좋아요.',
+  totalDesc:
+    '전반적으로 균형 잡힌 편이지만 수분 관리에 조금 더 신경 쓰면 좋아요.',
 }
 
 // RadarChart용 상수 (프론트 고정값)
-export const RADAR_LABELS = ['수분', '주름', '색소', '모공', '민감', '유분'] as const
+export const RADAR_LABELS = [
+  '수분',
+  '주름',
+  '색소',
+  '모공',
+  '민감',
+  '유분',
+] as const
 
 // scores 객체 → RadarChart values 배열로 변환
-export function scoresToRadarValues(scores: DiagnosisResult['scores']): number[] {
+export function scoresToRadarValues(
+  scores: DiagnosisResult['scores'],
+): number[] {
   return RADAR_LABELS.map((label) => scores[label])
 }
 

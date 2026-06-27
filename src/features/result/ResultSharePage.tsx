@@ -18,7 +18,7 @@ export function ResultSharePage() {
   const photoUrl: string | null = state?.photoUrl ?? null
 
   const radarValues = RADAR_LABELS.map(
-    (label) => result.metrics.find((m) => m.name === label)?.score ?? 0
+    (label) => result.metrics.find((m) => m.name === label)?.score ?? 0,
   )
 
   const canSend = phone.replace(/\D/g, '').length >= 10
@@ -40,10 +40,16 @@ export function ResultSharePage() {
           <div className="flex flex-col items-center gap-1">
             <div className="h-16 w-16 rounded-2xl overflow-hidden bg-white/10">
               {photoUrl && (
-                <img src={photoUrl} alt="진단 사진" className="w-full h-full object-cover" />
+                <img
+                  src={photoUrl}
+                  alt="진단 사진"
+                  className="w-full h-full object-cover"
+                />
               )}
             </div>
-            <p className="text-center font-semibold text-white">{userName} 님</p>
+            <p className="text-center font-semibold text-white">
+              {userName} 님
+            </p>
             <p className="text-center text-xs text-white/40">
               {result.skinType} &middot; 피부 나이 {result.skinAge}세
             </p>
@@ -63,8 +69,12 @@ export function ResultSharePage() {
                 key={ingredient.name}
                 className="flex items-center gap-3 rounded-xl bg-white/5 px-3 py-2 ring-1 ring-white/10"
               >
-                <span className={`h-7 w-7 shrink-0 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.name] ?? 'from-white/20 to-white/10'}`} />
-                <span className="flex-1 text-sm text-white">{ingredient.name}</span>
+                <span
+                  className={`h-7 w-7 shrink-0 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.name] ?? 'from-white/20 to-white/10'}`}
+                />
+                <span className="flex-1 text-sm text-white">
+                  {ingredient.name}
+                </span>
                 <span className="rounded-full bg-[#8b6cff]/20 px-2.5 py-0.5 text-xs text-[#c4b5ff]">
                   {ingredient.badge}
                 </span>

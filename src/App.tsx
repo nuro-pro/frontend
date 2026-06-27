@@ -10,26 +10,26 @@ import { SurveyPage } from '@/features/survey/SurveyPage'
 import { AnalyzingPage } from '@/features/result/AnalyzingPage'
 import { ResultPage } from '@/features/result/ResultPage'
 import { ResultSharePage } from '@/features/result/ResultSharePage'
-import {DiagnosisProvider} from '@/features/diagnosis/DiagnisisProvider'
+import { DiagnosisProvider } from '@/features/diagnosis/DiagnisisProvider'
 
 function App() {
   return (
     <BrowserRouter>
       <DiagnosisProvider>
         <Layout>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/intro" element={<IntroPage />} />
-          <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route path="/ready" element={<CaptureReadyPage />} />
-          <Route path="/capture" element={<CapturePage />} />
-          <Route path="/review" element={<CaptureReviewPage />} />
-          <Route path="/survey" element={<SurveyPage />} />
-          <Route path="/analyzing" element={<AnalyzingPage />} />
-          <Route path="/result" element={<ResultPage />} />
-          <Route path="/share" element={<ResultSharePage />} />
-        </Routes>
-      </Layout>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/intro" element={<IntroPage />} />
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path="/ready" element={<CaptureReadyPage />} />
+            <Route path="/capture" element={<CapturePage />} />
+            <Route path="/review" element={<CaptureReviewPage />} />
+            <Route path="/survey" element={<SurveyPage />} />
+            <Route path="/analyzing" element={<AnalyzingPage />} />
+            <Route path="/result" element={<ResultPage />} />
+            <Route path="/share" element={<ResultSharePage />} />
+          </Routes>
+        </Layout>
       </DiagnosisProvider>
     </BrowserRouter>
   )

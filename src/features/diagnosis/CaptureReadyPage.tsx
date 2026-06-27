@@ -17,10 +17,18 @@ export function CaptureReadyPage() {
       </p>
 
       <div className="mt-10 flex items-center gap-10">
-        <Button variant="secondary" className="cursor-pointer bg-[#7F4FFF]" onClick={() => navigate('/onboarding')}>
+        <Button
+          variant="secondary"
+          className="cursor-pointer bg-[#7F4FFF]"
+          onClick={() => navigate('/onboarding')}
+        >
           다음에 할게요
         </Button>
-        <Button variant="primary" className="cursor-pointer" onClick={() => navigate('/capture')}>
+        <Button
+          variant="primary"
+          className="cursor-pointer"
+          onClick={() => navigate('/capture')}
+        >
           네, 시작할게요
         </Button>
       </div>

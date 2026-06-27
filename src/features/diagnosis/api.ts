@@ -9,16 +9,34 @@ import type { DiagnosisResult } from './types'
  */
 const FILE_PART_NAME = 'image'
 
-export async function createDiagnosis(file: File): Promise<DiagnosisResult> {
+export async function createDiagnosis(
+  file: File,
+  skinCondition: string,
+  skinConcern: string,
+  skinSensitivity: string,
+): Promise<DiagnosisResult> {
   if (file.size > MAX_FILE_BYTES) {
     throw new ApiError('이미지 용량은 10MB를 넘을 수 없어요.')
   }
 
   const form = new FormData()
   form.append(FILE_PART_NAME, file)
+  form.append(
+    'survey',
+    new Blob(
+      [
+        JSON.stringify({
+          skinCondition,
+          skinConcern,
+          skinSensitivity,
+        }),
+      ],
+      { type: 'application/json' },
+    ),
+  )
 
   const { data } = await api.post<CommonResponse<DiagnosisResult>>(
-    '/diagnoses',
+    '/diagnoses?userId=1',
     form,
   )
 

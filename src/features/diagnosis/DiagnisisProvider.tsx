@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { DiagnosisContext, type UserInfo, type SurveyAnswers } from './dignosis-context'
+import {
+  DiagnosisContext,
+  type UserInfo,
+  type SurveyAnswers,
+} from './dignosis-context'
 
 export function DiagnosisProvider({ children }: { children: ReactNode }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
@@ -14,7 +18,17 @@ export function DiagnosisProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <DiagnosisContext.Provider value={{ userInfo, surveyAnswers, photo, setUserInfo, setSurveyAnswers, setPhoto, reset }}>
+    <DiagnosisContext.Provider
+      value={{
+        userInfo,
+        surveyAnswers,
+        photo,
+        setUserInfo,
+        setSurveyAnswers,
+        setPhoto,
+        reset,
+      }}
+    >
       {children}
     </DiagnosisContext.Provider>
   )

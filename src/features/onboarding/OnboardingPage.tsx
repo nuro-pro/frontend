@@ -14,7 +14,7 @@ export function OnboardingPage() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!canSubmit) return
-    setUserInfo({ name: nickname, age: Number(age) })  
+    setUserInfo({ name: nickname, age: Number(age) })
     navigate('/ready')
   }
 

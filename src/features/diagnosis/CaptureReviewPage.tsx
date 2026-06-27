@@ -34,16 +34,32 @@ export function CaptureReviewPage() {
       </p>
 
       <div className="mt-10 flex items-center gap-4 sm:gap-8">
-        <button type="button" aria-label="이전 사진" className="text-2xl text-white/40 transition hover:text-white/80">‹</button>
+        <button
+          type="button"
+          aria-label="이전 사진"
+          className="text-2xl text-white/40 transition hover:text-white/80"
+        >
+          ‹
+        </button>
 
         {/* 촬영 사진 미리보기 */}
         <div className="aspect-square w-56 rounded-3xl overflow-hidden bg-white/10 shadow-2xl sm:w-64">
           {previewUrl && (
-            <img src={previewUrl} alt="촬영된 사진" className="w-full h-full object-cover" />
+            <img
+              src={previewUrl}
+              alt="촬영된 사진"
+              className="w-full h-full object-cover"
+            />
           )}
         </div>
 
-        <button type="button" aria-label="다음 사진" className="text-2xl text-white/40 transition hover:text-white/80">›</button>
+        <button
+          type="button"
+          aria-label="다음 사진"
+          className="text-2xl text-white/40 transition hover:text-white/80"
+        >
+          ›
+        </button>
       </div>
 
       <div className="mt-10 flex items-center gap-10">

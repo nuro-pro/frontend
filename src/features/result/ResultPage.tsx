@@ -1,7 +1,9 @@
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
+import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 import {
   MOCK_RESULT,
   INGREDIENT_ICON_CLASSES,
@@ -11,11 +13,18 @@ import {
 const RADAR_LABELS = ['수분', '주름', '색소', '모공', '민감', '유분'] as const
 
 export function ResultPage() {
+  const { reset } = useDiagnosis()
   const navigate = useNavigate()
   const { state } = useLocation()
   const result: DiagnosisResult = state?.result ?? MOCK_RESULT
   const userName: string = state?.userName ?? '사용자'
   const photoUrl: string | null = state?.photoUrl ?? null // ← Context 대신 state에서
+
+    useEffect(() => {
+    return () => {
+      reset()  // 결과 페이지 나갈 때 초기화
+    }
+  }, [reset])
 
   // metrics 배열 → 레이더 차트용 배열로 변환
   const radarValues = RADAR_LABELS.map(
@@ -151,9 +160,9 @@ export function ResultPage() {
         <h2 className="mt-1 text-xl font-bold text-white">나와 잘 맞는 성분</h2>
 
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {result.ingredients.map((ingredient) => (
+          {result.ingredients.map((ingredient, index) => (
             <article
-              key={ingredient.name}
+              key={index}
               className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">

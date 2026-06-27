@@ -5,7 +5,7 @@ import { createDiagnosis } from '@/features/diagnosis/api'
 
 export function AnalyzingPage() {
   const navigate = useNavigate()
-  const { photo, userInfo, surveyAnswers, reset } = useDiagnosis()
+  const { photo, userInfo, surveyAnswers} = useDiagnosis()
 
   useEffect(() => {
     if (!photo || !surveyAnswers) {
@@ -22,7 +22,6 @@ export function AnalyzingPage() {
           surveyAnswers!.skinSensitivity,
         )
         const photoUrl = URL.createObjectURL(photo!)
-        reset()
         navigate('/result', {
           state: {
             result,
@@ -37,7 +36,7 @@ export function AnalyzingPage() {
     }
 
     analyze()
-  }, [photo, surveyAnswers, navigate, reset])
+  }, [photo, surveyAnswers, navigate])
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">

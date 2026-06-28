@@ -79,8 +79,8 @@ export function CaptureReviewPage() {
                   onClick={() => setCurrentIndex(i)}
                   className={`rounded-full transition-all ${
                     i === currentIndex
-                      ? 'w-4 h-2 bg-white'
-                      : 'w-2 h-2 bg-white/30 hover:bg-white/60'
+                      ? 'w-4 h-2 bg-[#7F4FFF]'
+                      : 'w-2 h-2 bg-[#7F4FFF] hover:bg-[#7F4FFF]/60'
                   }`}
                 />
               ))}

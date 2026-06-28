@@ -43,10 +43,21 @@ export function SurveyPage() {
 
   const current = QUESTIONS[step]
 
-  const handleSelect = (option: string) => {
-    const updated = { ...answers, [current.key]: option }
-    setAnswers(updated)
+const [selected, setSelected] = useState<string | null>(null)
+const [visible, setVisible] = useState(true)
 
+const handleSelect = (option: string) => {
+  if (selected) return
+  setSelected(option)
+
+  const updated = { ...answers, [current.key]: option }
+  setAnswers(updated)
+
+  setVisible(false) // 클릭하자마자 바로 페이드아웃
+
+  setTimeout(() => {
+    setSelected(null)
+    setVisible(true)
     if (step < QUESTIONS.length - 1) {
       setStep((prev) => prev + 1)
     } else {
@@ -57,11 +68,16 @@ export function SurveyPage() {
       })
       navigate('/analyzing')
     }
-  }
+  }, 600)
+}
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center px-6">
-      <div className="w-full max-w-2xl text-center">
+      <div
+        className={`w-full max-w-2xl text-center transition-opacity duration-1100 ${
+          visible ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
         <span className="inline-block rounded-full bg-white px-4 py-1 text-sm font-medium text-[#3a2a6e]">
           설문 {step + 1}
         </span>
@@ -76,7 +92,11 @@ export function SurveyPage() {
               key={option}
               type="button"
               onClick={() => handleSelect(option)}
-              className="rounded-2xl bg-white/5 px-6 py-8 text-white/90 ring-1 ring-white/10 transition hover:bg-white/10 hover:ring-[#8b6cff]/60"
+              className={`rounded-2xl bg-white/5 px-6 py-8 text-white/90 ring-1 ring-white/10 transition ${
+                selected
+                  ? 'pointer-events-none'  // 선택 후 모든 버튼 hover/click 차단
+                  : 'hover:bg-white/10 hover:ring-[#8b6cff]/60'
+              }`}
             >
               {option}
             </button>

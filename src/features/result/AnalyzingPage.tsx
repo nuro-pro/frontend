@@ -18,7 +18,7 @@ const IMAGES = [
   analyzing7, analyzing8, analyzing9,
 ]
 
-const INTERVAL_MS = 2000
+const INTERVAL_MS = 2050
 
 export function AnalyzingPage() {
   const navigate = useNavigate()
@@ -39,7 +39,7 @@ export function AnalyzingPage() {
 
   useEffect(() => {
     if (!photo || !surveyAnswers) {
-      //navigate('/capture')
+      navigate('/capture')
       return
     }
 
@@ -61,7 +61,7 @@ export function AnalyzingPage() {
           },
         })
       } catch {
-        //navigate('/capture')
+        navigate('/capture')
       }
     }
 
@@ -71,7 +71,8 @@ export function AnalyzingPage() {
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">
       <div className="relative flex h-32 w-1/6 items-center justify-center">
-        <div className="absolute inset-0 animate-pulse rounded-full bg-amber-200/40 blur-3xl" />
+        <div className="absolute inset-0 animate-pulse rounded-full bg-amber-200/40 blur-3xl" 
+        style={{ animationDelay: '-1s' }}/>
         <img
           src={images[currentIndex]}
           alt="analyzing"

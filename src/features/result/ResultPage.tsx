@@ -189,16 +189,16 @@ export function ResultPage() {
           추천 스킨케어 루틴
         </h2>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
           {result.routine.map((step, index) => (
             <article
               key={step.name}
               className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
-              <p className="text-sm font-bold text-[#a78bff]">
+              <p className="text-xl font-bold text-[#a78bff]">
                 {String(index + 1).padStart(2, '0')}
               </p>
-              <p className="mt-3 text-sm font-semibold text-white">
+              <p className="mt-3 text-xl font-semibold text-white">
                 {step.name}
               </p>
               <p className="mt-1 text-xs text-[#a78bff]">{step.product}</p>

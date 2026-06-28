@@ -22,6 +22,7 @@ export function ResultPage() {
 
   useEffect(() => {
     return () => {
+      if(photoUrl) URL.revokeObjectURL(photoUrl) // URL 객체 해제
       reset() // 결과 페이지 나갈 때 초기화
     }
   }, [reset])

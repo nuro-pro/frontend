@@ -46,7 +46,7 @@ function evaluateAlignment(
 
 export function CapturePage() {
   const navigate = useNavigate()
-  const { setPhoto } = useDiagnosis()
+  const { addToPhotos } = useDiagnosis()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { videoRef, status: cameraStatus, retry } = useCamera()
@@ -82,13 +82,13 @@ export function CapturePage() {
           capturedRef.current = false
           return
         }
-        setPhoto(new File([blob], 'capture.jpg', { type: 'image/jpeg' }))
+        addToPhotos(new File([blob], 'capture.jpg', { type: 'image/jpeg' }))
         navigate('/review')
       },
       'image/jpeg',
       0.92,
     )
-  }, [navigate, setPhoto, videoRef])
+  }, [navigate, addToPhotos, videoRef])
 
   // 감지 루프: 카메라+감지기 모두 준비됐을 때만 구동
   useEffect(() => {
@@ -135,7 +135,8 @@ export function CapturePage() {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    setPhoto(file)
+    //setPhoto(file)
+    addToPhotos(file)
     navigate('/review')
   }
 

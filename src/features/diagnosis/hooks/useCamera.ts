@@ -35,10 +35,12 @@ export function useCamera() {
         const video = videoRef.current
         if (video) {
           video.srcObject = s
-          // iOS 사파리: 사용자 제스처 없이도 muted+playsInline이면 재생됨.
+          video.onloadedmetadata = () => {
+            if (!cancelled) setStatus(CameraStatus.Ready)  // ← 여기로 이동
+          }
           void video.play().catch(() => undefined)
         }
-        setStatus(CameraStatus.Ready)
+        //setStatus(CameraStatus.Ready)
       })
       .catch((e: unknown) => {
         if (cancelled) return

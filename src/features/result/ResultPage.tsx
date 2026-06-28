@@ -161,9 +161,9 @@ export function ResultPage() {
         <h2 className="mt-1 text-xl font-bold text-white">나와 잘 맞는 성분</h2>
 
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {result.ingredients.map((ingredient, index) => (
+          {result.ingredients.map((ingredient) => (
             <article
-              key={index}
+              key={ingredient.engName}
               className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">

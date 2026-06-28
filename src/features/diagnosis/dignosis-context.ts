@@ -22,6 +22,8 @@ export interface DiagnosisContextType {
   setPhotos: (files: File[]) => void
   addToPhotos: (file: File) => void
   reset: () => void
+  cameraStream: MediaStream | null
+  setCameraStream: (stream: MediaStream | null) => void
 }
 
 export const DiagnosisContext = createContext<DiagnosisContextType | null>(null)

@@ -11,6 +11,7 @@ export function DiagnosisProvider({ children }: { children: ReactNode }) {
   const [surveyAnswers, setSurveyAnswers] = useState<SurveyAnswers | null>(null)
   const [photo, setPhoto] = useState<File | null>(null)
   const [photos, setPhotos] = useState<File[]>([])
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null)
   const addToPhotos = (file: File) => {
     setPhotos((prev) => [file, ...prev])
   }
@@ -21,6 +22,8 @@ export function DiagnosisProvider({ children }: { children: ReactNode }) {
     setSurveyAnswers(null)
     setPhoto(null)
     setPhotos([])
+    cameraStream?.getTracks().forEach(t => t.stop())
+    setCameraStream(null)
   }
 
   return (
@@ -36,6 +39,8 @@ export function DiagnosisProvider({ children }: { children: ReactNode }) {
         setPhotos,
         addToPhotos,
         reset,
+        cameraStream,
+        setCameraStream,
       }}
     >
       {children}

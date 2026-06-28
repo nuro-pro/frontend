@@ -35,17 +35,30 @@ export function useCamera() {
     }
 
     navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 1280 } }, audio: false })
+      .getUserMedia({
+        video: {
+          facingMode: 'user',
+          width: { ideal: 1280 },
+          height: { ideal: 1280 },
+        },
+        audio: false,
+      })
       .then((s) => {
-        if (cancelled) { s.getTracks().forEach(t => t.stop()); return }
-        setCameraStream(s)  // Context에 저장
+        if (cancelled) {
+          s.getTracks().forEach((t) => t.stop())
+          return
+        }
+        setCameraStream(s) // Context에 저장
         applyStream(s)
       })
       .catch((e: unknown) => {
         if (cancelled) return
         const name = e instanceof DOMException ? e.name : ''
-        setStatus(name === 'NotAllowedError' || name === 'SecurityError'
-          ? CameraStatus.Denied : CameraStatus.Error)
+        setStatus(
+          name === 'NotAllowedError' || name === 'SecurityError'
+            ? CameraStatus.Denied
+            : CameraStatus.Error,
+        )
       })
 
     return () => {
@@ -55,10 +68,10 @@ export function useCamera() {
   }, [retryKey])
 
   const retry = () => {
-    cameraStream?.getTracks().forEach(t => t.stop())
+    cameraStream?.getTracks().forEach((t) => t.stop())
     setCameraStream(null)
     setStatus(CameraStatus.Requesting)
-    setRetryKey(k => k + 1)
+    setRetryKey((k) => k + 1)
   }
 
   return { videoRef, status, retry }

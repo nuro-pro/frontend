@@ -27,8 +27,9 @@ export function CaptureReviewPage() {
 
   if (!currentPhoto) return null
 
-  const handlePrev = () => setCurrentIndex(prev => Math.max(0, prev - 1))
-  const handleNext = () => setCurrentIndex(prev => Math.min(photos.length - 1, prev + 1))
+  const handlePrev = () => setCurrentIndex((prev) => Math.max(0, prev - 1))
+  const handleNext = () =>
+    setCurrentIndex((prev) => Math.min(photos.length - 1, prev + 1))
 
   const handleConfirm = () => {
     setPhoto(currentPhoto)

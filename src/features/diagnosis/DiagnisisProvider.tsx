@@ -16,13 +16,12 @@ export function DiagnosisProvider({ children }: { children: ReactNode }) {
     setPhotos((prev) => [file, ...prev])
   }
 
-
   const reset = () => {
     setUserInfo(null)
     setSurveyAnswers(null)
     setPhoto(null)
     setPhotos([])
-    cameraStream?.getTracks().forEach(t => t.stop())
+    cameraStream?.getTracks().forEach((t) => t.stop())
     setCameraStream(null)
   }
 

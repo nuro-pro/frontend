@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import {useEffect} from 'react'
+import { useEffect } from 'react'
 import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
@@ -20,9 +20,9 @@ export function ResultPage() {
   const userName: string = state?.userName ?? '사용자'
   const photoUrl: string | null = state?.photoUrl ?? null // ← Context 대신 state에서
 
-    useEffect(() => {
+  useEffect(() => {
     return () => {
-      reset()  // 결과 페이지 나갈 때 초기화
+      reset() // 결과 페이지 나갈 때 초기화
     }
   }, [reset])
 
@@ -173,7 +173,9 @@ export function ResultPage() {
                   {ingredient.effects[0]}
                 </span>
               </div>
-              <p className="mt-4 font-semibold text-white">{ingredient.korName}</p>
+              <p className="mt-4 font-semibold text-white">
+                {ingredient.korName}
+              </p>
               <p className="mt-2 text-sm leading-relaxed text-white/50">
                 {ingredient.desc}
               </p>

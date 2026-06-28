@@ -1,15 +1,45 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 import { createDiagnosis } from '@/features/diagnosis/api'
+import analyzing1 from '@/assets/analyzing/1.png'
+import analyzing2 from '@/assets/analyzing/2.png'
+import analyzing3 from '@/assets/analyzing/3.png'
+import analyzing4 from '@/assets/analyzing/4.png'
+import analyzing5 from '@/assets/analyzing/5.png'
+import analyzing6 from '@/assets/analyzing/6.png'
+import analyzing7 from '@/assets/analyzing/7.png'
+import analyzing8 from '@/assets/analyzing/8.png'
+import analyzing9 from '@/assets/analyzing/9.png'
+
+const IMAGES = [
+  analyzing1, analyzing2, analyzing3,
+  analyzing4, analyzing5, analyzing6,
+  analyzing7, analyzing8, analyzing9,
+]
+
+const INTERVAL_MS = 2000
 
 export function AnalyzingPage() {
   const navigate = useNavigate()
   const { photo, userInfo, surveyAnswers} = useDiagnosis()
 
+  const [images] = useState(() => {
+  const shuffled = [...IMAGES].sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, 4)
+  })
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length)
+    }, INTERVAL_MS)
+    return () => clearInterval(timer)
+  }, [images])
+
   useEffect(() => {
     if (!photo || !surveyAnswers) {
-      navigate('/capture')
+      //navigate('/capture')
       return
     }
 
@@ -31,7 +61,7 @@ export function AnalyzingPage() {
           },
         })
       } catch {
-        navigate('/capture')
+        //navigate('/capture')
       }
     }
 
@@ -40,19 +70,13 @@ export function AnalyzingPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">
-      <div className="relative flex h-32 w-32 items-center justify-center">
+      <div className="relative flex h-32 w-1/6 items-center justify-center">
         <div className="absolute inset-0 animate-pulse rounded-full bg-amber-200/40 blur-3xl" />
-        <svg
-          viewBox="0 0 100 100"
-          className="relative h-24 w-24 drop-shadow-[0_0_20px_rgba(253,230,138,0.8)]"
-          aria-hidden="true"
-        >
-          {/* 4-point sparkle */}
-          <path
-            d="M50 0 C54 30 70 46 100 50 C70 54 54 70 50 100 C46 70 30 54 0 50 C30 46 46 30 50 0 Z"
-            fill="#fde68a"
-          />
-        </svg>
+        <img
+          src={images[currentIndex]}
+          alt="analyzing"
+          className="relative w-4/5 min-w-40 object-contain drop-shadow-[0_0_20px_rgba(253,230,138,0.8)]"
+        />
       </div>
 
       <div className="space-y-2">

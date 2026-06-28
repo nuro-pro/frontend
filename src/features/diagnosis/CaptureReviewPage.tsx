@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 export function CaptureReviewPage() {
   const navigate = useNavigate()
-  const { photos, setPhoto } = useDiagnosis()
+  const { photos, setPhoto, cameraStream, setCameraStream } = useDiagnosis()
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
@@ -32,6 +32,8 @@ export function CaptureReviewPage() {
     setCurrentIndex((prev) => Math.min(photos.length - 1, prev + 1))
 
   const handleConfirm = () => {
+    cameraStream?.getTracks().forEach((track) => track.stop())
+    setCameraStream(null)
     setPhoto(currentPhoto)
     navigate('/survey')
   }

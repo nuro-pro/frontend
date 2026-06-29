@@ -14,11 +14,16 @@ export interface SurveyAnswers {
 export interface DiagnosisContextType {
   userInfo: UserInfo | null
   surveyAnswers: SurveyAnswers | null
+  photos: File[]
   photo: File | null
   setUserInfo: (info: UserInfo) => void
   setSurveyAnswers: (answers: SurveyAnswers) => void
   setPhoto: (file: File) => void
+  setPhotos: (files: File[]) => void
+  addToPhotos: (file: File) => void
   reset: () => void
+  cameraStream: MediaStream | null
+  setCameraStream: (stream: MediaStream | null) => void
 }
 
 export const DiagnosisContext = createContext<DiagnosisContextType | null>(null)

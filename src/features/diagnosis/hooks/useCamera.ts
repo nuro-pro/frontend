@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 
 export const CameraStatus = {
   Requesting: 'requesting',
@@ -12,10 +13,26 @@ export function useCamera() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [status, setStatus] = useState<CameraStatus>(CameraStatus.Requesting)
   const [retryKey, setRetryKey] = useState(0)
+  const { cameraStream, setCameraStream } = useDiagnosis()
 
   useEffect(() => {
-    let stream: MediaStream | null = null
     let cancelled = false
+
+    const applyStream = (s: MediaStream) => {
+      const video = videoRef.current
+      if (!video) return
+      video.srcObject = s
+      video.onloadedmetadata = () => {
+        if (!cancelled) setStatus(CameraStatus.Ready)
+      }
+      void video.play().catch(() => undefined)
+    }
+
+    // 기존 스트림 있으면 재사용 → getUserMedia 스킵
+    if (cameraStream) {
+      applyStream(cameraStream)
+      return
+    }
 
     navigator.mediaDevices
       .getUserMedia({
@@ -31,14 +48,8 @@ export function useCamera() {
           s.getTracks().forEach((t) => t.stop())
           return
         }
-        stream = s
-        const video = videoRef.current
-        if (video) {
-          video.srcObject = s
-          // iOS 사파리: 사용자 제스처 없이도 muted+playsInline이면 재생됨.
-          void video.play().catch(() => undefined)
-        }
-        setStatus(CameraStatus.Ready)
+        setCameraStream(s) // Context에 저장
+        applyStream(s)
       })
       .catch((e: unknown) => {
         if (cancelled) return
@@ -52,11 +63,13 @@ export function useCamera() {
 
     return () => {
       cancelled = true
-      stream?.getTracks().forEach((t) => t.stop())
+      // 스트림은 stop하지 않음 — Context가 들고 있음
     }
-  }, [retryKey])
+  }, [retryKey, cameraStream, setCameraStream])
 
   const retry = () => {
+    cameraStream?.getTracks().forEach((t) => t.stop())
+    setCameraStream(null)
     setStatus(CameraStatus.Requesting)
     setRetryKey((k) => k + 1)
   }

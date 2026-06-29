@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
+import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 import {
   MOCK_RESULT,
   INGREDIENT_ICON_CLASSES,
@@ -16,6 +17,13 @@ export function ResultPage() {
   const result: DiagnosisResult = state?.result ?? MOCK_RESULT
   const userName: string = state?.userName ?? '사용자'
   const photoUrl: string | null = state?.photoUrl ?? null // ← Context 대신 state에서
+  const { reset } = useDiagnosis()
+
+  const handleHome = () => {
+    reset()
+    if (photoUrl) URL.revokeObjectURL(photoUrl)
+    navigate('/')
+  }
 
   // metrics 배열 → 레이더 차트용 배열로 변환
   const radarValues = RADAR_LABELS.map(
@@ -153,18 +161,20 @@ export function ResultPage() {
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {result.ingredients.map((ingredient) => (
             <article
-              key={ingredient.name}
+              key={ingredient.engName}
               className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">
                 <div
-                  className={`h-9 w-9 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.name] ?? 'from-white/20 to-white/10'}`}
+                  className={`h-9 w-9 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.korName] ?? 'from-white/20 to-white/10'}`}
                 />
                 <span className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]">
-                  {ingredient.badge}
+                  {ingredient.effects[0]}
                 </span>
               </div>
-              <p className="mt-4 font-semibold text-white">{ingredient.name}</p>
+              <p className="mt-4 font-semibold text-white">
+                {ingredient.korName}
+              </p>
               <p className="mt-2 text-sm leading-relaxed text-white/50">
                 {ingredient.desc}
               </p>
@@ -180,16 +190,16 @@ export function ResultPage() {
           추천 스킨케어 루틴
         </h2>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
           {result.routine.map((step, index) => (
             <article
               key={step.name}
               className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
-              <p className="text-sm font-bold text-[#a78bff]">
+              <p className="text-xl font-bold text-[#a78bff]">
                 {String(index + 1).padStart(2, '0')}
               </p>
-              <p className="mt-3 text-sm font-semibold text-white">
+              <p className="mt-3 text-xl font-semibold text-white">
                 {step.name}
               </p>
               <p className="mt-1 text-xs text-[#a78bff]">{step.product}</p>
@@ -206,11 +216,7 @@ export function ResultPage() {
       </p>
 
       <div className="mt-6 flex items-center justify-center gap-10">
-        <Button
-          variant="secondary"
-          className="w-44"
-          onClick={() => navigate('/')}
-        >
+        <Button variant="secondary" className="w-44" onClick={handleHome}>
           홈으로
         </Button>
         <Button

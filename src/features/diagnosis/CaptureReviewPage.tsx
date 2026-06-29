@@ -1,20 +1,23 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/Button'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export function CaptureReviewPage() {
   const navigate = useNavigate()
-  const { photo } = useDiagnosis()
+  const { photos, setPhoto, cameraStream, setCameraStream } = useDiagnosis()
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
-    if (!photo) navigate('/capture')
-  }, [photo, navigate])
+    if (!photos.length) navigate('/capture')
+  }, [photos.length, navigate])
+
+  const currentPhoto = photos[currentIndex] ?? null
 
   const previewUrl = useMemo(() => {
-    if (!photo) return null
-    return URL.createObjectURL(photo)
-  }, [photo])
+    if (!currentPhoto) return null
+    return URL.createObjectURL(currentPhoto)
+  }, [currentPhoto])
 
   useEffect(() => {
     return () => {
@@ -22,7 +25,18 @@ export function CaptureReviewPage() {
     }
   }, [previewUrl])
 
-  if (!photo) return null
+  if (!currentPhoto) return null
+
+  const handlePrev = () => setCurrentIndex((prev) => Math.max(0, prev - 1))
+  const handleNext = () =>
+    setCurrentIndex((prev) => Math.min(photos.length - 1, prev + 1))
+
+  const handleConfirm = () => {
+    cameraStream?.getTracks().forEach((track) => track.stop())
+    setCameraStream(null)
+    setPhoto(currentPhoto)
+    navigate('/survey')
+  }
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center px-6 text-center">
@@ -37,26 +51,49 @@ export function CaptureReviewPage() {
         <button
           type="button"
           aria-label="이전 사진"
-          className="text-2xl text-white/40 transition hover:text-white/80"
+          onClick={handlePrev}
+          disabled={currentIndex === 0}
+          className="text-2xl text-white/40 transition hover:text-white/80 disabled:opacity-20 disabled:cursor-not-allowed"
         >
           ‹
         </button>
 
-        {/* 촬영 사진 미리보기 */}
-        <div className="aspect-square w-56 rounded-3xl overflow-hidden bg-white/10 shadow-2xl sm:w-64">
-          {previewUrl && (
-            <img
-              src={previewUrl}
-              alt="촬영된 사진"
-              className="w-full h-full object-cover"
-            />
+        <div className="flex flex-col items-center gap-4">
+          <div className="aspect-square w-56 rounded-3xl overflow-hidden bg-white/10 shadow-2xl sm:w-64">
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt={`촬영된 사진 ${currentIndex + 1}`}
+                className="w-full h-full object-cover"
+              />
+            )}
+          </div>
+
+          {/* 페이지네이션 dots */}
+          {photos.length > 1 && (
+            <div className="flex items-center gap-2">
+              {photos.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setCurrentIndex(i)}
+                  className={`rounded-full transition-all ${
+                    i === currentIndex
+                      ? 'w-4 h-2 bg-[#7F4FFF]'
+                      : 'w-2 h-2 bg-[#7F4FFF] hover:bg-[#7F4FFF]/60'
+                  }`}
+                />
+              ))}
+            </div>
           )}
         </div>
 
         <button
           type="button"
           aria-label="다음 사진"
-          className="text-2xl text-white/40 transition hover:text-white/80"
+          onClick={handleNext}
+          disabled={currentIndex === photos.length - 1}
+          className="text-2xl text-white/40 transition hover:text-white/80 disabled:opacity-20 disabled:cursor-not-allowed"
         >
           ›
         </button>
@@ -66,7 +103,7 @@ export function CaptureReviewPage() {
         <Button variant="secondary" onClick={() => navigate('/capture')}>
           다시 촬영하기
         </Button>
-        <Button variant="primary" onClick={() => navigate('/survey')}>
+        <Button variant="primary" onClick={handleConfirm}>
           이걸로 할게요
         </Button>
       </div>

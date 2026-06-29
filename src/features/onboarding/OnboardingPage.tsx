@@ -1,13 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 
 export function OnboardingPage() {
   const navigate = useNavigate()
-  const { setUserInfo } = useDiagnosis()
+  const { setUserInfo, reset } = useDiagnosis()
   const [nickname, setNickname] = useState('')
   const [age, setAge] = useState('')
+
+  useEffect(() => {
+    reset()
+  }, [])
 
   const canSubmit = nickname.trim() !== '' && age.trim() !== ''
 
@@ -35,6 +39,7 @@ export function OnboardingPage() {
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               placeholder="예) 윤기니"
+              autoComplete="off"
               className="py-5 px-5 text-[13px] text-[#FEFEFE] placeholder:text-[#888888] border border-[#2d253e] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7f4fff]"
             />
           </div>
@@ -48,6 +53,7 @@ export function OnboardingPage() {
               value={age}
               onChange={(e) => setAge(e.target.value.replace(/\D/g, ''))}
               placeholder="예) 25"
+              autoComplete="off"
               className="py-5 px-5 text-[13px] text-[#FEFEFE] placeholder:text-[#888888] border border-[#2d253e] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7f4fff]"
             />
           </div>

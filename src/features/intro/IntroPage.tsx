@@ -20,11 +20,11 @@ export const IntroPage = () => {
       return () => clearTimeout(timer)
     }
 
-    const fadeOut = setTimeout(() => setVisible(false), 2000)
+    const fadeOut = setTimeout(() => setVisible(false), 1400)
     const next = setTimeout(() => {
       setIndex((i) => i + 1)
       setVisible(true)
-    }, 2700)
+    }, 2100)
 
     return () => {
       clearTimeout(fadeOut)

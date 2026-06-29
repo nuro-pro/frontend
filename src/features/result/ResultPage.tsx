@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
 import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
@@ -13,19 +12,18 @@ import {
 const RADAR_LABELS = ['수분', '주름', '색소', '모공', '민감', '유분'] as const
 
 export function ResultPage() {
-  const { reset } = useDiagnosis()
   const navigate = useNavigate()
   const { state } = useLocation()
   const result: DiagnosisResult = state?.result ?? MOCK_RESULT
   const userName: string = state?.userName ?? '사용자'
   const photoUrl: string | null = state?.photoUrl ?? null // ← Context 대신 state에서
+  const { reset } = useDiagnosis()
 
-  useEffect(() => {
-    return () => {
-      if(photoUrl) URL.revokeObjectURL(photoUrl) // URL 객체 해제
-      reset() // 결과 페이지 나갈 때 초기화
-    }
-  }, [])
+  const handleHome = () => {
+    reset()
+    if (photoUrl) URL.revokeObjectURL(photoUrl)
+    navigate('/')
+  }
 
   // metrics 배열 → 레이더 차트용 배열로 변환
   const radarValues = RADAR_LABELS.map(
@@ -221,7 +219,7 @@ export function ResultPage() {
         <Button
           variant="secondary"
           className="w-44"
-          onClick={() => navigate('/')}
+          onClick={handleHome}
         >
           홈으로
         </Button>

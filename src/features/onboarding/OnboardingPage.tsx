@@ -1,13 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 
 export function OnboardingPage() {
   const navigate = useNavigate()
-  const { setUserInfo } = useDiagnosis()
+  const { setUserInfo, reset } = useDiagnosis()
   const [nickname, setNickname] = useState('')
   const [age, setAge] = useState('')
+
+  useEffect(() => {
+    reset()
+  }, [])
 
   const canSubmit = nickname.trim() !== '' && age.trim() !== ''
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 import { createDiagnosis } from '@/features/diagnosis/api'
@@ -29,6 +29,7 @@ const INTERVAL_MS = 2050
 export function AnalyzingPage() {
   const navigate = useNavigate()
   const { photo, userInfo, surveyAnswers } = useDiagnosis()
+  const calledRef = useRef(false)
 
   const [images] = useState(() => {
     const shuffled = [...IMAGES].sort(() => Math.random() - 0.5)
@@ -48,6 +49,9 @@ export function AnalyzingPage() {
       navigate('/capture')
       return
     }
+
+    if (calledRef.current) return  // ← 두 번째 실행 차단
+    calledRef.current = true
 
     async function analyze() {
       try {
@@ -72,7 +76,7 @@ export function AnalyzingPage() {
     }
 
     analyze()
-  }, [photo, surveyAnswers, navigate])
+  }, [])
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">

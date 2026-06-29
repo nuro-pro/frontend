@@ -25,7 +25,7 @@ export function ResultPage() {
       if(photoUrl) URL.revokeObjectURL(photoUrl) // URL 객체 해제
       reset() // 결과 페이지 나갈 때 초기화
     }
-  }, [reset, photoUrl])
+  }, [])
 
   // metrics 배열 → 레이더 차트용 배열로 변환
   const radarValues = RADAR_LABELS.map(

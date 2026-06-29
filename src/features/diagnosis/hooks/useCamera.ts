@@ -65,7 +65,7 @@ export function useCamera() {
       cancelled = true
       // 스트림은 stop하지 않음 — Context가 들고 있음
     }
-  }, [retryKey , cameraStream, setCameraStream])
+  }, [retryKey, cameraStream, setCameraStream])
 
   const retry = () => {
     cameraStream?.getTracks().forEach((t) => t.stop())

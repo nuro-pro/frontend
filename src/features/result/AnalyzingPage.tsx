@@ -50,7 +50,7 @@ export function AnalyzingPage() {
       return
     }
 
-    if (calledRef.current) return  // ← 두 번째 실행 차단
+    if (calledRef.current) return // ← 두 번째 실행 차단
     calledRef.current = true
 
     async function analyze() {

@@ -216,11 +216,7 @@ export function ResultPage() {
       </p>
 
       <div className="mt-6 flex items-center justify-center gap-10">
-        <Button
-          variant="secondary"
-          className="w-44"
-          onClick={handleHome}
-        >
+        <Button variant="secondary" className="w-44" onClick={handleHome}>
           홈으로
         </Button>
         <Button

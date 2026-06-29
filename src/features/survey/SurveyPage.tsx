@@ -43,33 +43,33 @@ export function SurveyPage() {
 
   const current = QUESTIONS[step]
 
-const [selected, setSelected] = useState<string | null>(null)
-const [visible, setVisible] = useState(true)
+  const [selected, setSelected] = useState<string | null>(null)
+  const [visible, setVisible] = useState(true)
 
-const handleSelect = (option: string) => {
-  if (selected) return
-  setSelected(option)
+  const handleSelect = (option: string) => {
+    if (selected) return
+    setSelected(option)
 
-  const updated = { ...answers, [current.key]: option }
-  setAnswers(updated)
+    const updated = { ...answers, [current.key]: option }
+    setAnswers(updated)
 
-  setVisible(false) // 클릭하자마자 바로 페이드아웃
+    setVisible(false) // 클릭하자마자 바로 페이드아웃
 
-  setTimeout(() => {
-    setSelected(null)
-    setVisible(true)
-    if (step < QUESTIONS.length - 1) {
-      setStep((prev) => prev + 1)
-    } else {
-      setSurveyAnswers({
-        skinCondition: updated.skinCondition,
-        skinConcern: updated.skinConcern,
-        skinSensitivity: updated.skinSensitivity,
-      })
-      navigate('/analyzing')
-    }
-  }, 600)
-}
+    setTimeout(() => {
+      setSelected(null)
+      setVisible(true)
+      if (step < QUESTIONS.length - 1) {
+        setStep((prev) => prev + 1)
+      } else {
+        setSurveyAnswers({
+          skinCondition: updated.skinCondition,
+          skinConcern: updated.skinConcern,
+          skinSensitivity: updated.skinSensitivity,
+        })
+        navigate('/analyzing')
+      }
+    }, 600)
+  }
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center px-6">
@@ -94,7 +94,7 @@ const handleSelect = (option: string) => {
               onClick={() => handleSelect(option)}
               className={`rounded-2xl bg-white/5 px-6 py-8 text-white/90 ring-1 ring-white/10 transition ${
                 selected
-                  ? 'pointer-events-none'  // 선택 후 모든 버튼 hover/click 차단
+                  ? 'pointer-events-none' // 선택 후 모든 버튼 hover/click 차단
                   : 'hover:bg-white/10 hover:ring-[#8b6cff]/60'
               }`}
             >

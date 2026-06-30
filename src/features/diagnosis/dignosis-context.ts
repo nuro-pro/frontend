@@ -12,10 +12,12 @@ export interface SurveyAnswers {
 }
 
 export interface DiagnosisContextType {
+  userId: number | null
   userInfo: UserInfo | null
   surveyAnswers: SurveyAnswers | null
   photos: File[]
   photo: File | null
+  setUserId: (id: number | null) => void
   setUserInfo: (info: UserInfo) => void
   setSurveyAnswers: (answers: SurveyAnswers) => void
   setPhoto: (file: File) => void

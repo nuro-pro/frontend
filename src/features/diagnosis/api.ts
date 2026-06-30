@@ -10,6 +10,7 @@ import type { DiagnosisResult } from './types'
 const FILE_PART_NAME = 'image'
 
 export async function createDiagnosis(
+  userId: number,
   file: File,
   skinCondition: string,
   skinConcern: string,
@@ -36,7 +37,7 @@ export async function createDiagnosis(
   )
 
   const { data } = await api.post<CommonResponse<DiagnosisResult>>(
-    '/diagnoses?userId=1',
+    `/diagnoses?userId=${userId}`,
     form,
   )
 

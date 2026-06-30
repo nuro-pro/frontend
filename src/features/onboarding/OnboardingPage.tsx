@@ -2,24 +2,40 @@ import { useState, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
+import { createUser } from './api'
+import { ApiError } from '@/api/types'
 
 export function OnboardingPage() {
   const navigate = useNavigate()
-  const { setUserInfo, reset } = useDiagnosis()
+  const { setUserId, setUserInfo, reset } = useDiagnosis()
   const [nickname, setNickname] = useState('')
   const [age, setAge] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const [error, setError] = useState<string>()
 
   useEffect(() => {
     reset()
   }, [])
 
-  const canSubmit = nickname.trim() !== '' && age.trim() !== ''
+  const loading = status === 'loading'
+  const canSubmit = nickname.trim() !== '' && age.trim() !== '' && !loading
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!canSubmit) return
-    setUserInfo({ name: nickname, age: Number(age) })
-    navigate('/ready')
+    try {
+      setStatus('loading')
+      setError(undefined)
+      const user = await createUser(nickname.trim(), Number(age))
+      setUserId(user.id)
+      setUserInfo({ name: nickname.trim(), age: Number(age) })
+      navigate('/ready')
+    } catch (err) {
+      setError(
+        err instanceof ApiError ? err.message : '잠시 후 다시 시도해 주세요.',
+      )
+      setStatus('error')
+    }
   }
 
   return (
@@ -63,8 +79,14 @@ export function OnboardingPage() {
             disabled={!canSubmit}
             className="bg-[#7f4fff] text-[#FEFEFE] rounded-lg py-4 px-4 mt-4 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
           >
-            다음
+            {loading ? '저장 중…' : '다음'}
           </button>
+
+          {error && (
+            <p className="text-[13px] text-[#ff8f8f]" role="alert">
+              {error}
+            </p>
+          )}
         </form>
 
         <p className="text-[13px] text-[#8e8d8e]">

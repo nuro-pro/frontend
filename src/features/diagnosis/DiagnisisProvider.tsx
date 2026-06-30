@@ -7,6 +7,7 @@ import {
 } from './dignosis-context'
 
 export function DiagnosisProvider({ children }: { children: ReactNode }) {
+  const [userId, setUserId] = useState<number | null>(null)
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
   const [surveyAnswers, setSurveyAnswers] = useState<SurveyAnswers | null>(null)
   const [photo, setPhoto] = useState<File | null>(null)
@@ -17,6 +18,7 @@ export function DiagnosisProvider({ children }: { children: ReactNode }) {
   }
 
   const reset = () => {
+    setUserId(null)
     setUserInfo(null)
     setSurveyAnswers(null)
     setPhoto(null)
@@ -28,10 +30,12 @@ export function DiagnosisProvider({ children }: { children: ReactNode }) {
   return (
     <DiagnosisContext.Provider
       value={{
+        userId,
         userInfo,
         surveyAnswers,
         photo,
         photos,
+        setUserId,
         setUserInfo,
         setSurveyAnswers,
         setPhoto,

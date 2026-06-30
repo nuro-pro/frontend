@@ -3,11 +3,13 @@ export interface DiagnosisResult {
   skinType: string
   skinAge: number
   totalScore: number
+  peerTotalScore: number
   totalDesc: string
   summary: string
   metrics: {
     name: string
     score: number
+    peerScore: number
   }[]
   ingredients: {
     korName: string

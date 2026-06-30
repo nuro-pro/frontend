@@ -16,7 +16,6 @@ function byFileName(name: string): string | undefined {
 
 const norm = (s: string) => s.replace(/\s+/g, '')
 
-// 백엔드 korName(공백 제거) → assets 파일명
 const KOR_TO_FILE: Record<string, string> = {
   히알루론산: 'Hyaluronic-Acid',
   글리세린: 'Glycerin',
@@ -40,8 +39,35 @@ const KOR_TO_FILE: Record<string, string> = {
 
 const FALLBACK_IMAGE = byFileName('Hyaluronic-Acid')
 
-/** 성분 한글명 → 아이콘 이미지 url (없으면 폴백) */
 export function ingredientImage(korName: string): string | undefined {
   const file = KOR_TO_FILE[norm(korName)]
   return (file ? byFileName(file) : undefined) ?? FALLBACK_IMAGE
+}
+
+// 성분별 대표 색
+const ACCENT: Record<string, string> = {
+  히알루론산: '#6cc5ff',
+  글리세린: '#57c5d6',
+  세라마이드: '#69c0d4',
+  나이아신아마이드: '#c79d99',
+  징크PCA: '#c98f93',
+  BHA: '#cf9591',
+  AHA: '#d49aa0',
+  LHA: '#e2899b',
+  PHA: '#e09a93',
+  레티놀: '#b6a0e6',
+  펩타이드: '#b3a6ee',
+  아데노신: '#b9a6ff',
+  비타민C: '#f2cd72',
+  알파알부틴: '#f0c97a',
+  글루타치온: '#f0d07a',
+  판테놀: '#8fd29a',
+  병풀추출물: '#7fc58f',
+  어성초: '#86c98f',
+}
+
+const FALLBACK_ACCENT = '#8b6cff'
+
+export function ingredientAccent(korName: string): string {
+  return ACCENT[norm(korName)] ?? FALLBACK_ACCENT
 }

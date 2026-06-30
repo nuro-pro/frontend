@@ -1,6 +1,5 @@
 // 결과 화면 디자인 메타데이터
-// 지표별 색·또래 평균(임시값)·등급(보통/관리권장/좋음)·한 줄 설명을 정의
-// TODO(Swagger): 지표별 '또래 평균'은 현재 프론트 임시값 -> 백엔드가 내려주면 peer를 교체
+// 또래 평균(peerScore/peerTotalScore)은 백엔드 응답에서 직접 사용
 
 export const RADAR_LABELS = [
   '수분',
@@ -17,17 +16,15 @@ interface MetricMeta {
   color: string
   /** 점수 바 그라데이션 */
   bar: string
-  /** 또래 평균(임시값) */
-  peer: number
 }
 
 export const METRIC_META: Record<MetricLabel, MetricMeta> = {
-  수분: { color: '#5ad1ff', bar: 'from-[#5ad1ff] to-[#8b6cff]', peer: 58 },
-  주름: { color: '#a78bff', bar: 'from-[#8b6cff] to-[#a78bff]', peer: 50 },
-  색소: { color: '#ffb86a', bar: 'from-[#ffb86a] to-[#ff9d6a]', peer: 60 },
-  모공: { color: '#ff6ab0', bar: 'from-[#ff6ab0] to-[#ff8ac4]', peer: 56 },
-  민감: { color: '#6affd0', bar: 'from-[#6affd0] to-[#5ad1ff]', peer: 60 },
-  유분: { color: '#ff9d6a', bar: 'from-[#ff9d6a] to-[#ff7a6a]', peer: 58 },
+  수분: { color: '#5ad1ff', bar: 'from-[#5ad1ff] to-[#8b6cff]' },
+  주름: { color: '#a78bff', bar: 'from-[#8b6cff] to-[#a78bff]' },
+  색소: { color: '#ffb86a', bar: 'from-[#ffb86a] to-[#ff9d6a]' },
+  모공: { color: '#ff6ab0', bar: 'from-[#ff6ab0] to-[#ff8ac4]' },
+  민감: { color: '#6affd0', bar: 'from-[#6affd0] to-[#5ad1ff]' },
+  유분: { color: '#ff9d6a', bar: 'from-[#ff9d6a] to-[#ff7a6a]' },
 }
 
 /** RADAR_LABELS 순서에 맞춘 꼭짓점 색 배열 */

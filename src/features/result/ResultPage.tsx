@@ -12,7 +12,7 @@ import {
   BAND_META,
   metricDesc,
 } from './resultMeta'
-import { ingredientImage } from './ingredientImages'
+import { IngredientCard } from './components/IngredientCard'
 
 export function ResultPage() {
   const navigate = useNavigate()
@@ -72,7 +72,7 @@ export function ResultPage() {
                 {result.totalScore}
                 <span className="text-sm font-normal text-white/40">
                   {' '}
-                  / 또래 52
+                  / 또래 {result.peerTotalScore}
                 </span>
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -131,11 +131,12 @@ export function ResultPage() {
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {RADAR_LABELS.map((label) => {
-            const score =
-              result.metrics.find((m) => m.name === label)?.score ?? 0
+            const metric = result.metrics.find((m) => m.name === label)
+            const score = metric?.score ?? 0
+            const peerScore = metric?.peerScore ?? 0
             const band = bandOf(score)
             const meta = METRIC_META[label]
-            const diff = score - meta.peer
+            const diff = score - peerScore
             return (
               <article
                 key={label}
@@ -186,34 +187,7 @@ export function ResultPage() {
 
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {result.ingredients.map((ingredient) => (
-            <article
-              key={ingredient.engName}
-              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <img
-                  src={ingredientImage(ingredient.korName)}
-                  alt={ingredient.korName}
-                  className="h-12 w-12 shrink-0 object-contain"
-                />
-                <div className="flex flex-wrap justify-end gap-1.5">
-                  {ingredient.effects.slice(0, 2).map((effect) => (
-                    <span
-                      key={effect}
-                      className="rounded-full bg-[#8b6cff]/20 px-2.5 py-1 text-xs text-[#c4b5ff]"
-                    >
-                      {effect}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <p className="mt-4 font-semibold text-white">
-                {ingredient.korName}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-white/50">
-                {ingredient.desc}
-              </p>
-            </article>
+            <IngredientCard key={ingredient.engName} ingredient={ingredient} />
           ))}
         </div>
       </section>

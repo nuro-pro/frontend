@@ -2,10 +2,10 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { RadarChart } from '@/components/RadarChart'
-import { MOCK_RESULT, INGREDIENT_ICON_CLASSES } from './mockResult'
+import { MOCK_RESULT } from './mockResult'
+import { RADAR_LABELS, RADAR_COLORS } from './resultMeta'
+import { ingredientImage } from './ingredientImages'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
-
-const RADAR_LABELS = ['수분', '주름', '색소', '모공', '민감', '유분'] as const
 
 export function ResultSharePage() {
   const navigate = useNavigate()
@@ -59,6 +59,7 @@ export function ResultSharePage() {
             <RadarChart
               values={radarValues}
               labels={[...RADAR_LABELS]}
+              colors={RADAR_COLORS}
               className="h-48 w-48"
             />
           </div>
@@ -69,8 +70,10 @@ export function ResultSharePage() {
                 key={ingredient.engName}
                 className="flex items-center gap-3 rounded-xl bg-white/5 px-3 py-2 ring-1 ring-white/10"
               >
-                <span
-                  className={`h-7 w-7 shrink-0 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.korName] ?? 'from-white/20 to-white/10'}`}
+                <img
+                  src={ingredientImage(ingredient.korName)}
+                  alt={ingredient.korName}
+                  className="h-8 w-8 shrink-0 object-contain"
                 />
                 <span className="flex-1 text-sm text-white">
                   {ingredient.korName}

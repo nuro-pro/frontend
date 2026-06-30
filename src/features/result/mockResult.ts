@@ -1,67 +1,56 @@
-// 결과/공유 화면용 임시 데이터.
-// TODO(Swagger): DiagnosisResult 스키마 확정 후 백엔드 응답으로 교체.
-
-export interface DiagnosisResult {
-  id: string
-  resultDate: string
-  userName: string
-  skinType: string
-  skinAge: number
-  profileDesc: string
-  scores: {
-    수분: number
-    주름: number
-    색소: number
-    모공: number
-    민감: number
-    유분: number
-  }
-  ingredients: {
-    name: string
-    badge: string
-    desc: string
-  }[]
-  routine: {
-    name: string
-    product: string
-    desc: string
-  }[]
-  disclaimer: string
-  totalScore: number
-  totalDesc: string
-}
+// 결과/공유 화면용 임시 데이터 (state 없이 진입했을 때의 폴백)
+// 실제 타입은 @/features/diagnosis/types 의 DiagnosisResult를 단일 소스로 따른다.
+import type { DiagnosisResult } from '@/features/diagnosis/types'
 
 export const MOCK_RESULT: DiagnosisResult = {
-  id: 'abc123',
-  resultDate: '2026.08.24',
-  userName: 'Minseo',
+  id: 1,
   skinType: '복합성 피부',
   skinAge: 24,
-  profileDesc:
+  totalScore: 62,
+  totalDesc: '전반적으로 양호하나 수분과 탄력 관리에 집중이 필요해요.',
+  summary:
     '유분이 많은 T존과 속건조가 함께 공존하는 복합성 피부예요. 피지 조절과 수분 보충이 핵심이에요.',
-  scores: {
-    수분: 80,
-    주름: 55,
-    색소: 62,
-    모공: 45,
-    민감: 52,
-    유분: 68,
-  },
+  metrics: [
+    { name: '수분', score: 62 },
+    { name: '주름', score: 32 },
+    { name: '색소', score: 94 },
+    { name: '모공', score: 58 },
+    { name: '민감', score: 70 },
+    { name: '유분', score: 55 },
+  ],
   ingredients: [
     {
-      name: '히알루론산',
-      badge: '수분 보습',
+      korName: '히알루론산',
+      engName: 'Hyaluronic acid',
+      ewgGrade: 1,
+      riskLevel: '낮음',
+      dataLevel: '적당함',
       desc: '수분을 끌어당겨 속건조를 완화하고 겉피부 결까지 잔잔하게 정돈해줘요.',
+      effects: ['깊은 보습', '탄력 케어', '진정 회복'],
+      howToUse: '세안 > 토너 > 히알루론산 > 보습제',
+      tip: '촉촉할 때 발라 수분을 끌어오고, 마지막에 보습제로 덮어 가둬주세요.',
     },
     {
-      name: '나이아신아마이드',
-      badge: '톤 케어',
-      desc: '피부 톤과 유분 밸런스를 도와 맑고 균일한 인상을 만들어줘요.',
+      korName: 'LHA',
+      engName: 'Lipohydroxy Acid',
+      ewgGrade: 4,
+      riskLevel: '보통',
+      dataLevel: '적당함',
+      desc: '모공 속 노폐물과 각질을 부드럽게 관리해 피부결을 매끄럽게 정돈해줘요.',
+      effects: ['모공 관리', '각질 제거', '피부결 개선'],
+      howToUse: '세안 > 토너 > LHA > 크림',
+      tip: '저녁에 사용하며 피부 상태에 따라 횟수를 조절해 주세요.',
     },
     {
-      name: '세라마이드',
-      badge: '장벽 강화',
-      desc: '피부 장벽을 단단하게 채워 외부 자극과 수분 손실을 줄여줘요.',
+      korName: 'BHA',
+      engName: 'Beta Hydroxy Acid',
+      ewgGrade: 4,
+      riskLevel: '보통',
+      dataLevel: '적당함',
+      desc: '모공 속 피지와 노폐물을 관리하는 데 도움을 주며 피부를 깨끗하게 정돈해줘요.',
+      effects: ['피지 조절', '모공 관리', '각질 제거'],
+      howToUse: '세안 > 토너 > BHA > 크림',
+      tip: '주 1~3회 저녁에 사용하고 피부 상태에 따라 횟수를 조절해 주세요.',
     },
   ],
   routine: [
@@ -92,41 +81,4 @@ export const MOCK_RESULT: DiagnosisResult = {
     },
   ],
   disclaimer: '이 결과는 의학적 진단이 아닙니다.',
-  totalScore: 53,
-  totalDesc:
-    '전반적으로 균형 잡힌 편이지만 수분 관리에 조금 더 신경 쓰면 좋아요.',
-}
-
-// RadarChart용 상수 (프론트 고정값)
-export const RADAR_LABELS = [
-  '수분',
-  '주름',
-  '색소',
-  '모공',
-  '민감',
-  '유분',
-] as const
-
-// scores 객체 → RadarChart values 배열로 변환
-export function scoresToRadarValues(
-  scores: DiagnosisResult['scores'],
-): number[] {
-  return RADAR_LABELS.map((label) => scores[label])
-}
-
-// 성분별 아이콘 색상 (프론트 전용)
-export const INGREDIENT_ICON_CLASSES: Record<string, string> = {
-  히알루론산: 'from-[#5ad1ff] to-[#8b6cff]',
-  나이아신아마이드: 'from-[#a78bff] to-[#8b6cff]',
-  세라마이드: 'from-[#ffd6a0] to-[#ffb86a]',
-}
-
-// 지표별 바 색상 (프론트 전용)
-export const METRIC_BAR_CLASSES: Record<string, string> = {
-  수분: 'from-[#5ad1ff] to-[#8b6cff]',
-  주름: 'from-[#8b6cff] to-[#a78bff]',
-  색소: 'from-[#ffb86a] to-[#ff9d6a]',
-  모공: 'from-[#ff6ab0] to-[#ff8ac4]',
-  민감: 'from-[#6affd0] to-[#5ad1ff]',
-  유분: 'from-[#ff9d6a] to-[#ff7a6a]',
 }

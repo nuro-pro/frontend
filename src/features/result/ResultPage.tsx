@@ -3,13 +3,16 @@ import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
+import { MOCK_RESULT } from './mockResult'
 import {
-  MOCK_RESULT,
-  INGREDIENT_ICON_CLASSES,
-  METRIC_BAR_CLASSES,
-} from './mockResult'
-
-const RADAR_LABELS = ['수분', '주름', '색소', '모공', '민감', '유분'] as const
+  RADAR_LABELS,
+  RADAR_COLORS,
+  METRIC_META,
+  bandOf,
+  BAND_META,
+  metricDesc,
+} from './resultMeta'
+import { ingredientImage } from './ingredientImages'
 
 export function ResultPage() {
   const navigate = useNavigate()
@@ -98,6 +101,7 @@ export function ResultPage() {
             <RadarChart
               values={radarValues}
               labels={[...RADAR_LABELS]}
+              colors={RADAR_COLORS}
               className="h-56 w-56"
             />
           </div>
@@ -129,24 +133,46 @@ export function ResultPage() {
           {RADAR_LABELS.map((label) => {
             const score =
               result.metrics.find((m) => m.name === label)?.score ?? 0
+            const band = bandOf(score)
+            const meta = METRIC_META[label]
+            const diff = score - meta.peer
             return (
               <article
                 key={label}
                 className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
               >
-                <span className="text-sm font-medium text-white">{label}</span>
-                <p className="mt-3 text-2xl font-bold text-white">
-                  {score}
-                  <span className="text-sm font-normal text-white/40">
-                    /100
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-white">
+                    {label}
                   </span>
-                </p>
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs ${BAND_META[band].chip}`}
+                  >
+                    {BAND_META[band].label}
+                  </span>
+                </div>
+                <div className="mt-3 flex items-end justify-between gap-2">
+                  <p className="text-2xl font-bold text-white">
+                    {score}
+                    <span className="text-sm font-normal text-white/40">
+                      /100
+                    </span>
+                  </p>
+                  <span
+                    className={`text-xs ${diff >= 0 ? 'text-[#5ce8bb]' : 'text-[#ff8f8f]'}`}
+                  >
+                    또래 평균 대비 {diff >= 0 ? '▲' : '▼'} {Math.abs(diff)}점
+                  </span>
+                </div>
                 <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                   <div
-                    className={`h-full rounded-full bg-gradient-to-r ${METRIC_BAR_CLASSES[label]}`}
+                    className={`h-full rounded-full bg-gradient-to-r ${meta.bar}`}
                     style={{ width: `${score}%` }}
                   />
                 </div>
+                <p className="mt-3 text-xs leading-relaxed text-white/50">
+                  {metricDesc(label, band)}
+                </p>
               </article>
             )
           })}
@@ -164,13 +190,22 @@ export function ResultPage() {
               key={ingredient.engName}
               className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
-              <div className="flex items-center justify-between">
-                <div
-                  className={`h-9 w-9 rounded-full bg-gradient-to-br ${INGREDIENT_ICON_CLASSES[ingredient.korName] ?? 'from-white/20 to-white/10'}`}
+              <div className="flex items-center justify-between gap-2">
+                <img
+                  src={ingredientImage(ingredient.korName)}
+                  alt={ingredient.korName}
+                  className="h-12 w-12 shrink-0 object-contain"
                 />
-                <span className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-xs text-[#c4b5ff]">
-                  {ingredient.effects[0]}
-                </span>
+                <div className="flex flex-wrap justify-end gap-1.5">
+                  {ingredient.effects.slice(0, 2).map((effect) => (
+                    <span
+                      key={effect}
+                      className="rounded-full bg-[#8b6cff]/20 px-2.5 py-1 text-xs text-[#c4b5ff]"
+                    >
+                      {effect}
+                    </span>
+                  ))}
+                </div>
               </div>
               <p className="mt-4 font-semibold text-white">
                 {ingredient.korName}

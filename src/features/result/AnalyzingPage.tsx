@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 import { createDiagnosis } from '@/features/diagnosis/api'
+import { ApiError } from '@/api/types'
 import analyzing1 from '@/assets/analyzing/1.png'
 import analyzing2 from '@/assets/analyzing/2.png'
 import analyzing3 from '@/assets/analyzing/3.png'
@@ -28,7 +29,7 @@ const INTERVAL_MS = 2050
 
 export function AnalyzingPage() {
   const navigate = useNavigate()
-  const { photo, userInfo, surveyAnswers } = useDiagnosis()
+  const { photo, userId, userInfo, surveyAnswers } = useDiagnosis()
   const calledRef = useRef(false)
 
   const [images] = useState(() => {
@@ -45,6 +46,11 @@ export function AnalyzingPage() {
   }, [images])
 
   useEffect(() => {
+    // userId 없으면(온보딩 건너뜀) 진단 불가 → 온보딩으로
+    if (userId == null) {
+      navigate('/onboarding')
+      return
+    }
     if (!photo || !surveyAnswers) {
       navigate('/capture')
       return
@@ -56,6 +62,7 @@ export function AnalyzingPage() {
     async function analyze() {
       try {
         const result = await createDiagnosis(
+          userId!,
           photo!,
           surveyAnswers!.skinCondition,
           surveyAnswers!.skinConcern,
@@ -70,8 +77,13 @@ export function AnalyzingPage() {
             photoUrl,
           },
         })
-      } catch {
-        navigate('/capture')
+      } catch (e) {
+        // 4101: 사용자를 찾을 수 없음 → 온보딩부터 다시
+        if (e instanceof ApiError && e.errorCode === 4101) {
+          navigate('/onboarding')
+        } else {
+          navigate('/capture')
+        }
       }
     }
 

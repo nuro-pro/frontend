@@ -3,6 +3,8 @@ interface RadarChartProps {
   values: number[]
   /** 각 축 라벨 (시계방향, 12시 시작) */
   labels: string[]
+  /** 각 꼭짓점 색 (labels와 같은 순서·길이) 없으면 단색. */
+  colors?: string[]
   max?: number
   className?: string
 }
@@ -22,6 +24,7 @@ function pointAt(index: number, count: number, radius: number, center: number) {
 export function RadarChart({
   values,
   labels,
+  colors,
   max = 100,
   className,
 }: RadarChartProps) {
@@ -86,13 +89,16 @@ export function RadarChart({
 
       {values.map((v, i) => {
         const p = pointAt(i, count, radius * clamp(v), center)
+        const color = colors?.[i] ?? '#c4b5ff'
         return (
           <circle
             key={`dot-${labels[i]}`}
             cx={p.x}
             cy={p.y}
-            r={3}
-            fill="#c4b5ff"
+            r={3.5}
+            fill={color}
+            stroke="#fff"
+            strokeWidth={1}
           />
         )
       })}

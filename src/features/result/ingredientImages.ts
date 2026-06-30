@@ -16,7 +16,6 @@ function byFileName(name: string): string | undefined {
 
 const norm = (s: string) => s.replace(/\s+/g, '')
 
-
 const KOR_TO_FILE: Record<string, string> = {
   히알루론산: 'Hyaluronic-Acid',
   글리세린: 'Glycerin',
@@ -45,7 +44,7 @@ export function ingredientImage(korName: string): string | undefined {
   return (file ? byFileName(file) : undefined) ?? FALLBACK_IMAGE
 }
 
-// 성분별 대표 색 
+// 성분별 대표 색
 const ACCENT: Record<string, string> = {
   히알루론산: '#6cc5ff',
   글리세린: '#57c5d6',

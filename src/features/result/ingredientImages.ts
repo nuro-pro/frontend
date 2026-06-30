@@ -1,4 +1,4 @@
-// 성분 아이콘 이미지 
+// 성분 아이콘 이미지
 // 백엔드 응답의 korName으로 이미지를 찾고 못 찾으면 폴백 이미지
 
 const MODULES = import.meta.glob('../../assets/ingredient/*.png', {

@@ -5,10 +5,13 @@ export interface UserInfo {
   age: number
 }
 
+export interface SurveyAnswerItem {
+  questionId: number
+  answerId: number
+}
+
 export interface SurveyAnswers {
-  skinCondition: string
-  skinConcern: string
-  skinSensitivity: string
+  answers: SurveyAnswerItem[]
 }
 
 export interface DiagnosisContextType {
@@ -17,12 +20,15 @@ export interface DiagnosisContextType {
   surveyAnswers: SurveyAnswers | null
   photos: File[]
   photo: File | null
+
   setUserId: (id: number | null) => void
   setUserInfo: (info: UserInfo) => void
   setSurveyAnswers: (answers: SurveyAnswers) => void
+
   setPhoto: (file: File) => void
   setPhotos: (files: File[]) => void
   addToPhotos: (file: File) => void
+  
   reset: () => void
   cameraStream: MediaStream | null
   setCameraStream: (stream: MediaStream | null) => void

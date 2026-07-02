@@ -29,3 +29,8 @@ export interface DiagnosisResult {
   }[]
   disclaimer: string
 }
+
+export interface SurveyAnswerItem {
+  answerId: number
+  questionId: number
+}

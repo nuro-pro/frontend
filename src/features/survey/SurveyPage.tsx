@@ -24,7 +24,9 @@ export function SurveyPage() {
 
     async function fetchSurvey() {
       try {
-        const response = await getSurveyFull()
+        //이거 나중에 백에서 관리자용 전체조회 만드는게 좋을것 같긴 함
+        const response = await getSurveyFull().
+            then((questions) => questions.filter((q) => q.options.length > 0)) // 옵션이 없는 문항은 제외
         if (!cancelled) setQuestions(response)
       } catch (error) {
         console.error('Failed to fetch survey questions:', error)

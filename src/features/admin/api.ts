@@ -36,3 +36,7 @@ export const addIngredient = async (
   const response = await api.post('/ingredients/admin/add', ingredient)
   return response.data
 }
+
+export const deleteIngredient = async (ingredientId: number) => {
+  await api.delete(`/ingredients/admin/${ingredientId}`)
+}

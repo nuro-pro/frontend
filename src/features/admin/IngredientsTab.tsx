@@ -2,7 +2,7 @@ import { PageHeader } from './components/PageHeader'
 import { useState } from 'react'
 import type { Ingredient} from './types'
 import { inputStyle } from './components/inputstyle'
-import { addIngredient } from './api'
+import { addIngredient, deleteIngredient } from './api'
 import { Btn } from './components/Btn'
 
 const EWG_COLOR: Record<number, string> = {
@@ -23,10 +23,12 @@ export function IngredientsTab({ ingredients }: { ingredients: Ingredient[] }) {
       i.engName.toLowerCase().includes(search.toLowerCase())
   )
 
-    const deleteIngredient = (ingredientId: number) => {
+    const deleteIngredientHandler = (ingredientId: number) => {
+      if (!confirm('이 성분을 삭제할까요?')) return
       setIngredients((prev) =>
         prev.filter((i) => i.ingredientId !== ingredientId)
       )
+      deleteIngredient(ingredientId)
     }
 
   const [showAdd, setShowAdd] = useState(false)
@@ -107,7 +109,7 @@ export function IngredientsTab({ ingredients }: { ingredients: Ingredient[] }) {
     <div>
       <PageHeader
         title="성분 관리"
-        subtitle={`총 ${ingredients.length}개 성분`}
+        subtitle={`총 ${ingredientsState.length}개 성분`}
         action={<Btn variant="primary" onClick={() => setShowAdd((prev) => !prev)}>{showAdd ? '취소' : '+ 성분 추가'}</Btn>}
       />
           {showAdd && (
@@ -302,7 +304,7 @@ export function IngredientsTab({ ingredients }: { ingredients: Ingredient[] }) {
                   </div>
                 </td>
                 <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                  <Btn variant="danger" onClick={() => deleteIngredient(i.ingredientId)}>삭제</Btn>
+                  <Btn variant="danger" onClick={() => deleteIngredientHandler(i.ingredientId)}>삭제</Btn>
                 </td>
               </tr>
             ))}

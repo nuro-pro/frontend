@@ -1,10 +1,10 @@
 import {api, unwrap} from '@/api/client'
-import type { Survey, Ingredient } from './types'
+import type { Question, Ingredient } from './types'
 import type { CommonResponse } from '@/api/types'
 
 
-export async function getAdminData(): Promise<{ survey: Survey[], ingredients: Ingredient[] }> {
-  const surveyResponse = await api.get<CommonResponse<Survey[]>>('/surveys')
+export async function getAdminData(): Promise<{ survey: Question[], ingredients: Ingredient[] }> {
+  const surveyResponse = await api.get<CommonResponse<Question[]>>('/surveys')
   const ingredientsResponse = await api.get<CommonResponse<Ingredient[]>>('/ingredients/admin')
   return {
     survey: unwrap(surveyResponse.data) ?? [],

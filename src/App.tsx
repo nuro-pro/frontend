@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Layout } from '@/components/Layout'
+import { AdminPage } from '@/features/admin/AdminPage'
 import { LandingPage } from '@/features/landing/LandingPage'
 import { IntroPage } from '@/features/intro/IntroPage'
 import { OnboardingPage } from '@/features/onboarding/OnboardingPage'
@@ -19,6 +20,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="/intro" element={<IntroPage />} />
             <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/ready" element={<CaptureReadyPage />} />

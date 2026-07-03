@@ -36,7 +36,7 @@ export async function createDiagnosis(
   )
 
   const { data } = await api.post<CommonResponse<DiagnosisResult>>(
-    `/diagnoses?userId=${userId}`,
+    `/diagnoses?userId=${userId}`, //이게 보내는 부분
     form,
   )
 

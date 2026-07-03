@@ -1,5 +1,5 @@
 import {api, unwrap} from '@/api/client'
-import type { Question, Ingredient } from './types'
+import type { Question, Ingredient, AddIngredientRequest } from './types'
 import type { CommonResponse } from '@/api/types'
 
 
@@ -27,5 +27,12 @@ export const deleteSurveyAnswer = async (answerId: number): Promise<void> => {
 
 export const addSurveyAnswer = async (answer: { questionId: number; comment: string }): Promise<CommonResponse<number>> => {
   const response = await api.post<CommonResponse<number>>('/surveys/admin/answers/add', answer)
+  return response.data
+}
+
+export const addIngredient = async (
+  ingredient: AddIngredientRequest,
+) => {
+  const response = await api.post('/ingredients/admin/add', ingredient)
   return response.data
 }

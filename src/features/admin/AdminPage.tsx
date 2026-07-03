@@ -3,7 +3,7 @@ import { PageHeader } from './components/PageHeader'
 import { Card } from './components/Card'
 import { Btn } from './components/Btn'
 import type { Question, Ingredient, TabId, Option } from './types'
-import { getAdminData } from './api'
+import { getAdminData, deleteSurveyQuestion, addSurveyQuestion, deleteSurveyAnswer, addSurveyAnswer } from './api'
 
 const EWG_COLOR: Record<number, string> = {
   1: '#22c55e',
@@ -102,16 +102,23 @@ function SurveyTab({ surveyData }: { surveyData: Question[] }) {
   const deleteQuestion = (id: number) => {
     if (!confirm('이 문항을 삭제할까요?')) return
     setSurvey((prev) => prev.filter((q) => q.questionId !== id))
-    // TODO: DELETE /api/v1/surveys/admin/questions/{id}
+    deleteSurveyQuestion(id)
   }
 
-  const addQuestion = () => {
+  const addQuestion = async () => {
     if (!newQuestion.trim()) return
-    const newQ: Question = { questionId: Date.now(), question: newQuestion.trim(), options: [] }
-    setSurvey((prev) => [...prev, newQ])
-    setNewQuestion('')
-    setShowAddQuestion(false)
-    // TODO: POST /api/v1/surveys/admin/questions/add { comment: newQuestion }
+    try{
+      const response = await addSurveyQuestion({ comment: newQuestion.trim() })
+    if (response.data === undefined) {
+      throw new Error('질문 ID를 받지 못했습니다.')
+    }
+      const newQ: Question = { questionId: response.data, question: newQuestion.trim(), options: [] }
+      setSurvey((prev) => [...prev, newQ])
+      setNewQuestion('')
+      setShowAddQuestion(false)
+    } catch (error) {
+      console.error('Error adding survey question:', error)
+    }
   }
 
   const deleteAnswer = (questionId: number, answerId: number) => {
@@ -120,7 +127,7 @@ function SurveyTab({ surveyData }: { surveyData: Question[] }) {
         q.questionId === questionId ? { ...q, options: q.options.filter((a) => a.answerId !== answerId) } : q
       )
     )
-    // TODO: DELETE /api/v1/surveys/admin/answers/{answerId}
+    deleteSurveyAnswer(answerId)
   }
 
   const addAnswer = (questionId: number) => {
@@ -133,6 +140,7 @@ function SurveyTab({ surveyData }: { surveyData: Question[] }) {
       )
     )
     setNewAnswers((prev) => ({ ...prev, [questionId]: '' }))
+    addSurveyAnswer({ questionId, comment: text })
     // TODO: POST /api/v1/surveys/admin/answers/add { questionId, comment: text }
   }
 

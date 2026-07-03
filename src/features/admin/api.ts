@@ -11,3 +11,21 @@ export async function getAdminData(): Promise<{ survey: Question[], ingredients:
     ingredients: unwrap(ingredientsResponse.data) ?? [],
   }
 }
+
+export const deleteSurveyQuestion = async (questionId: number): Promise<void> => {
+  await api.delete(`/surveys/admin/questions/${questionId}`)
+}
+
+export const addSurveyQuestion = async (question: { comment:string }): Promise<CommonResponse<number>> => {
+  const response = await api.post<CommonResponse<number>>('/surveys/admin/questions/add', question)
+  return response.data
+}
+
+export const deleteSurveyAnswer = async (answerId: number): Promise<void> => {
+  await api.delete(`/surveys/admin/answers/${answerId}`)
+}
+
+export const addSurveyAnswer = async (answer: { questionId: number; comment: string }): Promise<CommonResponse<number>> => {
+  const response = await api.post<CommonResponse<number>>('/surveys/admin/answers/add', answer)
+  return response.data
+}

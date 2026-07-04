@@ -46,3 +46,8 @@ export async function createDiagnosis(
   }
   return result
 }
+
+export async function fetchDiagnosis(id: number) {
+  const res = await api.get(`/diagnoses/${id}`)
+  return res.data.data
+}

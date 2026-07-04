@@ -28,7 +28,7 @@ function App() {
             <Route path="/review" element={<CaptureReviewPage />} />
             <Route path="/survey" element={<SurveyPage />} />
             <Route path="/analyzing" element={<AnalyzingPage />} />
-            <Route path="/result" element={<ResultPage />} />
+            <Route path="/result/:id" element={<ResultPage />} />
             <Route path="/share" element={<ResultSharePage />} />
           </Routes>
         </Layout>

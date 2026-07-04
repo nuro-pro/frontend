@@ -34,4 +34,4 @@ export interface AddIngredientRequest {
   tip: string
 }
 
-export type TabId = 'survey' | 'ingredients'
+export type TabId = 'survey' | 'ingredients' 

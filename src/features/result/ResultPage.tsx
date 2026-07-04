@@ -3,7 +3,11 @@ import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
-import { MOCK_RESULT } from './mockResult'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { fetchDiagnosis } from '@/features/diagnosis/api'
+
+
 import {
   RADAR_LABELS,
   RADAR_COLORS,
@@ -17,10 +21,35 @@ import { IngredientCard } from './components/IngredientCard'
 export function ResultPage() {
   const navigate = useNavigate()
   const { state } = useLocation()
-  const result: DiagnosisResult = state?.result ?? MOCK_RESULT
+  //const result: DiagnosisResult = state?.result ?? MOCK_RESULT
   const userName: string = state?.userName ?? '사용자'
   const photoUrl: string | null = state?.photoUrl ?? null // ← Context 대신 state에서
   const { reset } = useDiagnosis()
+  const { id } = useParams()
+  const [result, setResult] = useState<DiagnosisResult | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!id) return
+
+    const load = async () => {
+      try {
+        const data = await fetchDiagnosis(Number(id))
+        setResult(data)
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [id])
+
+  if (loading || !result?.metrics) {
+    return  (
+      <div className="flex min-h-screen w-full items-center justify-center text-white">
+        <p>로딩중 . . .</p>
+      </div>
+      )
+  }
 
   const handleHome = () => {
     reset()
@@ -29,9 +58,9 @@ export function ResultPage() {
   }
 
   // metrics 배열 → 레이더 차트용 배열로 변환
-  const radarValues = RADAR_LABELS.map(
-    (label) => result.metrics.find((m) => m.name === label)?.score ?? 0,
-  )
+  const radarValues = RADAR_LABELS.map((label) => {
+    return result.metrics?.find((m) => m.name === label)?.score ?? 0
+  })
 
   return (
     <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-8 sm:py-14">

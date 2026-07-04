@@ -5,6 +5,8 @@ import { inputStyle } from './components/inputstyle'
 import { addIngredient, deleteIngredient } from './api'
 import { Btn } from './components/Btn'
 
+//form에서 enum? 구현...
+
 const EWG_COLOR: Record<number, string> = {
   1: '#22c55e',
   2: '#86efac',

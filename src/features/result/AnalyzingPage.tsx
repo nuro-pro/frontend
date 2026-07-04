@@ -68,7 +68,7 @@ export function AnalyzingPage() {
           surveyAnswers?.answers || []
         )
         const photoUrl = URL.createObjectURL(photo!)
-        navigate('/result', {
+        navigate(`/result/${result.id}`, {
           state: {
             result,
             userName: userInfo?.name || '사용자',

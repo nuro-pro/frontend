@@ -47,7 +47,7 @@ export async function createDiagnosis(
   return result
 }
 
-export async function fetchDiagnosis(id: number) {
-  const res = await api.get(`/diagnoses/${id}`)
+export async function fetchDiagnosis(sharedId: string) {
+  const res = await api.get(`/diagnoses/${sharedId}`)
   return res.data.data
 }

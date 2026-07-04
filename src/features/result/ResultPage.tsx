@@ -25,23 +25,23 @@ export function ResultPage() {
   const userName: string = state?.userName ?? '사용자'
   const photoUrl: string | null = state?.photoUrl ?? null // ← Context 대신 state에서
   const { reset } = useDiagnosis()
-  const { id } = useParams()
+  const { sharedId } = useParams()
   const [result, setResult] = useState<DiagnosisResult | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!id) return
+    if (!sharedId) return
 
     const load = async () => {
       try {
-        const data = await fetchDiagnosis(Number(id))
+        const data = await fetchDiagnosis(String(sharedId))
         setResult(data)
       } finally {
         setLoading(false)
       }
     }
     load()
-  }, [id])
+  }, [sharedId])
 
   if (loading || !result?.metrics) {
     return  (

@@ -29,7 +29,7 @@ const INTERVAL_MS = 2050
 
 export function AnalyzingPage() {
   const navigate = useNavigate()
-  const { photo, userId, userInfo, surveyAnswers } = useDiagnosis()
+  const { photo, userId, surveyAnswers } = useDiagnosis()
   const calledRef = useRef(false)
 
   const [images] = useState(() => {
@@ -67,15 +67,9 @@ export function AnalyzingPage() {
           photo!,
           surveyAnswers?.answers || []
         )
-        const photoUrl = URL.createObjectURL(photo!)
-        navigate(`/result/${result.id}`, {
-          state: {
-            result,
-            userName: userInfo?.name || '사용자',
-            userAge: userInfo?.age,
-            photoUrl,
-          },
-        })
+        console.log('Diagnosis result:', result)
+        navigate(`/result/${result.shareId}`)
+
       } catch (e) {
         // 4101: 사용자를 찾을 수 없음 → 온보딩부터 다시
         if (e instanceof ApiError && e.errorCode === 4101) {

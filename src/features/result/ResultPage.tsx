@@ -86,7 +86,7 @@ export function ResultPage() {
               <div className="h-40 w-40 rounded-2xl overflow-hidden bg-white/10">
                 {result.userImage && (
                   <img
-                    src={`http://localhost:8080${result.userImage}`}
+                    src={result.userImage}
                     alt="진단 사진"
                     className="w-full h-full object-cover"
                   />

@@ -22,17 +22,12 @@ export async function createDiagnosis(
   form.append(FILE_PART_NAME, file)
 
   const surveyPayload = {
-    answers: answers
+    answers: answers,
   }
 
   form.append(
     'survey',
-    new Blob(
-      [
-        JSON.stringify(surveyPayload),
-      ],
-      { type: 'application/json' },
-    ),
+    new Blob([JSON.stringify(surveyPayload)], { type: 'application/json' }),
   )
 
   const { data } = await api.post<CommonResponse<DiagnosisResult>>(

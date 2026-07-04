@@ -25,7 +25,6 @@ function initKakao() {
 
 initKakao()
 
-
 initKakao()
 
 createRoot(document.getElementById('root')!).render(

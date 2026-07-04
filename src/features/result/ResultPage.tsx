@@ -7,7 +7,6 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { fetchDiagnosis } from '@/features/diagnosis/api'
 
-
 import {
   RADAR_LABELS,
   RADAR_COLORS,
@@ -40,8 +39,7 @@ export function ResultPage() {
         console.log(e)
         alert('결과를 불러오지 못했어요. 다시 시도해 주세요.')
         navigate('/')
-      }
-      finally {
+      } finally {
         setLoading(false)
       }
     }
@@ -49,11 +47,11 @@ export function ResultPage() {
   }, [shareId])
 
   if (loading || !result?.metrics) {
-    return  (
+    return (
       <div className="flex min-h-screen w-full items-center justify-center text-white">
         <p>로딩중 . . .</p>
       </div>
-      )
+    )
   }
 
   const handleHome = () => {

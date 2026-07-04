@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
-import {getSurveyFull} from './api'
+import { getSurveyFull } from './api'
 import type { Question } from './types'
 
 export function SurveyPage() {
@@ -10,8 +10,6 @@ export function SurveyPage() {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [questions, setQuestions] = useState<Question[]>([])
-
-
 
   const [selected, setSelected] = useState<number | null>(null)
   const [visible, setVisible] = useState(true)
@@ -25,8 +23,9 @@ export function SurveyPage() {
     async function fetchSurvey() {
       try {
         //이거 나중에 백에서 관리자용 전체조회 만드는게 좋을것 같긴 함
-        const response = await getSurveyFull().
-            then((questions) => questions.filter((q) => q.options.length > 0)) // 옵션이 없는 문항은 제외
+        const response = await getSurveyFull().then((questions) =>
+          questions.filter((q) => q.options.length > 0),
+        ) // 옵션이 없는 문항은 제외
         if (!cancelled) setQuestions(response)
       } catch (error) {
         console.error('Failed to fetch survey questions:', error)
@@ -34,7 +33,9 @@ export function SurveyPage() {
     }
 
     fetchSurvey()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   // ⭐️ 데이터가 아직 없거나 로딩 중일 때 보여줄 UI 추가
@@ -46,7 +47,7 @@ export function SurveyPage() {
     )
   }
 
-  const handleSelect = (answerId:number) => {
+  const handleSelect = (answerId: number) => {
     if (!current || selected !== null) return
 
     setSelected(answerId)
@@ -61,10 +62,9 @@ export function SurveyPage() {
       if (step < questions.length - 1) {
         setStep((prev) => prev + 1)
       } else {
-
         const formattedAnswers = Object.entries(updated).map(([qId, aId]) => ({
-          answerId: Number(aId),      // Long 타입 대응
-          questionId: Number(qId),    // Long 타입 대응
+          answerId: Number(aId), // Long 타입 대응
+          questionId: Number(qId), // Long 타입 대응
         }))
 
         setSurveyAnswers({

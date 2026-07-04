@@ -29,25 +29,24 @@ export function ResultSharePage() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center px-6 py-10">
       <div className="w-full max-w-sm bg-[#222223] rounded-3xl p-6 relative">
-          <button
-                onClick={() => navigate(`/result/${result.shareId}`)}
-                className="absolute right-4 top-4 text-white/70 hover:text-white text-2xl"
-              >
-                ×
-          </button>
-
+        <button
+          onClick={() => navigate(`/result/${result.shareId}`)}
+          className="absolute right-4 top-4 text-white/70 hover:text-white text-2xl"
+        >
+          ×
+        </button>
 
         <h1 className="text-center text-lg font-bold text-white">
           결과 휴대폰으로 저장
         </h1>
 
-        <div className="mt-6 rounded-3xl bg-black/40 p-5 ring-1 ring-white/10"
+        <div
+          className="mt-6 rounded-3xl bg-black/40 p-5 ring-1 ring-white/10"
           style={{
-        background:
-          'radial-gradient(ellipse 150% 100% at bottom center, #663fce 0%, #0a0010 60%, #000000 100%)',
-      }}
+            background:
+              'radial-gradient(ellipse 150% 100% at bottom center, #663fce 0%, #0a0010 60%, #000000 100%)',
+          }}
         >
-              
           <div className="flex flex-col items-center gap-1">
             <p className="text-center font-semibold text-white">
               {result.userNickname} 님
@@ -90,10 +89,10 @@ export function ResultSharePage() {
 
         <div className="mt-6 flex flex-col items-center gap-3">
           <button
-              type="submit"
-              onClick={handleShareKakao}
-              className="rounded-xl bg-[#7F4FFF] px-6 py-3 text-sm font-medium text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
-              >
+            type="submit"
+            onClick={handleShareKakao}
+            className="rounded-xl bg-[#7F4FFF] px-6 py-3 text-sm font-medium text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+          >
             카카오톡으로 결과 전송
           </button>
         </div>

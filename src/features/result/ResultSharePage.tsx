@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react'
-import type { FormEvent } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { RadarChart } from '@/components/RadarChart'
 import { MOCK_RESULT } from './mockResult'
 import { RADAR_LABELS, RADAR_COLORS } from './resultMeta'
 import { ingredientImage } from './ingredientImages'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
+import { shareKakaoResult } from './shareKakaoResult'
 
 export function ResultSharePage() {
   const navigate = useNavigate()
   const { state } = useLocation()
-  const [phone, setPhone] = useState('')
   const result: DiagnosisResult = state?.result ?? MOCK_RESULT
 
   useEffect(() => {
@@ -23,32 +22,33 @@ export function ResultSharePage() {
     (label) => result.metrics.find((m) => m.name === label)?.score ?? 0,
   )
 
-  const canSend = phone.replace(/\D/g, '').length >= 10
-
-  const handleSend = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!canSend) return
-    navigate(`/result/${result.shareId}`)
+  function handleShareKakao() {
+    shareKakaoResult(result)
   }
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center px-6 py-10">
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm bg-[#222223] rounded-3xl p-6 relative">
+          <button
+                onClick={() => navigate(`/result/${result.shareId}`)}
+                className="absolute right-4 top-4 text-white/70 hover:text-white text-2xl"
+              >
+                ×
+          </button>
+
+
         <h1 className="text-center text-lg font-bold text-white">
           결과 휴대폰으로 저장
         </h1>
 
-        <div className="mt-6 rounded-3xl bg-black/40 p-5 ring-1 ring-white/10">
+        <div className="mt-6 rounded-3xl bg-black/40 p-5 ring-1 ring-white/10"
+          style={{
+        background:
+          'radial-gradient(ellipse 150% 100% at bottom center, #663fce 0%, #0a0010 60%, #000000 100%)',
+      }}
+        >
+              
           <div className="flex flex-col items-center gap-1">
-            <div className="h-16 w-16 rounded-2xl overflow-hidden bg-white/10">
-              {result.userImage && (
-                  <img
-                    src={`http://localhost:8080${result.userImage}`}
-                    alt="진단 사진"
-                    className="w-full h-full object-cover"
-                  />
-                )}
-            </div>
             <p className="text-center font-semibold text-white">
               {result.userNickname} 님
             </p>
@@ -88,29 +88,15 @@ export function ResultSharePage() {
           </ul>
         </div>
 
-        <form onSubmit={handleSend} className="mt-6">
-          <label htmlFor="phone" className="block text-sm text-white/70">
-            휴대폰 번호로 결과 전송
-          </label>
-          <div className="mt-2 flex gap-2">
-            <input
-              id="phone"
-              type="tel"
-              inputMode="numeric"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="010-1234-5678"
-              className="flex-1 rounded-xl bg-black/30 px-4 py-3 text-white ring-1 ring-white/10 outline-none placeholder:text-white/30 focus:ring-2 focus:ring-[#8b6cff]"
-            />
-            <button
+        <div className="mt-6 flex flex-col items-center gap-3">
+          <button
               type="submit"
-              disabled={!canSend}
-              className="rounded-xl bg-gradient-to-b from-[#8b6cff] to-[#6a3fce] px-6 py-3 text-sm font-medium text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              전송
-            </button>
-          </div>
-        </form>
+              onClick={handleShareKakao}
+              className="rounded-xl bg-[#7F4FFF] px-6 py-3 text-sm font-medium text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+            카카오톡으로 결과 전송
+          </button>
+        </div>
       </div>
     </div>
   )

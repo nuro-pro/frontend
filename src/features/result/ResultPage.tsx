@@ -263,14 +263,14 @@ export function ResultPage() {
         </Button>
         <Button
           variant="primary"
-          className="w-44"
+          className="w-48"
           onClick={() =>
             navigate('/share', {
               state: { result },
             })
           }
         >
-          휴대폰으로 공유
+          카카오톡으로 공유
         </Button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
@@ -20,28 +20,33 @@ import { IngredientCard } from './components/IngredientCard'
 
 export function ResultPage() {
   const navigate = useNavigate()
-  const { state } = useLocation()
-  //const result: DiagnosisResult = state?.result ?? MOCK_RESULT
-  const userName: string = state?.userName ?? '사용자'
-  const photoUrl: string | null = state?.photoUrl ?? null // ← Context 대신 state에서
   const { reset } = useDiagnosis()
-  const { sharedId } = useParams()
+  const { shareId } = useParams()
   const [result, setResult] = useState<DiagnosisResult | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!sharedId) return
+    if (!shareId) {
+      console.log(shareId)
+      navigate('/')
+      return
+    }
 
     const load = async () => {
       try {
-        const data = await fetchDiagnosis(String(sharedId))
+        const data = await fetchDiagnosis(String(shareId))
         setResult(data)
-      } finally {
+      } catch (e) {
+        console.log(e)
+        alert('결과를 불러오지 못했어요. 다시 시도해 주세요.')
+        navigate('/')
+      }
+      finally {
         setLoading(false)
       }
     }
     load()
-  }, [sharedId])
+  }, [shareId])
 
   if (loading || !result?.metrics) {
     return  (
@@ -53,7 +58,6 @@ export function ResultPage() {
 
   const handleHome = () => {
     reset()
-    if (photoUrl) URL.revokeObjectURL(photoUrl)
     navigate('/')
   }
 
@@ -68,7 +72,7 @@ export function ResultPage() {
       <header>
         <p className="text-sm font-medium text-[#a78bff]">AI 피부 진단 결과</p>
         <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
-          {userName}님의 피부 진단 결과입니다.
+          {result.userNickname}님의 피부 진단 결과입니다.
         </h1>
       </header>
 
@@ -80,16 +84,16 @@ export function ResultPage() {
           <div className="flex items-start gap-4">
             <div className="flex flex-col items-center gap-1 shrink-0">
               <div className="h-40 w-40 rounded-2xl overflow-hidden bg-white/10">
-                {photoUrl && (
+                {result.userImage && (
                   <img
-                    src={photoUrl}
+                    src={`http://localhost:8080${result.userImage}`}
                     alt="진단 사진"
                     className="w-full h-full object-cover"
                   />
                 )}
               </div>
               <p className="text-xs text-white/50">
-                {userName} 님 · {state?.userAge ?? ''}세
+                {result.userNickname} 님 · {result.userAge ?? ''}세
               </p>
             </div>
 
@@ -262,7 +266,7 @@ export function ResultPage() {
           className="w-44"
           onClick={() =>
             navigate('/share', {
-              state: { result, userName, userAge: state?.userAge, photoUrl },
+              state: { result },
             })
           }
         >

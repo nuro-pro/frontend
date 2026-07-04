@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { RadarChart } from '@/components/RadarChart'
@@ -11,11 +11,13 @@ export function ResultSharePage() {
   const navigate = useNavigate()
   const { state } = useLocation()
   const [phone, setPhone] = useState('')
-
   const result: DiagnosisResult = state?.result ?? MOCK_RESULT
-  const userName: string = state?.userName ?? '사용자'
-  const userAge: number | undefined = state?.userAge
-  const photoUrl: string | null = state?.photoUrl ?? null
+
+  useEffect(() => {
+    if (!state?.result) {
+      navigate('/')
+    }
+  }, [])
 
   const radarValues = RADAR_LABELS.map(
     (label) => result.metrics.find((m) => m.name === label)?.score ?? 0,
@@ -26,7 +28,7 @@ export function ResultSharePage() {
   const handleSend = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!canSend) return
-    navigate('/result', { state: { result, userName, userAge, photoUrl } })
+    navigate(`/result/${result.shareId}`)
   }
 
   return (
@@ -39,16 +41,16 @@ export function ResultSharePage() {
         <div className="mt-6 rounded-3xl bg-black/40 p-5 ring-1 ring-white/10">
           <div className="flex flex-col items-center gap-1">
             <div className="h-16 w-16 rounded-2xl overflow-hidden bg-white/10">
-              {photoUrl && (
-                <img
-                  src={photoUrl}
-                  alt="진단 사진"
-                  className="w-full h-full object-cover"
-                />
-              )}
+              {result.userImage && (
+                  <img
+                    src={`http://localhost:8080${result.userImage}`}
+                    alt="진단 사진"
+                    className="w-full h-full object-cover"
+                  />
+                )}
             </div>
             <p className="text-center font-semibold text-white">
-              {userName} 님
+              {result.userNickname} 님
             </p>
             <p className="text-center text-xs text-white/40">
               {result.skinType} &middot; 피부 나이 {result.skinAge}세

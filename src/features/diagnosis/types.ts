@@ -1,6 +1,11 @@
 export interface DiagnosisResult {
   id: number
   shareId: string
+
+  userNickname: string
+  userImage: string
+  userAge: number
+
   skinType: string
   skinAge: number
   totalScore: number

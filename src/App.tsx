@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import { Layout } from '@/components/Layout'
 import { AdminPage } from '@/features/admin/AdminPage'
 import { LandingPage } from '@/features/landing/LandingPage'
@@ -30,6 +30,8 @@ function App() {
             <Route path="/analyzing" element={<AnalyzingPage />} />
             <Route path="/result/:shareId" element={<ResultPage />} />
             <Route path="/share" element={<ResultSharePage />} />
+
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Layout>
       </DiagnosisProvider>

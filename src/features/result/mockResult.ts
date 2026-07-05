@@ -4,6 +4,10 @@ import type { DiagnosisResult } from '@/features/diagnosis/types'
 
 export const MOCK_RESULT: DiagnosisResult = {
   id: 1,
+  shareId: 'mock-share-id',
+  userNickname: '홍길동',
+  userImage: 'https://via.placeholder.com/300',
+  userAge: 25,
   skinType: '복합성 피부',
   skinAge: 24,
   totalScore: 62,

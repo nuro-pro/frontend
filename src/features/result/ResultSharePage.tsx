@@ -1,5 +1,5 @@
-import { useEffect, useState} from 'react'
-import { useNavigate, useParams  } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { RadarChart } from '@/components/RadarChart'
 import { RADAR_LABELS, RADAR_COLORS } from './resultMeta'
 import { ingredientImage } from './ingredientImages'
@@ -25,7 +25,11 @@ export function ResultSharePage() {
   }, [shareId])
 
   if (loading || !result) {
-    return <div className="flex min-h-screen items-center justify-center text-white">로딩중...</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center text-white">
+        로딩중...
+      </div>
+    )
   }
 
   const radarValues = RADAR_LABELS.map(
@@ -33,7 +37,7 @@ export function ResultSharePage() {
   )
 
   function handleShareKakao() {
-    if(!result) return
+    if (!result) return
     shareKakaoResult(result)
   }
 

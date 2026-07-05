@@ -46,7 +46,6 @@ export function AnalyzingPage() {
   }, [images])
 
   useEffect(() => {
-    // userId 없으면(온보딩 건너뜀) 진단 불가 → 온보딩으로
     if (userId == null) {
       navigate('/onboarding')
       return

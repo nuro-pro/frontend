@@ -1,0 +1,46 @@
+name: Vercel Production Deploy
+
+on:
+  push:
+    branches: ['develop']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  Production-Deploy:
+    environment: production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # VITE_API_BASE_URL 등 환경변수는 Vercel 프로젝트(Production)에 등록해 둔다.
+      # vercel pull이 그 값을 받아와 vercel build가 빌드 환경에 주입한다.
+      - name: Vercel pull (production)
+        run: npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+
+      - name: Clean old output
+        run: rm -rf .vercel/output || true
+
+      - name: Vercel build (production)
+        run: npx vercel build --prod --token=$VERCEL_TOKEN
+
+      - name: Deploy to Vercel (production)
+        run: npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN

@@ -29,7 +29,7 @@ function App() {
             <Route path="/survey" element={<SurveyPage />} />
             <Route path="/analyzing" element={<AnalyzingPage />} />
             <Route path="/result/:shareId" element={<ResultPage />} />
-            <Route path="/share" element={<ResultSharePage />} />
+            <Route path="/share/:shareId" element={<ResultSharePage />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

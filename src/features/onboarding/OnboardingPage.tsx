@@ -45,7 +45,7 @@ export function OnboardingPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col text-[#FEFEFE] gap-10 mt-10 w-6/4 text-left"
+          className="flex w-full max-w-sm flex-col text-[#FEFEFE] gap-10 mt-10 text-left"
         >
           <div className="flex flex-col gap-2">
             <label htmlFor="nickname">닉네임</label>

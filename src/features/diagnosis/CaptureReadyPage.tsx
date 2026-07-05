@@ -16,17 +16,17 @@ export function CaptureReadyPage() {
         촬영한 사진은 맞춤 결과를 제공하는 데에만 사용돼요.
       </p>
 
-      <div className="mt-10 flex items-center gap-10">
+      <div className="mt-10 flex items-center gap-3 sm:gap-10">
         <Button
           variant="secondary"
-          className="cursor-pointer bg-[#7F4FFF]"
+          className="cursor-pointer bg-[#7F4FFF] px-5! whitespace-nowrap sm:px-10!"
           onClick={() => navigate('/onboarding')}
         >
           다음에 할게요
         </Button>
         <Button
           variant="primary"
-          className="cursor-pointer"
+          className="cursor-pointer px-5! whitespace-nowrap sm:px-10!"
           onClick={() => navigate('/capture')}
         >
           네, 시작할게요

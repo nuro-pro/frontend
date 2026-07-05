@@ -1,28 +1,39 @@
-import { useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useEffect, useState} from 'react'
+import { useNavigate, useParams  } from 'react-router-dom'
 import { RadarChart } from '@/components/RadarChart'
-import { MOCK_RESULT } from './mockResult'
 import { RADAR_LABELS, RADAR_COLORS } from './resultMeta'
 import { ingredientImage } from './ingredientImages'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
 import { shareKakaoResult } from './shareKakaoResult'
+import { fetchDiagnosis } from '@/features/diagnosis/api'
 
 export function ResultSharePage() {
   const navigate = useNavigate()
-  const { state } = useLocation()
-  const result: DiagnosisResult = state?.result ?? MOCK_RESULT
+  const { shareId } = useParams()
+  const [result, setResult] = useState<DiagnosisResult | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!state?.result) {
+    if (!shareId) {
       navigate('/')
+      return
     }
-  }, [])
+    fetchDiagnosis(shareId)
+      .then(setResult)
+      .catch(() => navigate('/'))
+      .finally(() => setLoading(false))
+  }, [shareId])
+
+  if (loading || !result) {
+    return <div className="flex min-h-screen items-center justify-center text-white">로딩중...</div>
+  }
 
   const radarValues = RADAR_LABELS.map(
     (label) => result.metrics.find((m) => m.name === label)?.score ?? 0,
   )
 
   function handleShareKakao() {
+    if(!result) return
     shareKakaoResult(result)
   }
 
@@ -89,7 +100,7 @@ export function ResultSharePage() {
 
         <div className="mt-6 flex flex-col items-center gap-3">
           <button
-            type="submit"
+            type="button"
             onClick={handleShareKakao}
             className="rounded-xl bg-[#7F4FFF] px-6 py-3 text-sm font-medium text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
           >

@@ -262,10 +262,7 @@ export function ResultPage() {
         <Button
           variant="primary"
           className="w-48"
-          onClick={() =>
-            navigate('/share', {
-              state: { result },
-            })
+          onClick={() => navigate(`/share/${result.shareId}`)
           }
         >
           카카오톡으로 공유

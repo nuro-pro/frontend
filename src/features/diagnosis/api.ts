@@ -2,7 +2,7 @@ import { api, unwrap } from '@/api/client'
 import type { CommonResponse } from '@/api/types'
 import { MAX_FILE_BYTES } from '@/lib/constants'
 import { ApiError } from '@/api/types'
-import type { DiagnosisResult } from './types'
+import type { DiagnosisResult, SurveyAnswerItem } from './types'
 
 /**
  * multipart 파일 파트 이름.
@@ -12,9 +12,7 @@ const FILE_PART_NAME = 'image'
 export async function createDiagnosis(
   userId: number,
   file: File,
-  skinCondition: string,
-  skinConcern: string,
-  skinSensitivity: string,
+  answers: SurveyAnswerItem[],
 ): Promise<DiagnosisResult> {
   if (file.size > MAX_FILE_BYTES) {
     throw new ApiError('이미지 용량은 10MB를 넘을 수 없어요.')
@@ -22,22 +20,18 @@ export async function createDiagnosis(
 
   const form = new FormData()
   form.append(FILE_PART_NAME, file)
+
+  const surveyPayload = {
+    answers: answers,
+  }
+
   form.append(
     'survey',
-    new Blob(
-      [
-        JSON.stringify({
-          skinCondition,
-          skinConcern,
-          skinSensitivity,
-        }),
-      ],
-      { type: 'application/json' },
-    ),
+    new Blob([JSON.stringify(surveyPayload)], { type: 'application/json' }),
   )
 
   const { data } = await api.post<CommonResponse<DiagnosisResult>>(
-    `/diagnoses?userId=${userId}`,
+    `/diagnoses?userId=${userId}`, //이게 보내는 부분
     form,
   )
 
@@ -46,4 +40,9 @@ export async function createDiagnosis(
     throw new ApiError('진단 결과를 받지 못했어요. 다시 시도해 주세요.')
   }
   return result
+}
+
+export async function fetchDiagnosis(sharedId: string) {
+  const res = await api.get(`/diagnoses/${sharedId}`)
+  return res.data.data
 }

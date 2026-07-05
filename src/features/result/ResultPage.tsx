@@ -1,9 +1,12 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/Button'
 import { RadarChart } from '@/components/RadarChart'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
-import { MOCK_RESULT } from './mockResult'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { fetchDiagnosis } from '@/features/diagnosis/api'
+
 import {
   RADAR_LABELS,
   RADAR_COLORS,
@@ -16,22 +19,50 @@ import { IngredientCard } from './components/IngredientCard'
 
 export function ResultPage() {
   const navigate = useNavigate()
-  const { state } = useLocation()
-  const result: DiagnosisResult = state?.result ?? MOCK_RESULT
-  const userName: string = state?.userName ?? '사용자'
-  const photoUrl: string | null = state?.photoUrl ?? null // ← Context 대신 state에서
   const { reset } = useDiagnosis()
+  const { shareId } = useParams()
+  const [result, setResult] = useState<DiagnosisResult | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!shareId) {
+      console.log(shareId)
+      navigate('/')
+      return
+    }
+
+    const load = async () => {
+      try {
+        const data = await fetchDiagnosis(String(shareId))
+        setResult(data)
+      } catch (e) {
+        console.log(e)
+        alert('결과를 불러오지 못했어요. 다시 시도해 주세요.')
+        navigate('/')
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [shareId])
+
+  if (loading || !result?.metrics) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center text-white">
+        <p>로딩중 . . .</p>
+      </div>
+    )
+  }
 
   const handleHome = () => {
     reset()
-    if (photoUrl) URL.revokeObjectURL(photoUrl)
     navigate('/')
   }
 
   // metrics 배열 → 레이더 차트용 배열로 변환
-  const radarValues = RADAR_LABELS.map(
-    (label) => result.metrics.find((m) => m.name === label)?.score ?? 0,
-  )
+  const radarValues = RADAR_LABELS.map((label) => {
+    return result.metrics?.find((m) => m.name === label)?.score ?? 0
+  })
 
   return (
     <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-8 sm:py-14">
@@ -39,7 +70,7 @@ export function ResultPage() {
       <header>
         <p className="text-sm font-medium text-[#a78bff]">AI 피부 진단 결과</p>
         <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
-          {userName}님의 피부 진단 결과입니다.
+          {result.userNickname}님의 피부 진단 결과입니다.
         </h1>
       </header>
 
@@ -51,16 +82,16 @@ export function ResultPage() {
           <div className="flex items-start gap-4">
             <div className="flex flex-col items-center gap-1 shrink-0">
               <div className="h-40 w-40 rounded-2xl overflow-hidden bg-white/10">
-                {photoUrl && (
+                {result.userImage && (
                   <img
-                    src={photoUrl}
+                    src={result.userImage}
                     alt="진단 사진"
                     className="w-full h-full object-cover"
                   />
                 )}
               </div>
               <p className="text-xs text-white/50">
-                {userName} 님 · {state?.userAge ?? ''}세
+                {result.userNickname} 님 · {result.userAge ?? ''}세
               </p>
             </div>
 
@@ -230,14 +261,14 @@ export function ResultPage() {
         </Button>
         <Button
           variant="primary"
-          className="w-44"
+          className="w-48"
           onClick={() =>
             navigate('/share', {
-              state: { result, userName, userAge: state?.userAge, photoUrl },
+              state: { result },
             })
           }
         >
-          휴대폰으로 공유
+          카카오톡으로 공유
         </Button>
       </div>
     </div>

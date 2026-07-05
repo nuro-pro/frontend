@@ -1,71 +1,76 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
-
-const QUESTIONS = [
-  {
-    question: '세안 후 아무것도 바르지 않았을 때 피부가 어떤가요?',
-    options: [
-      '금방 건조하고 당겨요',
-      '조금 건조한 편이에요',
-      '적당히 괜찮아요',
-      '번들거려요',
-    ],
-    key: 'skinCondition',
-  },
-  {
-    question: '가장 신경쓰이는 피부 고민은 무엇인가요?',
-    options: [
-      '피부가 건조해요',
-      '트러블이 나요',
-      '피부톤이 칙칙해요',
-      '탄력이 떨어진 것 같아요',
-    ],
-    key: 'skinConcern',
-  },
-  {
-    question: '새로운 화장품을 사용하면 피부가 어떤가요?',
-    options: [
-      '쉽게 붉어져요',
-      '따갑거나 가려워요',
-      '별다른 변화가 없어요',
-      '잘 모르겠어요',
-    ],
-    key: 'skinSensitivity',
-  },
-]
+import { getSurveyFull } from './api'
+import type { Question } from './types'
 
 export function SurveyPage() {
   const navigate = useNavigate()
   const { setSurveyAnswers } = useDiagnosis()
   const [step, setStep] = useState(0)
-  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [answers, setAnswers] = useState<Record<number, number>>({})
+  const [questions, setQuestions] = useState<Question[]>([])
 
-  const current = QUESTIONS[step]
-
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<number | null>(null)
   const [visible, setVisible] = useState(true)
 
-  const handleSelect = (option: string) => {
-    if (selected) return
-    setSelected(option)
+  const current = questions[step]
 
-    const updated = { ...answers, [current.key]: option }
+  // 설문 데이터 가져오기
+  useEffect(() => {
+    let cancelled = false
+
+    async function fetchSurvey() {
+      try {
+        //이거 나중에 백에서 관리자용 전체조회 만드는게 좋을것 같긴 함
+        const response = await getSurveyFull().then((questions) =>
+          questions.filter((q) => q.options.length > 0),
+        ) // 옵션이 없는 문항은 제외
+        if (!cancelled) setQuestions(response)
+      } catch (error) {
+        console.error('Failed to fetch survey questions:', error)
+      }
+    }
+
+    fetchSurvey()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  // ⭐️ 데이터가 아직 없거나 로딩 중일 때 보여줄 UI 추가
+  if (!current) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center text-white">
+        <p>설문 문항을 불러오는 중입니다...</p>
+      </div>
+    )
+  }
+
+  const handleSelect = (answerId: number) => {
+    if (!current || selected !== null) return
+
+    setSelected(answerId)
+
+    const updated = { ...answers, [current.questionId]: answerId }
     setAnswers(updated)
-
     setVisible(false) // 클릭하자마자 바로 페이드아웃
 
     setTimeout(() => {
       setSelected(null)
       setVisible(true)
-      if (step < QUESTIONS.length - 1) {
+      if (step < questions.length - 1) {
         setStep((prev) => prev + 1)
       } else {
+        const formattedAnswers = Object.entries(updated).map(([qId, aId]) => ({
+          answerId: Number(aId), // Long 타입 대응
+          questionId: Number(qId), // Long 타입 대응
+        }))
+
         setSurveyAnswers({
-          skinCondition: updated.skinCondition,
-          skinConcern: updated.skinConcern,
-          skinSensitivity: updated.skinSensitivity,
+          answers: formattedAnswers,
         })
+        console.log('설문 완료, answers:', formattedAnswers)
         navigate('/analyzing')
       }
     }, 600)
@@ -87,26 +92,26 @@ export function SurveyPage() {
         </h1>
 
         <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {current.options.map((option) => (
+          {current.options.map((option, index) => (
             <button
-              key={option}
+              key={`option-${option.answerId}-${index}`}
               type="button"
-              onClick={() => handleSelect(option)}
+              onClick={() => handleSelect(option.answerId)}
               className={`rounded-2xl bg-white/5 px-6 py-8 text-white/90 ring-1 ring-white/10 transition ${
                 selected
                   ? 'pointer-events-none' // 선택 후 모든 버튼 hover/click 차단
                   : 'hover:bg-white/10 hover:ring-[#8b6cff]/60'
               }`}
             >
-              {option}
+              {option.comment}
             </button>
           ))}
         </div>
 
         <div className="mt-10 flex items-center justify-center gap-2">
-          {QUESTIONS.map((q, index) => (
+          {questions.map((q, index) => (
             <span
-              key={q.question}
+              key={`dot-${q.questionId || index}`}
               className={
                 index === step
                   ? 'h-2 w-6 rounded-full bg-[#8b6cff] transition-all'

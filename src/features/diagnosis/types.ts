@@ -1,5 +1,11 @@
 export interface DiagnosisResult {
   id: number
+  shareId: string
+
+  userNickname: string
+  userImage: string
+  userAge: number
+
   skinType: string
   skinAge: number
   totalScore: number
@@ -28,4 +34,9 @@ export interface DiagnosisResult {
     desc: string
   }[]
   disclaimer: string
+}
+
+export interface SurveyAnswerItem {
+  answerId: number
+  questionId: number
 }

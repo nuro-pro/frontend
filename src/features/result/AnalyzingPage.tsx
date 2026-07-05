@@ -29,7 +29,7 @@ const INTERVAL_MS = 2050
 
 export function AnalyzingPage() {
   const navigate = useNavigate()
-  const { photo, userId, userInfo, surveyAnswers } = useDiagnosis()
+  const { photo, userId, surveyAnswers } = useDiagnosis()
   const calledRef = useRef(false)
 
   const [images] = useState(() => {
@@ -52,6 +52,9 @@ export function AnalyzingPage() {
       return
     }
     if (!photo || !surveyAnswers) {
+      console.log(
+        'photo or surveyAnswers is missing, redirecting to capture page',
+      )
       navigate('/capture')
       return
     }
@@ -64,24 +67,16 @@ export function AnalyzingPage() {
         const result = await createDiagnosis(
           userId!,
           photo!,
-          surveyAnswers!.skinCondition,
-          surveyAnswers!.skinConcern,
-          surveyAnswers!.skinSensitivity,
+          surveyAnswers?.answers || [],
         )
-        const photoUrl = URL.createObjectURL(photo!)
-        navigate('/result', {
-          state: {
-            result,
-            userName: userInfo?.name || '사용자',
-            userAge: userInfo?.age,
-            photoUrl,
-          },
-        })
+        console.log('Diagnosis result:', result)
+        navigate(`/result/${result.shareId}`)
       } catch (e) {
         // 4101: 사용자를 찾을 수 없음 → 온보딩부터 다시
         if (e instanceof ApiError && e.errorCode === 4101) {
           navigate('/onboarding')
         } else {
+          console.error('Error during diagnosis:', e)
           navigate('/capture')
         }
       }

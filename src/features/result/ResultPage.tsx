@@ -211,7 +211,7 @@ export function ResultPage() {
                   />
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-white/50">
-                  {metricDesc(label, band)}
+                  {metric?.comment ?? metricDesc(label, band)}
                 </p>
               </article>
             )

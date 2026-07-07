@@ -16,6 +16,7 @@ export interface DiagnosisResult {
     name: string
     score: number
     peerScore: number
+    comment: string
   }[]
   ingredients: {
     korName: string

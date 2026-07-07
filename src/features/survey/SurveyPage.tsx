@@ -97,10 +97,12 @@ export function SurveyPage() {
               key={`option-${option.answerId}-${index}`}
               type="button"
               onClick={() => handleSelect(option.answerId)}
-              className={`rounded-2xl bg-white/5 px-6 py-8 text-white/90 ring-1 ring-white/10 transition ${
-                selected
-                  ? 'pointer-events-none' // 선택 후 모든 버튼 hover/click 차단
-                  : 'hover:bg-white/10 hover:ring-[#8b6cff]/60'
+              className={`rounded-2xl px-6 py-8 ring-1 transition ${
+                selected === option.answerId
+                  ? 'bg-[#7f4fff] font-medium text-white ring-[#7f4fff] shadow-lg shadow-[#7f4fff]/30' // 선택됨: 꽉 찬 보라
+                  : selected !== null
+                    ? 'pointer-events-none bg-white/5 text-white/90 ring-white/10' // 다른 항목이 선택됨
+                    : 'bg-white/5 text-white/90 ring-white/10 hover:bg-white/10 hover:ring-[#8b6cff]/60' // 기본
               }`}
             >
               {option.comment}

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import landingTitle from '@/assets/landing1/landingTitle.png'
 
-// 표지 블롭 아이콘 
+// 표지 블롭 아이콘
 const BLOB_MODULES = import.meta.glob('../../assets/landing3/*.{svg,png}', {
   eager: true,
   import: 'default',
@@ -13,10 +13,10 @@ const BLOBS = Object.entries(BLOB_MODULES)
 
 const ROW1 = BLOBS.slice(0, 6) // landing1~6 (윗줄)
 const ROW2 = BLOBS.slice(6, 12) // landing7~12 (아랫줄)
-const EDGE_BLEED = '2vw' 
-const TOP_CLIP = '2.5vw' 
-const ROW_OVERLAP = '8vw' 
-const BLOB_SCALE = 'scale-[1.14]' 
+const EDGE_BLEED = '2vw'
+const TOP_CLIP = '2.5vw'
+const ROW_OVERLAP = '8vw'
+const BLOB_SCALE = 'scale-[1.14]'
 
 function BlobRow({ items, offset }: { items: string[]; offset: number }) {
   return (

@@ -74,7 +74,7 @@ export function ResultPage() {
     return result.metrics?.find((m) => m.name === label)?.score ?? 0
   })
 
-    // 사용처: createdAt이 없을 수도 있으니 방어적으로
+  // 사용처: createdAt이 없을 수도 있으니 방어적으로
   const resultDate = result.createdAt ? new Date(result.createdAt) : new Date()
   const dateLabel = formatResultDate(resultDate)
 
@@ -208,7 +208,7 @@ export function ResultPage() {
                     또래 평균 대비 {diff >= 0 ? '▲' : '▼'} {Math.abs(diff)}점
                   </span>
                 </div>
-                
+
                 {/* 프로그래스 바 컨테이너 (relative 추가) */}
                 <div className="relative mt-3 h-2 w-full overflow-hidden rounded-full bg-white/10">
                   {/* 채워지는 바 */}
@@ -219,7 +219,9 @@ export function ResultPage() {
                   {/* 또래 평균 위치 인디케이터 (양 끝에서도 바 안쪽에 닿도록 clamp) */}
                   <div
                     className="w-4 absolute top-0 bottom-0 w-1 -translate-x-1/2 rounded-full bg-white shadow-[0_0_4px_rgba(0,0,0,0.5)]"
-                    style={{ left: `clamp(2px, ${peerScore}%, calc(100% - 2px))` }}
+                    style={{
+                      left: `clamp(2px, ${peerScore}%, calc(100% - 2px))`,
+                    }}
                   />
                 </div>
 

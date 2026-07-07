@@ -2,16 +2,20 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const GREETING = ['안녕하세요.', '만나서 반가워요.']
-const DESCRIPTION = ['얼굴 촬영과 간단한 설문을 통해 지금의 피부 상태를 알아볼게요.']
+const DESCRIPTION = [
+  '얼굴 촬영과 간단한 설문을 통해 지금의 피부 상태를 알아볼게요.',
+]
 
 export const IntroPage = () => {
   const navigate = useNavigate()
 
-  const [line1, setLine1] = useState(false)          // 안녕하세요
-  const [line2, setLine2] = useState(false)          // 만나서 반가워요
+  const [line1, setLine1] = useState(false) // 안녕하세요
+  const [line2, setLine2] = useState(false) // 만나서 반가워요
   const [greetingOut, setGreetingOut] = useState(false) // 인사말 페이드아웃
 
-  const [descPhase, setDescPhase] = useState<'hidden' | 'faint' | 'full' | 'out'>('hidden')
+  const [descPhase, setDescPhase] = useState<
+    'hidden' | 'faint' | 'full' | 'out'
+  >('hidden')
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = []
@@ -38,8 +42,7 @@ export const IntroPage = () => {
     return () => timers.forEach(clearTimeout)
   }, [navigate])
 
-  const descOpacity =
-    descPhase === 'faint' ? 0.3 : descPhase === 'full' ? 1 : 0
+  const descOpacity = descPhase === 'faint' ? 0.3 : descPhase === 'full' ? 1 : 0
 
   // full 이후로는(=out 포함) 제자리 유지, 그 전에만 아래에 위치
   const descRaised = descPhase === 'full' || descPhase === 'out'

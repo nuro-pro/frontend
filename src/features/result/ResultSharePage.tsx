@@ -133,7 +133,9 @@ export function ResultSharePage() {
 
         <div className="mt-6 flex flex-col gap-4">
           <div>
-            <p className="text-base font-semibold text-white">휴대폰 번호로 결과 전송</p>
+            <p className="text-base font-semibold text-white">
+              휴대폰 번호로 결과 전송
+            </p>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex gap-2">
@@ -157,26 +159,30 @@ export function ResultSharePage() {
             </div>
           </div>
 
-
           {/* 구분선 */}
           <div className="flex items-center gap-3">
             <span className="h-px flex-1 bg-white/10" />
             <span className="text-xs text-white/35">또는</span>
             <span className="h-px flex-1 bg-white/10" />
           </div>
-            
-                      {/* 메인 CTA: 카카오톡 */}
+
+          {/* 메인 CTA: 카카오톡 */}
           <button
             type="button"
             onClick={handleShareKakao}
             className="flex items-center justify-center gap-2 rounded-xl bg-[#FEE500] px-6 py-3.5 text-sm font-semibold text-[#3A1D1D] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
               <path d="M12 3C6.48 3 2 6.58 2 11c0 2.84 1.94 5.33 4.86 6.74-.16.55-.86 2.97-.89 3.16 0 0-.02.15.08.21.1.06.22.01.22.01.29-.04 3.36-2.2 3.9-2.58.6.08 1.21.13 1.83.13 5.52 0 10-3.58 10-8S17.52 3 12 3z" />
             </svg>
             카카오톡으로 결과 전송
           </button>
-
         </div>
       </div>
     </div>

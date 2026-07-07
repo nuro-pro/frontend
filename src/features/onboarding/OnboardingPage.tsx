@@ -40,12 +40,12 @@ export function OnboardingPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <div className="flex flex-col items-center justify-center gap-4">
+      <div className="flex w-full max-w-lg flex-col items-center justify-center gap-4">
         <p className="text-[#FEFEFE] text-3xl">먼저, 어떻게 불러드릴까요?</p>
 
         <form
           onSubmit={handleSubmit}
-          className="flex w-full max-w-sm flex-col text-[#FEFEFE] gap-10 mt-10 text-left"
+          className="flex w-full max-w-lg flex-col text-[#FEFEFE] gap-10 mt-10 text-left"
         >
           <div className="flex flex-col gap-2">
             <label htmlFor="nickname">닉네임</label>

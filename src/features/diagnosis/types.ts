@@ -1,6 +1,7 @@
 export interface DiagnosisResult {
   id: number
   shareId: string
+  createdAt: string
 
   userNickname: string
   userImage: string
@@ -34,7 +35,6 @@ export interface DiagnosisResult {
     product: string
     desc: string
   }[]
-  disclaimer: string
 }
 
 export interface SurveyAnswerItem {

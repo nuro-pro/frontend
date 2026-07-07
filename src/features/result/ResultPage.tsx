@@ -74,6 +74,10 @@ export function ResultPage() {
     return result.metrics?.find((m) => m.name === label)?.score ?? 0
   })
 
+    // 사용처: createdAt이 없을 수도 있으니 방어적으로
+  const resultDate = result.createdAt ? new Date(result.createdAt) : new Date()
+  const dateLabel = formatResultDate(resultDate)
+
   return (
     <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-8 sm:py-14">
       {/* 헤더 */}
@@ -87,7 +91,7 @@ export function ResultPage() {
           </h1>
         </div>
         <p className="shrink-0 pt-1 text-xs text-white/40 sm:text-sm">
-          {formatResultDate(new Date())}
+          {dateLabel}
         </p>
       </header>
 

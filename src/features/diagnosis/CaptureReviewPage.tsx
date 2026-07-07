@@ -14,7 +14,7 @@ export function CaptureReviewPage() {
 
   const currentPhoto = photos[currentIndex] ?? null
 
-  // 사진을 data URL(base64)로 읽어 저장 
+  // 사진을 data URL(base64)로 읽어 저장
   const [urls, setUrls] = useState<string[]>([])
   useEffect(() => {
     let cancelled = false

@@ -285,14 +285,10 @@ export function ResultPage() {
         </div>
       </section>
 
-      <p className="mt-12 text-center text-xs text-white/40">
-        {result.disclaimer}
-      </p>
-
-      <div className="mt-8 flex items-center justify-center gap-3 sm:gap-6">
+      <div className="mt-30 flex items-center justify-center gap-3 sm:gap-6">
         <Button
           variant="secondary"
-          className="bg-[#1b1622]! px-6! whitespace-nowrap sm:px-10!"
+          className="bg-[#1b1622]! px-6! whitespace-nowrap sm:px-10! w-[150px]"
           onClick={handleHome}
         >
           홈으로

@@ -10,7 +10,7 @@ export function Layout({ children }: LayoutProps) {
       className="min-h-screen"
       style={{
         background:
-          'radial-gradient(ellipse 90% 40% at bottom center, #663fce 0%, #0a0010 60%, #000000 100%)',
+          'radial-gradient(ellipse 55% 26% at bottom center, #5b34ad 0%, #0a0010 55%, #000000 100%)',
       }}
     >
       {children}

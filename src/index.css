@@ -28,3 +28,24 @@ body {
 body {
   font-family: 'SUIT Variable', sans-serif;
 }
+
+@keyframes drop-in {
+  0% {
+    transform: translateY(-115vh);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.animate-drop-in {
+  animation: drop-in 0.85s cubic-bezier(0.34, 1.4, 0.5, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-drop-in {
+    animation: none;
+  }
+}

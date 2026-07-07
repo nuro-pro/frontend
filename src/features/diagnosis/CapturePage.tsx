@@ -6,16 +6,26 @@ import { Button } from '@/components/Button'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 import { useCamera, CameraStatus } from './hooks/useCamera'
 import { useFaceDetection, FaceDetectorStatus } from './hooks/useFaceDetection'
-import { ScanningRing } from './components/ScanningRing'
+import { SphereGuide } from './components/SphereGuide'
+import type { GuideDirection } from './components/SphereGuide'
 import { RingStatus } from './components/ringStatus'
 
 const DETECT_INTERVAL_MS = 80
-const HOLD_MS = 1200
 
-const HINT: Record<RingStatus, string> = {
-  searching: '얼굴이 보이도록 카메라를 바라봐 주세요.',
-  aligning: '가이드 원 안에 얼굴을 맞춰주세요.',
-  locked: '좋아요! 잠시만 그대로 멈춰주세요…',
+// 정렬 완료 후 정면→왼쪽→오른쪽 촬영 시퀀스 (각 단계 시각 안내)
+type Phase = 'aligning' | 'front' | 'left' | 'right'
+
+const PHASE_TEXT: Record<Phase, string> = {
+  aligning: '정면을 바라봐주세요.',
+  front: '정면을 바라봐주세요.',
+  left: '고개를 왼쪽으로 천천히 돌려주세요.',
+  right: '고개를 오른쪽으로 천천히 돌려주세요.',
+}
+const PHASE_DIR: Record<Phase, GuideDirection> = {
+  aligning: 'front',
+  front: 'front',
+  left: 'left',
+  right: 'right',
 }
 
 function evaluateAlignment(
@@ -52,12 +62,12 @@ export function CapturePage() {
   const { videoRef, status: cameraStatus, retry } = useCamera()
   const { detectorRef, status: detectorStatus } = useFaceDetection()
 
-  const [ring, setRing] = useState<RingStatus>(RingStatus.Searching)
+  const [phase, setPhase] = useState<Phase>('aligning')
 
   const rafRef = useRef<number | null>(null)
   const lastDetectRef = useRef(0)
-  const alignedSinceRef = useRef<number | null>(null)
-  const capturedRef = useRef(false)
+  const seqStartedRef = useRef(false)
+  const seqTimersRef = useRef<number[]>([])
 
   const cameraReady = cameraStatus === CameraStatus.Ready
   const detectionActive =
@@ -65,30 +75,59 @@ export function CapturePage() {
   const cameraBlocked =
     cameraStatus === CameraStatus.Denied || cameraStatus === CameraStatus.Error
 
-  // 현재 비디오 프레임을 캡처해 File로 만들고 다음 단계로
-  const captureFrame = useCallback(() => {
-    const video = videoRef.current
-    if (!video || video.videoWidth === 0) return
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-    // 디스플레이는 셀카처럼 좌우반전이지만, 백엔드엔 원본 프레임을 보냄
-    ctx.drawImage(video, 0, 0)
-    canvas.toBlob(
-      (blob) => {
-        if (!blob) {
-          capturedRef.current = false
-          return
-        }
-        addToPhotos(new File([blob], 'capture.jpg', { type: 'image/jpeg' }))
-        navigate('/review')
-      },
-      'image/jpeg',
-      0.92,
-    )
-  }, [navigate, addToPhotos, videoRef])
+  // 현재 비디오 프레임을 캡처해 photos에 추가 (백엔드엔 원본 프레임)
+  const captureFrame = useCallback(
+    (after?: () => void) => {
+      const video = videoRef.current
+      if (!video || video.videoWidth === 0) return
+      const canvas = document.createElement('canvas')
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+      ctx.drawImage(video, 0, 0)
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return
+          addToPhotos(new File([blob], 'capture.jpg', { type: 'image/jpeg' }))
+          after?.()
+        },
+        'image/jpeg',
+        0.92,
+      )
+    },
+    [addToPhotos, videoRef],
+  )
+
+  // 정렬 완료 → 정면/왼쪽/오른쪽 순서로 안내하며 각 단계 촬영
+  const runSequence = useCallback(() => {
+    setPhase('front')
+    seqTimersRef.current = [
+      window.setTimeout(() => {
+        captureFrame()
+        setPhase('left')
+      }, 1600),
+      window.setTimeout(() => {
+        captureFrame()
+        setPhase('right')
+      }, 4000),
+      window.setTimeout(() => {
+        captureFrame(() => navigate('/review'))
+      }, 6400),
+    ]
+  }, [captureFrame, navigate])
+
+  // 감지 루프에서 항상 최신 runSequence를 참조 (effect 재실행/타이머 끊김 방지)
+  const runSeqRef = useRef(runSequence)
+  useEffect(() => {
+    runSeqRef.current = runSequence
+  }, [runSequence])
+
+  // 언마운트 시에만 시퀀스 타이머 정리
+  useEffect(() => {
+    const timers = seqTimersRef
+    return () => timers.current.forEach(clearTimeout)
+  }, [])
 
   // 감지 루프: 카메라+감지기 모두 준비됐을 때만 구동
   useEffect(() => {
@@ -96,6 +135,7 @@ export function CapturePage() {
 
     const loop = () => {
       rafRef.current = requestAnimationFrame(loop)
+      if (seqStartedRef.current) return // 시퀀스 시작 후엔 감지 정지
       const video = videoRef.current
       const detector = detectorRef.current
       if (!video || !detector || video.readyState < 2 || video.videoWidth === 0)
@@ -107,20 +147,10 @@ export function CapturePage() {
 
       const result = detector.detectForVideo(video, now)
       const next = evaluateAlignment(video, result.detections)
-      setRing((prev) => (prev === next ? prev : next))
 
       if (next === RingStatus.Locked) {
-        if (alignedSinceRef.current === null) {
-          alignedSinceRef.current = now
-        } else if (
-          now - alignedSinceRef.current >= HOLD_MS &&
-          !capturedRef.current
-        ) {
-          capturedRef.current = true
-          captureFrame()
-        }
-      } else {
-        alignedSinceRef.current = null
+        seqStartedRef.current = true
+        runSeqRef.current()
       }
     }
 
@@ -128,9 +158,8 @@ export function CapturePage() {
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
       rafRef.current = null
-      alignedSinceRef.current = null
     }
-  }, [detectionActive, captureFrame, detectorRef, videoRef])
+  }, [detectionActive, detectorRef, videoRef])
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -184,13 +213,22 @@ export function CapturePage() {
           playsInline
           className="absolute inset-0 h-full w-full rounded-full object-cover [transform:scaleX(-1)]"
         />
-        <div className="pointer-events-none absolute h-px w-2/3 bg-white/20" />
-        <div className="pointer-events-none absolute h-2/3 w-px bg-white/20" />
 
         {detectionActive ? (
-          <ScanningRing status={ring} />
+          <SphereGuide
+            direction={PHASE_DIR[phase]}
+            aligned={phase !== 'aligning'}
+          />
         ) : (
           <div className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-[#8b6cff]/80" />
+        )}
+
+        {/* 상단 토스트 안내 */}
+        {detectionActive && (
+          <div className="absolute top-[8%] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-[#ff6b6b]/40 bg-[#2a1018]/85 px-3.5 py-1.5 text-[11px] whitespace-nowrap text-[#ffb3b3] backdrop-blur-sm">
+            <span className="text-[#ff8f8f]">ⓘ</span>
+            가이드 라인에 맞게 얼굴 위치를 조정해주세요.
+          </div>
         )}
 
         {!cameraReady && (
@@ -200,13 +238,13 @@ export function CapturePage() {
         )}
       </div>
 
-      <p className="min-h-5 text-center text-sm text-white/60">
+      <p className="min-h-7 text-center text-lg font-medium text-white">
         {!cameraReady
           ? ''
           : detectorFailed
             ? '얼굴 인식을 불러오지 못했어요. 아래 버튼으로 촬영해 주세요.'
             : detectionActive
-              ? HINT[ring]
+              ? PHASE_TEXT[phase]
               : '얼굴 인식 준비 중…'}
       </p>
 
@@ -219,7 +257,11 @@ export function CapturePage() {
       />
 
       {detectorFailed ? (
-        <Button variant="primary" className="px-10" onClick={captureFrame}>
+        <Button
+          variant="primary"
+          className="px-10"
+          onClick={() => captureFrame(() => navigate('/review'))}
+        >
           촬영하기
         </Button>
       ) : (

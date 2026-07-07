@@ -110,8 +110,9 @@ export function RadarChart({
             key={`label-${label}`}
             x={p.x}
             y={p.y}
-            fill="rgba(255,255,255,0.55)"
-            fontSize={11}
+            fill="rgba(255,255,255,0.72)"
+            fontSize={12}
+            fontWeight={500}
             textAnchor="middle"
             dominantBaseline="middle"
           >

@@ -16,12 +16,42 @@ export const MOCK_RESULT: DiagnosisResult = {
   summary:
     '유분이 많은 T존과 속건조가 함께 공존하는 복합성 피부예요. 피지 조절과 수분 보충이 핵심이에요.',
   metrics: [
-    { name: '수분', score: 62, peerScore: 60 },
-    { name: '주름', score: 32, peerScore: 72 },
-    { name: '색소', score: 94, peerScore: 66 },
-    { name: '모공', score: 58, peerScore: 56 },
-    { name: '민감', score: 70, peerScore: 60 },
-    { name: '유분', score: 55, peerScore: 54 },
+    {
+      name: '수분',
+      score: 62,
+      peerScore: 60,
+      comment: '볼 부위 속건조가 보여 수분 보충이 필요해요.',
+    },
+    {
+      name: '주름',
+      score: 32,
+      peerScore: 72,
+      comment: '눈가 잔주름이 다소 관찰돼 탄력 케어가 필요해요.',
+    },
+    {
+      name: '색소',
+      score: 94,
+      peerScore: 66,
+      comment: '맑은 피부톤이 잘 유지되고 있어요.',
+    },
+    {
+      name: '모공',
+      score: 58,
+      peerScore: 56,
+      comment: 'T존 모공이 살짝 도드라져 보여요.',
+    },
+    {
+      name: '민감',
+      score: 70,
+      peerScore: 60,
+      comment: '외부 자극에 비교적 안정적인 편이에요.',
+    },
+    {
+      name: '유분',
+      score: 55,
+      peerScore: 54,
+      comment: 'T존 위주로 유분이 있는 편이에요.',
+    },
   ],
   ingredients: [
     {

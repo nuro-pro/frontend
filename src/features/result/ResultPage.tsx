@@ -74,6 +74,10 @@ export function ResultPage() {
     return result.metrics?.find((m) => m.name === label)?.score ?? 0
   })
 
+  // 사용처: createdAt이 없을 수도 있으니 방어적으로
+  const resultDate = result.createdAt ? new Date(result.createdAt) : new Date()
+  const dateLabel = formatResultDate(resultDate)
+
   return (
     <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-8 sm:py-14">
       {/* 헤더 */}
@@ -87,55 +91,55 @@ export function ResultPage() {
           </h1>
         </div>
         <p className="shrink-0 pt-1 text-xs text-white/40 sm:text-sm">
-          {formatResultDate(new Date())}
+          {dateLabel}
         </p>
       </header>
 
       {/* 프로필 + 레이더 차트 */}
-      <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <section className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-4 lg:grid-cols-2">
         {/* 프로필 카드 */}
-        <article className="relative rounded-2xl bg-[#16131d] p-6 pt-16 ring-1 ring-white/10">
-          <span className="absolute left-5 top-0 rounded-t-none rounded-b-xl bg-[#6a5ab6] px-4 py-2 text-sm font-semibold text-[#efeaff]">
+        <article className="relative rounded-2xl bg-[#1e1a27] p-5 pt-12 ring-1 ring-white/10">
+          <span className="absolute left-4 top-0 rounded-b-xl border border-white/15 bg-[radial-gradient(ellipse_at_center,#7F4FFFB3,#7F4FFF33_70%,transparent)] px-3 py-1.5 text-[14px] font-semibold text-[#efeaff] shadow-inner backdrop-blur-md">
             한눈에 보는 피부 상태
           </span>
-          <div className="flex items-start gap-4">
-            <div className="flex flex-col items-center gap-1.5 shrink-0">
-              <div className="h-40 w-40 rounded-2xl overflow-hidden bg-white/10">
+          <div className="flex items-start gap-4 pt-6">
+            <div className="flex shrink-0 flex-col items-center gap-1.5">
+              <div className="h-36 w-36 overflow-hidden rounded-2xl bg-white/10">
                 {result.userImage && (
                   <img
                     src={result.userImage}
                     alt="진단 사진"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 )}
               </div>
-              <p className="text-sm text-white/55">
+              <p className="text-[14px] text-[#ffffff]">
                 {result.userNickname} 님 · {result.userAge ?? ''}세
               </p>
             </div>
 
             <div className="flex-1">
-              <p className="text-sm text-white/50">종합 점수</p>
-              <p className="text-4xl font-bold text-white mt-1">
+              <p className="text-sm text-[#DFDFDF]/80">종합 점수</p>
+              <p className="mt-0.5 text-3xl font-bold text-white">
                 {result.totalScore}
                 <span className="text-sm font-normal text-white/40">
                   {' '}
                   / 또래 {result.peerTotalScore}
                 </span>
               </p>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
                 {[result.skinType, `피부 나이 ${result.skinAge}세`].map(
                   (tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-[#8b6cff]/20 px-3 py-1 text-sm text-[#c4b5ff]"
+                      className="rounded-full border border-white/15 bg-[#8391C7]/40 px-5 py-1.5 text-xs text-white shadow-inner backdrop-blur-md"
                     >
                       {tag}
                     </span>
                   ),
                 )}
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-white/55">
+              <p className="mt-3 text-xs leading-relaxed text-[#DFDFDF]">
                 {result.summary}
               </p>
             </div>
@@ -143,16 +147,16 @@ export function ResultPage() {
         </article>
 
         {/* 레이더 차트 */}
-        <article className="relative flex flex-col rounded-2xl bg-[#16131d] p-6 pt-16 ring-1 ring-white/10">
-          <span className="absolute left-5 top-0 rounded-t-none rounded-b-xl bg-[#6a5ab6] px-4 py-2 text-sm font-semibold text-[#efeaff]">
+        <article className="relative flex flex-col rounded-2xl bg-[#1e1a27] p-5 pt-12 ring-1 ring-white/10">
+          <span className="absolute left-4 top-0 rounded-b-xl border border-white/15 bg-[radial-gradient(ellipse_at_center,#7F4FFFB3,#7F4FFF33_70%,transparent)] px-3 py-1.5  text-[14px]  font-semibold text-[#efeaff] shadow-inner backdrop-blur-md">
             6개 지표 밸런스
           </span>
-          <div className="flex flex-1 items-center justify-center">
+          <div className="flex flex-1 items-center justify-center overflow-hidden">
             <RadarChart
               values={radarValues}
               labels={[...RADAR_LABELS]}
               colors={RADAR_COLORS}
-              className="h-64 w-64 sm:h-72 sm:w-72"
+              className="h-52 w-52 scale-125 sm:h-56 sm:w-56"
             />
           </div>
         </article>
@@ -176,10 +180,10 @@ export function ResultPage() {
             return (
               <article
                 key={label}
-                className="rounded-2xl bg-[#16131d] p-5 ring-1 ring-white/10"
+                className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-base font-semibold text-white">
+                  <span className="text-2xl font-semibold text-white">
                     {label}
                   </span>
                   <span
@@ -204,12 +208,23 @@ export function ResultPage() {
                     또래 평균 대비 {diff >= 0 ? '▲' : '▼'} {Math.abs(diff)}점
                   </span>
                 </div>
-                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/10">
+
+                {/* 프로그래스 바 컨테이너 (relative 추가) */}
+                <div className="relative mt-3 h-2 w-full overflow-hidden rounded-full bg-white/10">
+                  {/* 채워지는 바 */}
                   <div
                     className={`h-full rounded-full bg-gradient-to-r ${meta.bar}`}
                     style={{ width: `${score}%` }}
                   />
+                  {/* 또래 평균 위치 인디케이터 (양 끝에서도 바 안쪽에 닿도록 clamp) */}
+                  <div
+                    className="w-4 absolute top-0 bottom-0 w-1 -translate-x-1/2 rounded-full bg-white shadow-[0_0_4px_rgba(0,0,0,0.5)]"
+                    style={{
+                      left: `clamp(2px, ${peerScore}%, calc(100% - 2px))`,
+                    }}
+                  />
                 </div>
+
                 <p className="mt-3 text-sm leading-relaxed text-white/50">
                   {metric?.comment ?? metricDesc(label, band)}
                 </p>
@@ -228,7 +243,7 @@ export function ResultPage() {
           내 피부와 잘 맞는 성분
         </h2>
 
-        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mt-5 grid grid-cols-1 gap-12 sm:grid-cols-3">
           {result.ingredients.map((ingredient) => (
             <IngredientCard key={ingredient.engName} ingredient={ingredient} />
           ))}
@@ -244,11 +259,11 @@ export function ResultPage() {
           NURO 추천 스킨케어 루틴
         </h2>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="mt-5 grid grid-cols-2 gap-10 sm:grid-cols-3">
           {result.routine.map((step, index) => (
             <article
               key={step.name}
-              className="rounded-2xl bg-[#16131d] p-5 ring-1 ring-white/10"
+              className="rounded-2xl bg-[#1e1a27] p-5 ring-1 ring-white/10"
             >
               <div className="flex items-start justify-between">
                 <p className="text-xl font-bold text-[#a78bff]">
@@ -276,14 +291,10 @@ export function ResultPage() {
         </div>
       </section>
 
-      <p className="mt-12 text-center text-xs text-white/40">
-        {result.disclaimer}
-      </p>
-
-      <div className="mt-8 flex items-center justify-center gap-3 sm:gap-6">
+      <div className="mt-30 flex items-center justify-center gap-3 sm:gap-6">
         <Button
           variant="secondary"
-          className="bg-[#1b1622]! px-6! whitespace-nowrap sm:px-10!"
+          className="bg-[#1b1622]! px-6! whitespace-nowrap sm:px-10! w-[150px]"
           onClick={handleHome}
         >
           홈으로

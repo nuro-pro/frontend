@@ -56,32 +56,32 @@ export function CaptureReviewPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center px-6 text-center">
-      <h1 className="text-xl font-semibold text-white sm:text-2xl">
+      <h1 className="text-xl font-semibold text-white sm:text-4xl">
         촬영된 사진을 확인해주세요.
       </h1>
-      <p className="mt-3 text-sm text-white/50">
+      <p className="mt-3 text-lg text-white/50">
         마음에 들지 않으면 다시 촬영할 수 있어요.
       </p>
 
-      <div className="relative mt-10 w-full max-w-xl">
+      <div className="relative mt-10 w-full max-w-xl lg:max-w-2xl xl:max-w-3xl">
         {/* 캐러셀: 중앙 현재 사진 + 양옆 이전/다음 프리뷰 */}
-        <div className="relative flex h-56 items-center justify-center sm:h-64">
+        <div className="relative flex h-56 items-center justify-center sm:h-64 lg:h-72 xl:h-80">
           {prevUrl && (
             <img
               src={prevUrl}
               alt=""
-              className="pointer-events-none absolute left-2 top-1/2 h-[76%] w-28 -translate-y-1/2 rounded-2xl object-cover opacity-45 brightness-[0.45] sm:w-40"
+              className="pointer-events-none absolute left-2 top-1/2 h-[76%] w-28 -translate-y-1/2 rounded-2xl object-cover opacity-45 brightness-[0.45] sm:w-40 lg:w-48 xl:w-56"
             />
           )}
           {nextUrl && (
             <img
               src={nextUrl}
               alt=""
-              className="pointer-events-none absolute right-2 top-1/2 h-[76%] w-28 -translate-y-1/2 rounded-2xl object-cover opacity-45 brightness-[0.45] sm:w-40"
+              className="pointer-events-none absolute right-2 top-1/2 h-[76%] w-28 -translate-y-1/2 rounded-2xl object-cover opacity-45 brightness-[0.45] sm:w-40 lg:w-48 xl:w-56"
             />
           )}
 
-          <div className="relative z-10 aspect-square w-52 overflow-hidden rounded-3xl bg-white/10 shadow-2xl sm:w-60">
+          <div className="relative z-10 aspect-square w-52 overflow-hidden rounded-3xl bg-white/10 shadow-2xl sm:w-60 lg:w-72 xl:w-80">
             {currentUrl && (
               <img
                 src={currentUrl}

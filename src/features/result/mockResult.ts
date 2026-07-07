@@ -5,6 +5,7 @@ import type { DiagnosisResult } from '@/features/diagnosis/types'
 export const MOCK_RESULT: DiagnosisResult = {
   id: 1,
   shareId: 'mock-share-id',
+  createdAt: new Date().toISOString(),
   userNickname: '홍길동',
   userImage: 'https://via.placeholder.com/300',
   userAge: 25,
@@ -115,5 +116,4 @@ export const MOCK_RESULT: DiagnosisResult = {
       desc: '색소 침착을 예방해줘요.',
     },
   ],
-  disclaimer: '이 결과는 의학적 진단이 아닙니다.',
 }

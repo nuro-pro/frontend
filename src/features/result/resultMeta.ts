@@ -21,7 +21,7 @@ interface MetricMeta {
 export const METRIC_META: Record<MetricLabel, MetricMeta> = {
   수분: { color: '#3fc8ff', bar: 'from-[#5ad1ff] to-[#3b9bff]' },
   주름: { color: '#b07bff', bar: 'from-[#9b6cff] to-[#c4a3ff]' },
-  색소: { color: '#ffb86a', bar: 'from-[#ffb86a] to-[#ff9d6a]' },
+  색소: { color: '#FFAF2D', bar: 'from-[#ffb86a] to-[#ff9d6a]' },
   모공: { color: '#ff6ab0', bar: 'from-[#ff6ab0] to-[#ff8ac4]' },
   민감: { color: '#6affd0', bar: 'from-[#6affd0] to-[#3fd8b0]' },
   유분: { color: '#ff9d6a', bar: 'from-[#ff9d6a] to-[#ff7a6a]' },

@@ -209,18 +209,18 @@ export function ResultPage() {
                   </span>
                 </div>
 
-                {/* 프로그래스 바 컨테이너 (relative 추가) */}
-                <div className="relative mt-3 h-2 w-full overflow-hidden rounded-full bg-white/10">
-                  {/* 채워지는 바 */}
+                {/* 프로그래스 바 */}
+                <div className="relative mt-3 h-2 w-full rounded-full bg-white/10">
+                  {/* 채워지는 바 (본인 점수만큼) */}
                   <div
                     className={`h-full rounded-full bg-gradient-to-r ${meta.bar}`}
                     style={{ width: `${score}%` }}
                   />
-                  {/* 또래 평균 위치 인디케이터 (양 끝에서도 바 안쪽에 닿도록 clamp) */}
+                  {/* 흰 점: 본인 점수 끝에 위치 */}
                   <div
-                    className="w-4 absolute top-0 bottom-0 w-1 -translate-x-1/2 rounded-full bg-white shadow-[0_0_4px_rgba(0,0,0,0.5)]"
+                    className="absolute top-1/2 h-2 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white ring-1 ring-black/20"
                     style={{
-                      left: `clamp(2px, ${peerScore}%, calc(100% - 2px))`,
+                      left: `clamp(4px, ${Number(score) || 0}%, calc(100% - 4px))`,
                     }}
                   />
                 </div>

@@ -62,6 +62,7 @@ export function ResultSharePage() {
         phoneNumber: phone.replace(/\D/g, ''),
       })
       alert('전송 완료! 잠시 후 휴대폰을 확인해주세요.')
+      navigate(`/result/${result.shareId}`)
     } catch (e) {
       console.error(e)
       alert('전송 실패. 잠시 후 다시 시도해주세요.')

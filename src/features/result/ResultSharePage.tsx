@@ -6,6 +6,7 @@ import { ingredientImage } from './ingredientImages'
 import type { DiagnosisResult } from '@/features/diagnosis/types'
 import { shareKakaoResult } from './shareKakaoResult'
 import { fetchDiagnosis } from '@/features/diagnosis/api'
+import { api } from '@/api/client'
 
 export function ResultSharePage() {
   const navigate = useNavigate()
@@ -13,6 +14,7 @@ export function ResultSharePage() {
   const [result, setResult] = useState<DiagnosisResult | null>(null)
   const [loading, setLoading] = useState(true)
   const [phone, setPhone] = useState('')
+  const [sending, setSending] = useState(false)
 
   // 010-1234-5678 형태로 자동 포맷
   const formatPhone = (v: string) => {
@@ -23,11 +25,6 @@ export function ResultSharePage() {
   }
 
   const phoneValid = phone.replace(/\D/g, '').length === 11
-
-  const handleShareSms = () => {
-    if (!phoneValid) return
-    // TODO: 문자 전송 API 연결 (phone.replace(/\D/g,'') 로 숫자만 전달)
-  }
 
   useEffect(() => {
     if (!shareId) {
@@ -55,6 +52,22 @@ export function ResultSharePage() {
   function handleShareKakao() {
     if (!result) return
     shareKakaoResult(result)
+  }
+
+  const handleShareSms = async () => {
+    if (!phoneValid || sending) return
+    setSending(true)
+    try {
+      await api.post(`/notifications/${result.shareId}/sms`, {
+        phoneNumber: phone.replace(/\D/g, ''),
+      })
+      alert('전송 완료! 잠시 후 휴대폰을 확인해주세요.')
+    } catch (e) {
+      console.error(e)
+      alert('전송 실패. 잠시 후 다시 시도해주세요.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -136,7 +149,7 @@ export function ResultSharePage() {
               <button
                 type="button"
                 onClick={handleShareSms}
-                disabled={!phoneValid}
+                disabled={!phoneValid || sending}
                 className="shrink-0 rounded-xl bg-[#7F4FFF] px-5 py-3 text-sm font-medium text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30"
               >
                 전송

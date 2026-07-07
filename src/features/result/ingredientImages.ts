@@ -71,3 +71,67 @@ const FALLBACK_ACCENT = '#8b6cff'
 export function ingredientAccent(korName: string): string {
   return ACCENT[norm(korName)] ?? FALLBACK_ACCENT
 }
+
+// 카드 앞면 효과 태그(영어)
+const EN_HYDRATION = [
+  'Deep Hydration',
+  'Moisture Retention',
+  'Skin Plumping',
+  'Hydration Boost',
+]
+const EN_SEBUM = [
+  'Sebum Regulation',
+  'Balanced Oil Production',
+  'Pore Care',
+  'Shine Control',
+]
+const EN_SOOTHING = [
+  'Sensitive Skin Care',
+  'Anti-inflammatory',
+  'Trouble Care',
+  'Natural Herb',
+]
+const EN_BRIGHTENING = [
+  'Brightening Care',
+  'Dark Spot Care',
+  'Even Skin Tone',
+  'Radiance Boost',
+]
+const EN_WRINKLE = [
+  'Anti-Wrinkle Care',
+  'Fine Line Reduction',
+  'Elasticity Boost',
+  'Youthful Skin',
+]
+const EN_EXFOLIATION = [
+  'Pore Minimizing',
+  'Pore Refining',
+  'Texture Improvement',
+  'Sebum Control',
+]
+
+const EFFECTS_EN: Record<string, string[]> = {
+  히알루론산: EN_HYDRATION,
+  글리세린: EN_HYDRATION,
+  세라마이드: EN_HYDRATION,
+  징크PCA: EN_SEBUM,
+  나이아신아마이드: EN_SEBUM,
+  BHA: EN_SEBUM,
+  병풀추출물: EN_SOOTHING,
+  어성초: EN_SOOTHING,
+  판테놀: EN_SOOTHING,
+  글루타치온: EN_BRIGHTENING,
+  비타민C: EN_BRIGHTENING,
+  알파알부틴: EN_BRIGHTENING,
+  레티놀: EN_WRINKLE,
+  펩타이드: EN_WRINKLE,
+  아데노신: EN_WRINKLE,
+  AHA: EN_EXFOLIATION,
+  LHA: EN_EXFOLIATION,
+  PHA: EN_EXFOLIATION,
+}
+
+/** 성분 한글명 → 카드 앞면 영어 효과 태그(없으면 빈 배열) */
+export function ingredientEffectsEn(korName: string): string[] {
+  return EFFECTS_EN[norm(korName)] ?? []
+}

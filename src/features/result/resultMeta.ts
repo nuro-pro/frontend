@@ -19,11 +19,11 @@ interface MetricMeta {
 }
 
 export const METRIC_META: Record<MetricLabel, MetricMeta> = {
-  수분: { color: '#5ad1ff', bar: 'from-[#5ad1ff] to-[#8b6cff]' },
-  주름: { color: '#a78bff', bar: 'from-[#8b6cff] to-[#a78bff]' },
+  수분: { color: '#3fc8ff', bar: 'from-[#5ad1ff] to-[#3b9bff]' },
+  주름: { color: '#b07bff', bar: 'from-[#9b6cff] to-[#c4a3ff]' },
   색소: { color: '#ffb86a', bar: 'from-[#ffb86a] to-[#ff9d6a]' },
   모공: { color: '#ff6ab0', bar: 'from-[#ff6ab0] to-[#ff8ac4]' },
-  민감: { color: '#6affd0', bar: 'from-[#6affd0] to-[#5ad1ff]' },
+  민감: { color: '#6affd0', bar: 'from-[#6affd0] to-[#3fd8b0]' },
   유분: { color: '#ff9d6a', bar: 'from-[#ff9d6a] to-[#ff7a6a]' },
 }
 
@@ -42,10 +42,11 @@ export function bandOf(score: number): Band {
   return Band.Good
 }
 
+// 등급칩 색: 보통=라벤더, 관리 권장=레드, 좋음=그린
 export const BAND_META: Record<Band, { label: string; chip: string }> = {
-  care: { label: '관리 권장', chip: 'bg-[#ff6b6b]/15 text-[#ff8f8f]' },
-  normal: { label: '보통', chip: 'bg-white/10 text-white/60' },
-  good: { label: '좋음', chip: 'bg-[#37e0a6]/15 text-[#5ce8bb]' },
+  care: { label: '관리 권장', chip: 'bg-[#5a2f38] text-[#ff9aa5]' },
+  normal: { label: '보통', chip: 'bg-[#3d3a52] text-[#c4bde0]' },
+  good: { label: '좋음', chip: 'bg-[#245140] text-[#5fe0a5]' },
 }
 
 // 지표·등급별 한 줄 설명 (임시 카피)

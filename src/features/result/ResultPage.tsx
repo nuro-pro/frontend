@@ -102,7 +102,7 @@ export function ResultPage() {
           <span className="absolute left-4 top-0 rounded-b-xl border border-white/15 bg-[radial-gradient(ellipse_at_center,#7F4FFFB3,#7F4FFF33_70%,transparent)] px-3 py-1.5 text-[14px] font-semibold text-[#efeaff] shadow-inner backdrop-blur-md">
             한눈에 보는 피부 상태
           </span>
-          <div className="flex items-start gap-6 pt-6 sm:gap-8">
+          <div className="flex items-start gap-8 pt-6 sm:gap-10">
             <div className="flex shrink-0 flex-col items-center gap-1.5">
               <div className="h-36 w-36 overflow-hidden rounded-2xl bg-white/10">
                 {result.userImage && (

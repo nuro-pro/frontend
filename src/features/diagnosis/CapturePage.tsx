@@ -239,10 +239,10 @@ export function CapturePage() {
       </div>
 
       <p
-        className={`text-center font-medium text-white ${
+        className={`text-center text-[#FEFEFE] ${
           detectionActive
-            ? 'min-h-10 text-3xl sm:min-h-12 sm:text-4xl'
-            : 'min-h-7 text-lg'
+            ? 'min-h-10 text-3xl'
+            : 'min-h-7 text-lg font-medium text-white'
         }`}
       >
         {!cameraReady

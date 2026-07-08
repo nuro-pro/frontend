@@ -57,12 +57,12 @@ export function SphereGuide({ direction, aligned }: SphereGuideProps) {
           strokeWidth="1"
           opacity="0.22"
         />
-        <ellipse
-          cx="100"
-          cy="100"
-          rx="82"
-          ry="18"
-          fill="none"
+        {/* 가로 적도: 중심을 지나는 선 */}
+        <line
+          x1="20"
+          y1="100"
+          x2="180"
+          y2="100"
           stroke="#ffffff"
           strokeWidth="1"
           opacity="0.22"

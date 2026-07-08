@@ -205,7 +205,7 @@ export function CapturePage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-10 px-6">
-      <div className="relative flex aspect-square w-72 max-w-[80vw] items-center justify-center sm:w-80">
+      <div className="relative flex aspect-square w-[22rem] max-w-[86vw] items-center justify-center sm:w-[30rem]">
         <video
           ref={videoRef}
           autoPlay
@@ -238,7 +238,13 @@ export function CapturePage() {
         )}
       </div>
 
-      <p className="min-h-7 text-center text-lg font-medium text-white">
+      <p
+        className={`text-center font-medium text-white ${
+          detectionActive
+            ? 'min-h-10 text-3xl sm:min-h-12 sm:text-4xl'
+            : 'min-h-7 text-lg'
+        }`}
+      >
         {!cameraReady
           ? ''
           : detectorFailed

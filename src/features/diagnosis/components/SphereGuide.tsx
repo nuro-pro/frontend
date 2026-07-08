@@ -85,7 +85,7 @@ export function SphereGuide({ direction, aligned }: SphereGuideProps) {
           />
         </g>
 
-        {/* 방향 화살표 */}
+        {/* 방향 화살표: 가로 그리드 선(적도) 중앙에 얹힌 화살표 */}
         {direction !== 'front' && (
           <g
             stroke="#ffffff"
@@ -96,9 +96,15 @@ export function SphereGuide({ direction, aligned }: SphereGuideProps) {
             opacity="0.95"
           >
             {direction === 'left' ? (
-              <polyline points="100,88 88,100 100,112" />
+              <>
+                <line x1="118" y1="100" x2="84" y2="100" />
+                <polyline points="94,91 84,100 94,109" />
+              </>
             ) : (
-              <polyline points="100,88 112,100 100,112" />
+              <>
+                <line x1="82" y1="100" x2="116" y2="100" />
+                <polyline points="106,91 116,100 106,109" />
+              </>
             )}
           </g>
         )}

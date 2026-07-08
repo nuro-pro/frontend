@@ -54,7 +54,10 @@ export function SurveyPage() {
 
     const updated = { ...answers, [current.questionId]: answerId }
     setAnswers(updated)
-    setVisible(false) // 클릭하자마자 바로 페이드아웃
+
+    // 보라색 선택 상태를 약 1초간 유지한 뒤 페이드아웃 → 다음으로
+    const HOLD_MS = 1000
+    setTimeout(() => setVisible(false), HOLD_MS)
 
     setTimeout(() => {
       setSelected(null)
@@ -73,7 +76,7 @@ export function SurveyPage() {
         console.log('설문 완료, answers:', formattedAnswers)
         navigate('/analyzing')
       }
-    }, 600)
+    }, HOLD_MS + 600)
   }
 
   return (

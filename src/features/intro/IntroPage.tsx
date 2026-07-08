@@ -13,9 +13,9 @@ export const IntroPage = () => {
   const [line2, setLine2] = useState(false) // 만나서 반가워요
   const [greetingOut, setGreetingOut] = useState(false) // 인사말 페이드아웃
 
-  const [descPhase, setDescPhase] = useState<
-    'hidden' | 'faint' | 'full' | 'out'
-  >('hidden')
+  const [descPhase, setDescPhase] = useState<'hidden' | 'full' | 'out'>(
+    'hidden',
+  )
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = []
@@ -24,10 +24,6 @@ export const IntroPage = () => {
     timers.push(setTimeout(() => setLine1(true), 50))
     timers.push(setTimeout(() => setLine2(true), 1200))
 
-    // 2. 인사말이 아직 진한 동안, 안내 문구가 화면 밑에서 "흐릿하게" 등장
-    timers.push(setTimeout(() => setDescPhase('faint'), 2600))
-
-    // 3. 인사말 페이드아웃 + 안내 문구 진해지며 위로 (동시 크로스페이드)
     timers.push(
       setTimeout(() => {
         setGreetingOut(true)
@@ -42,7 +38,7 @@ export const IntroPage = () => {
     return () => timers.forEach(clearTimeout)
   }, [navigate])
 
-  const descOpacity = descPhase === 'faint' ? 0.3 : descPhase === 'full' ? 1 : 0
+  const descOpacity = descPhase === 'full' ? 1 : 0
 
   // full 이후로는(=out 포함) 제자리 유지, 그 전에만 아래에 위치
   const descRaised = descPhase === 'full' || descPhase === 'out'

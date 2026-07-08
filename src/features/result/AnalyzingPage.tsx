@@ -100,7 +100,7 @@ export function AnalyzingPage() {
 
       <div className="space-y-2">
         <p className="text-lg font-medium text-white">이미지 분석중...</p>
-        <p className="text-sm text-white/40">조금만 기다려요</p>
+        <p className="text-sm text-white/40">조금만 기다려주세요</p>
       </div>
     </div>
   )

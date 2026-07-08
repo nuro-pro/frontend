@@ -20,7 +20,7 @@ export function CaptureReadyPage() {
         <Button
           variant="secondary"
           className="cursor-pointer bg-[#7F4FFF] px-5! whitespace-nowrap sm:px-10!"
-          onClick={() => navigate('/onboarding')}
+          onClick={() => navigate('/')}
         >
           다음에 할게요
         </Button>

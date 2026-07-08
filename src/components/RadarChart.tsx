@@ -28,9 +28,9 @@ export function RadarChart({
   max = 100,
   className,
 }: RadarChartProps) {
-  const size = 220
+  const size = 240
   const center = size / 2
-  const radius = 72
+  const radius = 80
   const count = labels.length
 
   const ringPolygon = (factor: number) =>

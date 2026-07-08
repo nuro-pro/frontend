@@ -147,7 +147,7 @@ export function ResultSharePage() {
                 value={phone}
                 onChange={(e) => setPhone(formatPhone(e.target.value))}
                 placeholder="010-0000-0000"
-                className="flex-1 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#7F4FFF] focus:outline-none focus:ring-1 focus:ring-[#7F4FFF]"
+                className="min-w-0 flex-1 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#7F4FFF] focus:outline-none focus:ring-1 focus:ring-[#7F4FFF]"
               />
               <button
                 type="button"

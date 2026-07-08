@@ -42,10 +42,10 @@ export function bandOf(score: number): Band {
   return Band.Good
 }
 
-// 등급칩 색: 보통=라벤더, 관리 권장=레드, 좋음=그린
+// 등급칩 색: 보통=옐로우, 관리 권장=레드, 좋음=그린
 export const BAND_META: Record<Band, { label: string; chip: string }> = {
   care: { label: '관리 권장', chip: 'bg-[#5a2f38] text-[#ff9aa5]' },
-  normal: { label: '보통', chip: 'bg-[#3d3a52] text-[#c4bde0]' },
+  normal: { label: '보통', chip: 'bg-[#4a3f1c] text-[#f4d06a]' },
   good: { label: '좋음', chip: 'bg-[#245140] text-[#5fe0a5]' },
 }
 

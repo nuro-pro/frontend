@@ -96,7 +96,7 @@ export function ResultPage() {
       </header>
 
       {/* 프로필 + 레이더 차트 */}
-      <section className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-4 lg:grid-cols-2">
+      <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* 프로필 카드 */}
         <article className="relative rounded-2xl bg-[#1e1a27] p-5 pt-12 ring-1 ring-white/10">
           <span className="absolute left-4 top-0 rounded-b-xl border border-white/15 bg-[radial-gradient(ellipse_at_center,#7F4FFFB3,#7F4FFF33_70%,transparent)] px-3 py-1.5 text-[14px] font-semibold text-[#efeaff] shadow-inner backdrop-blur-md">

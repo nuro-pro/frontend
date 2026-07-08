@@ -151,12 +151,12 @@ export function ResultPage() {
           <span className="absolute left-4 top-0 rounded-b-xl border border-white/15 bg-[radial-gradient(ellipse_at_center,#7F4FFFB3,#7F4FFF33_70%,transparent)] px-3 py-1.5  text-[14px]  font-semibold text-[#efeaff] shadow-inner backdrop-blur-md">
             6개 지표 밸런스
           </span>
-          <div className="flex flex-1 items-center justify-center overflow-hidden">
+          <div className="flex flex-1 items-center justify-center">
             <RadarChart
               values={radarValues}
               labels={[...RADAR_LABELS]}
               colors={RADAR_COLORS}
-              className="h-52 w-52 scale-125 sm:h-56 sm:w-56"
+              className="h-60 w-60 sm:h-64 sm:w-64"
             />
           </div>
         </article>

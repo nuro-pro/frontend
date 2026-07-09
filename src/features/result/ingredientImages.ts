@@ -44,6 +44,21 @@ export function ingredientImage(korName: string): string | undefined {
   return (file ? byFileName(file) : undefined) ?? FALLBACK_IMAGE
 }
 
+// 카드 앞면 프레임
+const CARD_MODULES = import.meta.glob('../../assets/card/*.png', {
+  eager: true,
+  import: 'default',
+}) as Record<string, string>
+
+export function ingredientCardFrame(korName: string): string | undefined {
+  const file = KOR_TO_FILE[norm(korName)]
+  if (!file) return undefined
+  const hit = Object.entries(CARD_MODULES).find(([path]) =>
+    path.endsWith(`/${file}.png`),
+  )
+  return hit?.[1]
+}
+
 // 성분별 대표 색
 const ACCENT: Record<string, string> = {
   히알루론산: '#6cc5ff',

@@ -61,6 +61,17 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
               background: `linear-gradient(180deg, #0a0810 0%, #0a0810 38%, ${accent}1f 72%, ${accent}40 100%)`,
             }}
           />
+          {/* 배경 그래픽 */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundImage: [
+                `radial-gradient(58% 40% at 84% 6%, rgba(255,255,255,0.07), transparent 60%)`,
+                `radial-gradient(66% 48% at 14% -4%, rgba(0,0,0,0.5), transparent 56%)`,
+                `radial-gradient(104% 60% at 50% -14%, ${accent}24, transparent 62%)`,
+              ].join(','),
+            }}
+          />
           <div className="relative flex h-full">
             <div className="relative flex-1 overflow-hidden">
               <div className="p-5">

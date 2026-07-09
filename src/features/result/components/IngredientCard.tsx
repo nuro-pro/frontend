@@ -5,6 +5,7 @@ import {
   ingredientImage,
   ingredientAccent,
   ingredientEffectsEn,
+  ingredientCardFrame,
 } from '../ingredientImages'
 
 type Ingredient = DiagnosisResult['ingredients'][number]
@@ -37,6 +38,8 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
   const [flipped, setFlipped] = useState(false)
   const accent = ingredientAccent(ingredient.korName)
   const image = ingredientImage(ingredient.korName)
+  // 피그마 앞면 프레임(있으면 앞면 전체를 이 이미지로 대체, 없으면 아래 HTML 앞면)
+  const frame = ingredientCardFrame(ingredient.korName)
   // 앞면 태그는 영어(레퍼런스), 매핑 없으면 백엔드 한글 effects로 폴백
   const frontTagsEn = ingredientEffectsEn(ingredient.korName)
   const frontTags = frontTagsEn.length ? frontTagsEn : ingredient.effects
@@ -53,66 +56,80 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
           flipped ? '[transform:rotateY(180deg)]' : ''
         }`}
       >
-        {/* 앞면 */}
+        {/* 앞면: 피그마 프레임 이미지가 있으면 그걸로, 없으면 HTML 앞면으로 폴백 */}
         <div className="absolute inset-0 overflow-hidden rounded-2xl ring-1 ring-white/10 [backface-visibility:hidden]">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(180deg, #0a0810 0%, #0a0810 38%, ${accent}1f 72%, ${accent}40 100%)`,
-            }}
-          />
-          {/* 배경 그래픽 */}
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              backgroundImage: [
-                `radial-gradient(58% 40% at 84% 6%, rgba(255,255,255,0.07), transparent 60%)`,
-                `radial-gradient(66% 48% at 14% -4%, rgba(0,0,0,0.5), transparent 56%)`,
-                `radial-gradient(104% 60% at 50% -14%, ${accent}24, transparent 62%)`,
-              ].join(','),
-            }}
-          />
-          <div className="relative flex h-full">
-            <div className="relative flex-1 overflow-hidden">
-              <div className="p-5">
-                <h3 className="text-3xl leading-tight font-bold text-white">
-                  {ingredient.engName}
-                </h3>
-                <p className="mt-2 text-base text-white/80">
-                  {ingredient.korName}
-                </p>
-                <p className="mt-3 line-clamp-3 text-[11px] leading-relaxed text-white/50">
-                  {ingredient.desc}
-                </p>
-              </div>
-              <img
-                src={image}
-                alt={ingredient.korName}
-                className="pointer-events-none absolute bottom-[1%] left-1/2 w-[92%] -translate-x-1/2 object-contain"
+          {frame ? (
+            <img
+              src={frame}
+              alt={ingredient.korName}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <>
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(180deg, #0a0810 0%, #0a0810 38%, ${accent}1f 72%, ${accent}40 100%)`,
+                }}
               />
-            </div>
+              {/* 배경 그래픽 */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  backgroundImage: [
+                    `radial-gradient(52% 48% at 100% 4%, #05070feb 0%, #05070fbb 32%, transparent 60%)`,
+                    // 어두운 원(좌상단)
+                    `radial-gradient(46% 44% at 2% 0%, #05070fe0 0%, #05070faa 30%, transparent 58%)`,
+                    // 청록/accent 앰비언트
+                    `radial-gradient(115% 85% at 32% 18%, ${accent}3a 0%, ${accent}16 42%, transparent 74%)`,
+                    // 좌하단 글로우
+                    `radial-gradient(60% 45% at 8% 78%, ${accent}22, transparent 62%)`,
+                  ].join(','),
+                }}
+              />
+              <div className="relative flex h-full">
+                <div className="relative flex-1 overflow-hidden">
+                  <div className="p-5">
+                    <h3 className="text-3xl leading-tight font-bold text-white">
+                      {ingredient.engName}
+                    </h3>
+                    <p className="mt-2 text-base text-white/80">
+                      {ingredient.korName}
+                    </p>
+                    <p className="mt-3 line-clamp-3 text-[11px] leading-relaxed text-white/50">
+                      {ingredient.desc}
+                    </p>
+                  </div>
+                  <img
+                    src={image}
+                    alt={ingredient.korName}
+                    className="pointer-events-none absolute bottom-[1%] left-1/2 w-[92%] -translate-x-1/2 object-contain"
+                  />
+                </div>
 
-            {/* 우측 accent 밴드 + 세로(90° 회전) 효과 태그 */}
-            <div
-              className="flex w-10 shrink-0 flex-col items-center justify-between py-6"
-              style={{
-                background: `linear-gradient(180deg, ${accent}26 0%, ${accent}4d 100%)`,
-              }}
-            >
-              {frontTags.map((effect) => (
-                <span
-                  key={effect}
-                  className="text-[11px] font-medium tracking-wide whitespace-nowrap text-white/85"
+                {/* 우측 accent 밴드 + 세로(90° 회전) 효과 태그 */}
+                <div
+                  className="flex w-10 shrink-0 flex-col items-center justify-between py-6"
                   style={{
-                    writingMode: 'vertical-rl',
-                    textOrientation: 'sideways',
+                    background: `linear-gradient(180deg, ${accent}26 0%, ${accent}4d 100%)`,
                   }}
                 >
-                  {effect}
-                </span>
-              ))}
-            </div>
-          </div>
+                  {frontTags.map((effect) => (
+                    <span
+                      key={effect}
+                      className="text-[11px] font-medium tracking-wide whitespace-nowrap text-white/85"
+                      style={{
+                        writingMode: 'vertical-rl',
+                        textOrientation: 'sideways',
+                      }}
+                    >
+                      {effect}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* 뒷면 */}

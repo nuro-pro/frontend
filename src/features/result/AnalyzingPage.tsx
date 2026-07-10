@@ -47,7 +47,7 @@ export function AnalyzingPage() {
 
   useEffect(() => {
     if (userId == null) {
-      navigate('/onboarding')
+      //navigate('/onboarding')
       return
     }
     if (!photo || !surveyAnswers) {
@@ -86,7 +86,7 @@ export function AnalyzingPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">
-      <div className="relative flex h-32 w-1/6 items-center justify-center">
+      <div className="relative flex h-32 w-1/6 items-center justify-center mb-50">
         <div
           className="absolute inset-0 animate-pulse rounded-full bg-amber-200/40 blur-3xl"
           style={{ animationDelay: '-1s' }}
@@ -94,13 +94,13 @@ export function AnalyzingPage() {
         <img
           src={images[currentIndex]}
           alt="analyzing"
-          className="relative w-4/5 min-w-40 object-contain drop-shadow-[0_0_20px_rgba(253,230,138,0.8)]"
+          className="relative w-6/5 min-w-40 object-contain"
         />
       </div>
 
-      <div className="space-y-2">
-        <p className="text-lg font-medium text-white">이미지 분석중...</p>
-        <p className="text-sm text-white/40">조금만 기다려주세요</p>
+      <div className="space-y-8">
+        <p className="text-3xl font-medium text-white">분석중...</p>
+        <p className="text-2xl text-white/40">조금만 기다려주세요!</p>
       </div>
     </div>
   )

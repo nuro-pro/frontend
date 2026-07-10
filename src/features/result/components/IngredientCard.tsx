@@ -112,7 +112,6 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
           }}
         >
           <div className="flex h-full flex-col p-5">
-            <p className="text-[10px] tracking-wide text-white/40">뒷면</p>
 
             <div className="mt-1 flex items-start justify-between gap-2">
               <div>

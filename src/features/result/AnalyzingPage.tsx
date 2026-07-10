@@ -47,7 +47,7 @@ export function AnalyzingPage() {
 
   useEffect(() => {
     if (userId == null) {
-      //navigate('/onboarding')
+      navigate('/onboarding')
       return
     }
     if (!photo || !surveyAnswers) {

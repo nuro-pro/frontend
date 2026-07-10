@@ -86,7 +86,7 @@ export function AnalyzingPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">
-      <div className="relative flex h-32 w-1/6 items-center justify-center mb-12">
+      <div className="relative flex h-32 w-1/6 items-center justify-center mb-15">
         <div
           className="absolute inset-0 animate-pulse rounded-full bg-amber-200/40 blur-3xl"
           style={{ animationDelay: '-1s' }}

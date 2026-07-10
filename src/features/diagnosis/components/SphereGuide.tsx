@@ -86,23 +86,23 @@ export function SphereGuide({ direction, aligned }: SphereGuideProps) {
         </g>
 
         {/* 방향 화살표: 가로 그리드 선(적도) 중앙에 얹힌 화살표 */}
-      {/* 방향 화살표: 가로 그리드 선(적도) 중앙에 얹힌 화살촉 */}
-      {direction !== 'front' && (
-        <g
-          stroke="#ffffff"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-          opacity="0.95"
-        >
-          {direction === 'left' ? (
-            <polyline points="94,91 84,100 94,109" />
-          ) : (
-            <polyline points="106,91 116,100 106,109" />
-          )}
-        </g>
-      )}
+        {/* 방향 화살표: 가로 그리드 선(적도) 중앙에 얹힌 화살촉 */}
+        {direction !== 'front' && (
+          <g
+            stroke="#ffffff"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+            opacity="0.95"
+          >
+            {direction === 'left' ? (
+              <polyline points="94,91 84,100 94,109" />
+            ) : (
+              <polyline points="106,91 116,100 106,109" />
+            )}
+          </g>
+        )}
       </svg>
     </div>
   )

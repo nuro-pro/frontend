@@ -112,7 +112,6 @@ export function IngredientCard({ ingredient }: IngredientCardProps) {
           }}
         >
           <div className="flex h-full flex-col p-5">
-
             <div className="mt-1 flex items-start justify-between gap-2">
               <div>
                 <h3 className="text-2xl leading-tight font-bold text-white">

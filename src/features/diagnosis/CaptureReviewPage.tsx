@@ -56,9 +56,7 @@ export function CaptureReviewPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center px-6 text-center">
-      <h1 className="text-[#FEFEFE] text-4xl">
-        촬영된 사진을 확인해주세요.
-      </h1>
+      <h1 className="text-[#FEFEFE] text-4xl">촬영된 사진을 확인해주세요.</h1>
       <p className="mt-3 text-lg text-white/50">
         마음에 들지 않으면 다시 촬영할 수 있어요.
       </p>

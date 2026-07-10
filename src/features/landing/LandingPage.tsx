@@ -62,7 +62,7 @@ export function LandingPage() {
       <div className="absolute inset-x-0 bottom-[7%] flex flex-col items-center px-6">
         <Link
           to="/intro"
-          className="rounded-full border border-white/10 bg-white/[0.07] px-8 py-3.5 text-lg font-medium tracking-[0.02em] text-white backdrop-blur-sm transition hover:border-white/30 hover:bg-white/20"
+          className="rounded-full border border-white/10 bg-white/[0.07] px-8 py-2.5 text-2xl font-bold tracking-[0.02em] text-white backdrop-blur-sm transition hover:border-white/30 hover:bg-white/20"
         >
           Let&apos;s get started
         </Link>

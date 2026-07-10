@@ -127,7 +127,7 @@ export function ResultPage() {
                   / 또래 {result.peerTotalScore}
                 </span>
               </p>
-              <div className="mt-2.5 flex flex-wrap gap-1.5">
+              <div className="mt-2.5 flex flex-wrap gap-3">
                 {[result.skinType, `피부 나이 ${result.skinAge}세`].map(
                   (tag) => (
                     <span

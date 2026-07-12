@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDiagnosis } from '@/features/diagnosis/useDiagnosis'
 
-
-const IDLE_MS = 180_000 // 3분 
+const IDLE_MS = 180_000 // 3분
 
 export function IdleReset() {
   const navigate = useNavigate()

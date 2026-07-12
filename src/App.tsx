@@ -12,11 +12,13 @@ import { AnalyzingPage } from '@/features/result/AnalyzingPage'
 import { ResultPage } from '@/features/result/ResultPage'
 import { ResultSharePage } from '@/features/result/ResultSharePage'
 import { DiagnosisProvider } from '@/features/diagnosis/DiagnisisProvider'
+import { IdleReset } from '@/components/IdleReset'
 
 function App() {
   return (
     <BrowserRouter>
       <DiagnosisProvider>
+        <IdleReset />
         <Layout>
           <Routes>
             <Route path="/" element={<LandingPage />} />

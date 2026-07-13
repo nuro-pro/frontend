@@ -14,7 +14,7 @@ export function LandingPage() {
         preload="auto"
       />
 
-      <div className="absolute inset-x-0 top-[60%] flex flex-col items-center px-6">
+      <div className="absolute inset-x-0 top-[63%] flex flex-col items-center px-6">
         <Link
           to="/intro"
           className="rounded-full border border-white/10 bg-white/[0.07] px-8 py-2.5 text-2xl font-bold tracking-[0.02em] text-white backdrop-blur-sm transition hover:border-white/30 hover:bg-white/20"

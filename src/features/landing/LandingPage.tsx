@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import landingDesktop from '@/assets/mov/landing1.mp4' // 16:9 데스크톱
+import landingDesktop from '@/assets/mov/landing3.mp4'
 import landingMobile from '@/assets/mov/landing2.mp4' // 9:16 모바일
 
 const MOBILE_QUERY = '(max-width: 767px)'
@@ -29,6 +29,7 @@ export function LandingPage() {
     </div>
   )
 
+  // 모바일: 9:16 영상, 전체화면 채움
   if (isMobile) {
     return (
       <div className="relative h-dvh w-full overflow-hidden bg-black">
@@ -48,26 +49,18 @@ export function LandingPage() {
   }
 
   return (
-    <div className="flex h-screen w-full items-center justify-center overflow-hidden bg-black">
-      <div
-        className="relative"
-        style={{
-          aspectRatio: '16 / 9',
-          width: 'min(100vw, calc(100vh * 16 / 9))',
-        }}
-      >
-        <video
-          key="desktop"
-          className="h-full w-full object-cover"
-          src={landingDesktop}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-        />
-        {cta}
-      </div>
+    <div className="relative h-screen w-full overflow-hidden bg-black">
+      <video
+        key="desktop"
+        className="absolute inset-0 h-full w-full object-cover"
+        src={landingDesktop}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+      />
+      {cta}
     </div>
   )
 }

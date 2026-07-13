@@ -18,7 +18,7 @@ export function LandingPage() {
   }, [])
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black">
+    <div className="relative h-dvh w-full overflow-hidden bg-black">
       <video
         key={isMobile ? 'mobile' : 'desktop'}
         className="absolute inset-0 h-full w-full object-cover"

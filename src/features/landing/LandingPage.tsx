@@ -1,12 +1,28 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import landingVideo from '@/assets/mov/landing1.mp4'
+import landingDesktop from '@/assets/mov/landing1.mp4' // 16:9 데스크톱
+import landingMobile from '@/assets/mov/landing2.mp4' // 9:16 모바일
+
+const MOBILE_QUERY = '(max-width: 767px)'
 
 export function LandingPage() {
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia(MOBILE_QUERY).matches,
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY)
+    const onChange = () => setIsMobile(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black">
       <video
+        key={isMobile ? 'mobile' : 'desktop'}
         className="absolute inset-0 h-full w-full object-cover"
-        src={landingVideo}
+        src={isMobile ? landingMobile : landingDesktop}
         autoPlay
         muted
         loop
